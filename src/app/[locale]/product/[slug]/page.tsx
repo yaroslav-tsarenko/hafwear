@@ -7,6 +7,7 @@ import { ProductInfo } from "@/components/product/ProductInfo/ProductInfo";
 import { ProductTabs } from "@/components/product/ProductTabs/ProductTabs";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { JsonLd } from "@/components/shared/SEO/JsonLd";
+import { absoluteImageUrl } from "@/lib/media";
 
 export const revalidate = 60;
 
@@ -130,7 +131,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     description: product.description || product.shortDescription || product.name,
     sku: product.sku,
     gtin13: product.ean || product.gtin || undefined,
-    image: product.images[0]?.url,
+    image: absoluteImageUrl(product.images[0]?.url, siteUrl) || undefined,
     brand: product.brand ? { "@type": "Brand", name: product.brand } : undefined,
     offers: {
       "@type": "Offer",

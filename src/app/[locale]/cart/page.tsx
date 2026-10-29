@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Lock, ImageOff } from "lucide-react";
 import { useCart } from "@/providers/CartProvider";
@@ -61,7 +61,8 @@ export default function CartPage() {
                     className="relative aspect-[4/5] w-24 shrink-0 overflow-hidden bg-[color:var(--color-image-bg)] sm:w-32"
                   >
                     {item.imageUrl ? (
-                      <Image
+                      <SafeImage
+                        compactFallback
                         src={item.imageUrl}
                         alt={item.name}
                         fill

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { absoluteImageUrl } from "@/lib/media";
 
 export async function GET() {
   try {
@@ -12,7 +13,7 @@ export async function GET() {
 
     const items = products
       .map((product) => {
-        const imageUrl = product.images[0]?.url || "";
+        const imageUrl = absoluteImageUrl(product.images[0]?.url, siteUrl);
         const price = `${Number(product.price).toFixed(2)} EUR`;
         const availability = product.quantity > 0 ? "in_stock" : "out_of_stock";
 
