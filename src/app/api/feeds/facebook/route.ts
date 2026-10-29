@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { absoluteImageUrl } from "@/lib/media";
 
 export async function GET() {
   try {
@@ -23,7 +24,7 @@ export async function GET() {
       product.condition,
       `${Number(product.price).toFixed(2)} EUR`,
       `${siteUrl}/en/product/${product.slug}`,
-      product.images[0]?.url || "",
+      absoluteImageUrl(product.images[0]?.url, siteUrl),
       product.brand || "",
       product.gtin || "",
     ]);

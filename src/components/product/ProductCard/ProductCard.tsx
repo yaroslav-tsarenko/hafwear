@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
 import { Link } from "@/i18n/routing";
 import { ImageOff } from "lucide-react";
 import { useCurrency } from "@/providers/CurrencyProvider";
@@ -48,7 +48,7 @@ export function ProductCard({
       <div className="relative aspect-[4/5] overflow-hidden bg-[color:var(--color-image-bg)]">
         {primary ? (
           <>
-            <Image
+            <SafeImage
               src={primary.url}
               alt={primary.alt || product.name}
               fill
@@ -59,7 +59,7 @@ export function ProductCard({
               }`}
             />
             {secondary && (
-              <Image
+              <SafeImage
                 src={secondary.url}
                 alt=""
                 aria-hidden

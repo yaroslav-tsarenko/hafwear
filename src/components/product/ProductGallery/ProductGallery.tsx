@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
 
 interface ProductGalleryProps {
   images: { id: string; url: string; alt?: string | null }[];
@@ -42,7 +42,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
         >
           {images.map((image, index) => (
             <div key={image.id} className="relative aspect-[4/5] w-full shrink-0 snap-center bg-[color:var(--color-image-bg)]">
-              <Image
+              <SafeImage
                 src={image.url}
                 alt={image.alt || `${productName} — photo ${index + 1}`}
                 fill
@@ -69,7 +69,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               index === 0 || images.length === 2 ? "col-span-2 aspect-[4/5]" : "aspect-[4/5]"
             }`}
           >
-            <Image
+            <SafeImage
               src={image.url}
               alt={image.alt || `${productName} — photo ${index + 1}`}
               fill

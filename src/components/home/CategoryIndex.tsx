@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
 import { Link } from "@/i18n/routing";
 
 export interface CategoryIndexItem {
@@ -34,7 +34,8 @@ export function CategoryIndex({ items }: { items: CategoryIndexItem[] }) {
               <Link href={`/catalog/${item.slug}`} className="group flex items-center gap-4 py-4">
                 <span className="relative h-14 w-12 shrink-0 overflow-hidden bg-[color:var(--color-image-bg)]">
                   {item.imageUrl && (
-                    <Image
+                    <SafeImage
+                      compactFallback
                       src={item.imageUrl}
                       alt=""
                       fill

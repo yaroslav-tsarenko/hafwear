@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
 import { Link } from "@/i18n/routing";
 
 export interface DepartmentTile {
@@ -19,7 +19,7 @@ export function DepartmentTiles({ tiles }: { tiles: DepartmentTile[] }) {
           <Link key={tile.href} href={tile.href} className="group block">
             <div className="relative aspect-[3/4] overflow-hidden bg-[color:var(--color-image-bg)]">
               {tile.imageUrl && (
-                <Image
+                <SafeImage
                   src={tile.imageUrl}
                   alt=""
                   fill

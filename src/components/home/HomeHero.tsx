@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
 import { Link } from "@/i18n/routing";
 import { ArrowRight } from "lucide-react";
 import { brand } from "@/lib/brand";
@@ -49,7 +49,7 @@ export function HomeHero({ product }: HomeHeroProps) {
         {image && product ? (
           <Link href={`/product/${product.slug}`} className="group block">
             <div className="relative aspect-[4/5] overflow-hidden bg-[color:var(--color-image-bg)]">
-              <Image
+              <SafeImage
                 src={image.url}
                 alt={image.alt || product.name}
                 fill

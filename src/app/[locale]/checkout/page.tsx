@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { useForm } from "react-hook-form";
@@ -526,7 +526,7 @@ function CheckoutContent() {
                     >
                       <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-[color:var(--color-image-bg)]">
                         {item.imageUrl ? (
-                          <Image src={item.imageUrl} alt={item.name} fill sizes="56px" className="object-contain p-1" />
+                          <SafeImage compactFallback src={item.imageUrl} alt={item.name} fill sizes="56px" className="object-contain p-1" />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center text-[color:var(--color-text-tertiary)]">
                             <ImageOff size={18} />
@@ -597,7 +597,7 @@ function CheckoutContent() {
               <div key={item.id} className="flex items-center gap-3">
                 <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-[color:var(--color-image-bg)]">
                   {item.imageUrl ? (
-                    <Image src={item.imageUrl} alt={item.name} fill sizes="40px" className="object-contain p-0.5" />
+                    <SafeImage compactFallback src={item.imageUrl} alt={item.name} fill sizes="40px" className="object-contain p-0.5" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-[color:var(--color-text-tertiary)]">
                       <ImageOff size={14} />

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/routing";
 
@@ -21,7 +21,7 @@ export function CartToast({ name, imageUrl, quantity }: CartToastProps) {
     >
       <div className="relative h-16 w-[52px] shrink-0 overflow-hidden bg-[color:var(--color-image-bg)]">
         {imageUrl && (
-          <Image src={imageUrl} alt="" fill sizes="52px" className="object-contain p-1 mix-blend-multiply dark:mix-blend-normal" />
+          <SafeImage compactFallback src={imageUrl} alt="" fill sizes="52px" className="object-contain p-1 mix-blend-multiply dark:mix-blend-normal" />
         )}
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">

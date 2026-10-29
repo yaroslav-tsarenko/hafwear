@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { absoluteImageUrl } from "@/lib/media";
 
 export async function GET() {
   try {
@@ -28,7 +29,7 @@ export async function GET() {
       brand: product.brand,
       gtin: product.gtin,
       categories: product.categories.map((c) => c.category.name),
-      images: product.images.map((img) => img.url),
+      images: product.images.map((img) => absoluteImageUrl(img.url, siteUrl)),
       url: `${siteUrl}/en/product/${product.slug}`,
       updatedAt: product.updatedAt,
     }));
