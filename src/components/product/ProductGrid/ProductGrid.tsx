@@ -1,39 +1,22 @@
 "use client";
 
-import { ProductCard } from "@/components/product/ProductCard/ProductCard";
-
-interface Product {
-  id: string;
-  name: string;
-  slug: string;
-  sku: string;
-  price: number;
-  comparePrice?: number | null;
-  quantity: number;
-  images: { url: string; alt?: string | null }[];
-  categories?: { category: { name: string } }[];
-}
+import { ProductCard, type CardProduct } from "@/components/product/ProductCard/ProductCard";
 
 interface ProductGridProps {
-  products: Product[];
+  products: CardProduct[];
+  /** Number of columns at the widest breakpoint. */
+  columns?: 3 | 4;
 }
 
-export function ProductGrid({ products }: ProductGridProps) {
+export function ProductGrid({ products, columns = 3 }: ProductGridProps) {
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 xl:gap-8">
-      {products.map((product) => (
-        <ProductCard
-          key={product.id}
-          id={product.id}
-          name={product.name}
-          slug={product.slug}
-          sku={product.sku}
-          price={Number(product.price)}
-          comparePrice={product.comparePrice ? Number(product.comparePrice) : null}
-          imageUrl={product.images[0]?.url}
-          category={product.categories?.[0]?.category?.name}
-          quantity={product.quantity}
-        />
+    <div
+      className={`grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:gap-y-14 ${
+        columns === 4 ? "md:grid-cols-3 xl:grid-cols-4" : "md:grid-cols-3"
+      }`}
+    >
+      {products.map((product, i) => (
+        <ProductCard key={product.id} product={product} priority={i < 3} />
       ))}
     </div>
   );

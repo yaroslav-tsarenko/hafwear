@@ -70,7 +70,7 @@ class SpoyntService {
     const localizedPendingUrl = `${siteUrl}/${params.locale}/order/confirmed?orderId=${params.orderId}&status=pending`;
     // Spoynt restricts localhost URLs for callback_url. If local, fallback to public URL for validation.
     const cleanSiteUrl = siteUrl.includes("localhost") || siteUrl.includes("127.0.0.1")
-      ? "https://ravora.co.uk"
+      ? "https://hafwear.co.uk"
       : siteUrl;
     const callbackUrl = `${cleanSiteUrl}/api/payment/spoynt-callback`;
 
@@ -160,9 +160,9 @@ class SpoyntService {
                 card_holder: "true",
                 logo_height: "32",
                 btn_bg_color: "#E53935", // Brand color
-                merchant_name: "Ravora Store",
+                merchant_name: "Hafwear Store",
                 btn_font_color: "#ffffff",
-                window_title: "Ravora Secure Payment",
+                window_title: "Hafwear Secure Payment",
               },
             },
           },

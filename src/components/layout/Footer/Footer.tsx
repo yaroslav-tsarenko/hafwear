@@ -4,49 +4,50 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { FaLinkedinIn, FaInstagram } from "react-icons/fa6";
-import { ArrowRight, Mail, Phone, MapPin, Truck, RotateCcw, Leaf } from "lucide-react";
-import { RavoraLogo } from "../RavoraLogo";
+import { ArrowRight } from "lucide-react";
+import { HafwearLogo } from "../HafwearLogo";
 import { brand, brandAddressLine } from "@/lib/brand";
 import visaLogo from "@/assets/visa-logo.svg";
 import mastercardLogo from "@/assets/mastercard-logo.svg";
 import pciDssLogo from "@/assets/pci-dss-compliant-logo-vector.svg";
 
-const shopLinks = [
-  { href: "/catalog", label: "All products" },
-  { href: "/catalog/men", label: "Men" },
-  { href: "/catalog/women", label: "Women" },
-  { href: "/catalog/kids", label: "Kids" },
-  { href: "/catalog/women-swimwear", label: "Swimwear" },
-  { href: "/catalog?sort=newest", label: "New arrivals" },
-  { href: "/catalog?onSale=true", label: "Sale" },
-];
-
-const serviceLinks = [
-  { href: "/policies/shipping", label: "Shipping" },
-  { href: "/policies/returns", label: "Returns" },
-  { href: "/size-guide", label: "Size guide" },
-  { href: "/policies/payment", label: "Payment" },
-  { href: "/policies/privacy", label: "Privacy" },
-  { href: "/contact", label: "Contact" },
-  { href: "/faq", label: "FAQ" },
-];
-
-const companyLinks = [
-  { href: "/about", label: "About Ravora" },
-  { href: "/policies", label: "Policies" },
-  { href: "/contact", label: "Contact" },
+const columns = [
+  {
+    title: "Shop",
+    links: [
+      { href: "/catalog/women", label: "Women" },
+      { href: "/catalog/men", label: "Men" },
+      { href: "/catalog/kids", label: "Kids" },
+      { href: "/catalog/women-swimwear", label: "Swim" },
+      { href: "/catalog?sort=newest", label: "New in" },
+      { href: "/catalog?onSale=true", label: "Sale" },
+    ],
+  },
+  {
+    title: "Help",
+    links: [
+      { href: "/policies/shipping", label: "Delivery" },
+      { href: "/policies/returns", label: "Returns" },
+      { href: "/size-guide", label: "Size guide" },
+      { href: "/policies/payment", label: "Payment" },
+      { href: "/faq", label: "FAQ" },
+      { href: "/contact", label: "Contact us" },
+    ],
+  },
+  {
+    title: "Hafwear",
+    links: [
+      { href: "/about", label: "Our story" },
+      { href: "/policies", label: "Policies" },
+      { href: "/account", label: "My account" },
+    ],
+  },
 ];
 
 const legalLinks = [
   { href: "/policies/privacy", label: "Privacy" },
   { href: "/policies/terms", label: "Terms" },
   { href: "/policies/cookies", label: "Cookies" },
-];
-
-const trustBadges = [
-  { icon: Truck, label: "Free UK shipping over £100" },
-  { icon: RotateCcw, label: "14-day returns" },
-  { icon: Leaf, label: "Sustainably sourced materials" },
 ];
 
 export function Footer() {
@@ -56,229 +57,150 @@ export function Footer() {
   const [subscribed, setSubscribed] = useState(false);
 
   return (
-    <footer className="mt-auto bg-[color:var(--color-primary)] text-[color:var(--color-primary-fg)]">
-      <div className="mx-auto max-w-[var(--container-content)] px-4 pt-16 sm:px-6 lg:px-8">
-        {/* Trust strip */}
-        <div className="grid gap-4 border-b border-white/10 pb-10 sm:grid-cols-3">
-          {trustBadges.map(({ icon: Icon, label }) => (
-            <div key={label} className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white">
-                <Icon size={18} strokeWidth={1.5} />
-              </span>
-              <span className="text-sm font-medium text-white/90">{label}</span>
+    <footer className="mt-auto border-t border-[color:var(--color-border)] bg-[color:var(--color-bg)] text-[color:var(--color-text)]">
+      <div className="hw-container">
+        {/* Newsletter */}
+        <div className="grid gap-8 border-b border-[color:var(--color-border)] py-16 lg:grid-cols-2 lg:items-end lg:gap-16">
+          <div>
+            <h2 className="font-serif text-[40px] leading-[1.02] sm:text-[52px]">
+              Letters from Bridgend.
+            </h2>
+            <p className="mt-4 max-w-md text-[15px] leading-relaxed text-[color:var(--color-text-secondary)]">
+              New pieces, the odd quiet sale and a little news from Wales. A few times a month, never more.
+            </p>
+          </div>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (!email) return;
+              try {
+                await fetch("/api/newsletter", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email }),
+                });
+              } catch { /* silent */ }
+              setSubscribed(true);
+              setEmail("");
+            }}
+          >
+            <label htmlFor="footer-email" className="text-[12px] uppercase tracking-[0.1em] text-[color:var(--color-text-tertiary)]">
+              Email address
+            </label>
+            <div className="mt-2 flex items-center border-b border-[color:var(--color-text)]">
+              <input
+                id="footer-email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="min-w-0 flex-1 bg-transparent py-3 text-[16px] placeholder:text-[color:var(--color-text-tertiary)] focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 py-3 pl-4 text-[14px] font-medium transition-opacity hover:opacity-60"
+              >
+                Subscribe <ArrowRight size={15} />
+              </button>
             </div>
-          ))}
+            <p className="mt-3 min-h-[1.25rem] text-[13px] text-[color:var(--color-text-secondary)]" aria-live="polite">
+              {subscribed ? "Thank you — diolch! You're on the list." : "You can unsubscribe at any time."}
+            </p>
+          </form>
         </div>
 
-        {/* Main columns */}
-        <div className="grid gap-10 py-14 lg:grid-cols-12 lg:gap-8">
-          {/* Brand */}
-          <div className="lg:col-span-4">
-            <Link href="/" className="flex flex-col gap-1 text-white/95" aria-label="Ravora">
-              <RavoraLogo size={28} />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/50">
-                est. 2026 · United Kingdom
-              </span>
+        {/* Columns */}
+        <div className="grid grid-cols-2 gap-10 py-14 md:grid-cols-4 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="col-span-2 md:col-span-1">
+            <Link href="/" aria-label="Hafwear home">
+              <HafwearLogo size={22} />
             </Link>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70">
-              Refined athletic apparel for men, women and kids — sustainably sourced,
-              honestly made, and shipped from the United Kingdom.
+            <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-[color:var(--color-text-secondary)]">
+              <span className="font-serif text-[17px] italic text-[color:var(--color-text)]">haf</span>{" "}
+              {brand.story.pronunciation} — {brand.story.meaning}. Easy everyday clothes for the whole family.
             </p>
-
-            <div className="mt-6 flex flex-col gap-2 text-sm text-white/70">
-              <a
-                href={`mailto:${brand.contact.email}`}
-                className="inline-flex items-center gap-2 transition-colors hover:text-white"
-              >
-                <Mail size={14} /> {brand.contact.email}
+            <div className="mt-6 flex flex-col gap-1.5 text-[14px]">
+              <a href={`mailto:${brand.contact.email}`} className="hover:underline hover:underline-offset-4">
+                {brand.contact.email}
               </a>
-              <a
-                href={brand.contact.phoneHref}
-                className="inline-flex items-center gap-2 transition-colors hover:text-white"
-              >
-                <Phone size={14} /> {brand.contact.phone}
+              <a href={brand.contact.phoneHref} className="hover:underline hover:underline-offset-4">
+                {brand.contact.phone}
               </a>
-              <span className="inline-flex items-start gap-2 text-white/60">
-                <MapPin size={14} className="mt-0.5 shrink-0" />
-                <span className="leading-relaxed">{brandAddressLine}</span>
-              </span>
             </div>
-
-            <div className="mt-6 flex items-center gap-2">
-              {process.env.NEXT_PUBLIC_LINKEDIN_URL && (
-                <a
-                  href={process.env.NEXT_PUBLIC_LINKEDIN_URL}
-                  aria-label="LinkedIn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/80 transition-colors hover:border-white/40 hover:text-white"
-                >
-                  <FaLinkedinIn size={14} />
-                </a>
-              )}
+            <div className="mt-5 flex items-center gap-1">
               {process.env.NEXT_PUBLIC_INSTAGRAM_URL && (
                 <a
                   href={process.env.NEXT_PUBLIC_INSTAGRAM_URL}
                   aria-label="Instagram"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/80 transition-colors hover:border-white/40 hover:text-white"
+                  className="-ml-2 inline-flex h-9 w-9 items-center justify-center transition-opacity hover:opacity-60"
                 >
-                  <FaInstagram size={14} />
+                  <FaInstagram size={16} />
+                </a>
+              )}
+              {process.env.NEXT_PUBLIC_LINKEDIN_URL && (
+                <a
+                  href={process.env.NEXT_PUBLIC_LINKEDIN_URL}
+                  aria-label="LinkedIn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-9 w-9 items-center justify-center transition-opacity hover:opacity-60"
+                >
+                  <FaLinkedinIn size={15} />
                 </a>
               )}
             </div>
           </div>
 
-          {/* Shop */}
-          <div className="lg:col-span-2">
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/50">
-              Shop
-            </h3>
-            <ul className="mt-4 space-y-2.5">
-              {shopLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/80 transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Customer service */}
-          <div className="lg:col-span-2">
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/50">
-              Customer service
-            </h3>
-            <ul className="mt-4 space-y-2.5">
-              {serviceLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/80 transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div className="lg:col-span-1">
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/50">
-              Company
-            </h3>
-            <ul className="mt-4 space-y-2.5">
-              {companyLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/80 transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div className="lg:col-span-3">
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/50">
-              Ravora Dispatch
-            </h3>
-            <p className="mt-4 text-sm text-white/70">
-              Occasional letters on new arrivals, thoughtful drops, and quiet sales. No noise.
-            </p>
-            <form
-              className="mt-4"
-              onSubmit={async (e) => {
-                e.preventDefault();
-                if (!email) return;
-                try {
-                  await fetch("/api/newsletter", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email }),
-                  });
-                } catch { /* silent */ }
-                setSubscribed(true);
-                setEmail("");
-              }}
-            >
-              <div className="flex overflow-hidden rounded-full border border-white/15 bg-white/5 backdrop-blur-sm">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@ravora.co.uk"
-                  className="min-w-0 flex-1 bg-transparent px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  aria-label="Subscribe"
-                  className="inline-flex items-center gap-1 bg-[color:var(--color-accent)] px-4 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-[color:var(--color-accent-hover)]"
-                >
-                  Subscribe <ArrowRight size={14} />
-                </button>
-              </div>
-              {subscribed && (
-                <p className="mt-2 text-xs text-white/70">
-                  Thanks — we&apos;ll be in touch.
-                </p>
-              )}
-            </form>
-          </div>
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h3 className="text-[12px] uppercase tracking-[0.1em] text-[color:var(--color-text-tertiary)]">{col.title}</h3>
+              <ul className="mt-4 space-y-2.5">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <Link href={link.href} className="text-[14px] hover:underline hover:underline-offset-4">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col gap-6 border-t border-white/10 py-8 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-col gap-1 text-xs text-white/60">
+        <div className="flex flex-col gap-6 border-t border-[color:var(--color-border)] py-8 text-[12px] text-[color:var(--color-text-secondary)] lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-1">
             <p>{t("copyright", { year: currentYear, storeName: brand.displayName })}</p>
             <p>
-              {brand.company.legalName} · Company No. {brand.company.number} ·{" "}
-              {brand.company.address.city}, {brand.company.address.country}
+              {brand.company.legalName} · Company No. {brand.company.number} · {brandAddressLine}
             </p>
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             {legalLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-xs text-white/70 transition-colors hover:text-white"
-              >
+              <Link key={link.label} href={link.href} className="hover:text-[color:var(--color-text)]">
                 {link.label}
               </Link>
             ))}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4">
-            {[
-              { src: visaLogo, alt: "Visa" },
-              { src: mastercardLogo, alt: "Mastercard" },
-              { src: pciDssLogo, alt: "PCI DSS Compliant" },
-            ].map(({ src, alt }) => (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                key={alt}
-                src={src.src}
-                alt={alt}
-                style={{
-                  height: 30,
-                  width: "auto",
-                  maxWidth: "none",
-                  display: "inline-block",
-                }}
-                className="shrink-0 opacity-90"
-              />
-            ))}
+            <div className="flex items-center gap-3">
+              {[
+                { src: visaLogo, alt: "Visa" },
+                { src: mastercardLogo, alt: "Mastercard" },
+                { src: pciDssLogo, alt: "PCI DSS Compliant" },
+              ].map(({ src, alt }) => (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  key={alt}
+                  src={src.src}
+                  alt={alt}
+                  style={{ height: 24, width: "auto", maxWidth: "none" }}
+                  className="shrink-0"
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

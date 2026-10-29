@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { VAT_RATE } from "@/lib/pricing";
 
 let resend: Resend | null = null;
 
@@ -12,7 +13,7 @@ function getFrom(): string {
   return (
     process.env.RESEND_FROM_EMAIL ||
     process.env.RESEND_FROM ||
-    "Ravora <noreply@ravora.co.uk>"
+    "Hafwear <noreply@hafwear.co.uk>"
   );
 }
 
@@ -21,14 +22,16 @@ function getReplyTo(): string | undefined {
 }
 
 function getSiteUrl(): string {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL || "https://ravora.co.uk";
+  const raw = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.co.uk";
   return raw.replace(/\/+$/, "");
 }
 
-const BRAND_COLOR = "#E53935";
-const BG_COLOR = "#f7f7f7";
-const TEXT_COLOR = "#1A1A2E";
-const MUTED_COLOR = "#666";
+// Hafwear soft-minimal palette: ink buttons and links, ochre sun for the logo mark.
+const BRAND_COLOR = "#111111";
+const SUN_COLOR = "#E0A526";
+const BG_COLOR = "#F2F1EE";
+const TEXT_COLOR = "#111111";
+const MUTED_COLOR = "#5F5E5A";
 
 interface SendArgs {
   to: string;
@@ -73,22 +76,22 @@ function emailWrapper(content: string, options: { preheader?: string } = {}): st
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Ravora</title>
+  <title>Hafwear</title>
 </head>
 <body style="margin:0;padding:0;background:${BG_COLOR};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:${TEXT_COLOR};">
   ${preheader}
   <div style="max-width:600px;margin:0 auto;padding:32px 16px;">
     <div style="text-align:center;margin-bottom:24px;">
       <a href="${getSiteUrl()}" style="text-decoration:none;">
-        <span style="font-size:24px;font-weight:900;color:${BRAND_COLOR};letter-spacing:-0.03em;">Ravora</span>
+        <span style="display:inline-block;width:22px;height:11px;border-radius:11px 11px 0 0;background:${SUN_COLOR};vertical-align:baseline;margin-right:8px;"></span><span style="font-size:24px;font-weight:600;color:${TEXT_COLOR};letter-spacing:-0.04em;">hafwear</span>
       </a>
     </div>
-    <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e5e5;">
+    <div style="background:#fff;border-radius:4px;padding:32px;border:1px solid #DEDCD7;">
       ${content}
     </div>
     <div style="text-align:center;margin-top:24px;font-size:12px;color:#999;line-height:1.6;">
-      <p style="margin:0 0 4px;">&copy; ${new Date().getFullYear()} Ravora. All rights reserved.</p>
-      <p style="margin:0;">JAYHALE LIMITED &middot; Bridgend, Mid Glamorgan, Academy House, 11 Dunraven Place &middot; Reg. 16020956 &middot; <a href="${getSiteUrl()}" style="color:${BRAND_COLOR};text-decoration:none;">ravora.co.uk</a></p>
+      <p style="margin:0 0 4px;">&copy; ${new Date().getFullYear()} Hafwear &middot; <em>haf</em> is Welsh for summer.</p>
+      <p style="margin:0;">JAYHALE LIMITED &middot; Bridgend, Mid Glamorgan, Academy House, 11 Dunraven Place &middot; Reg. 16020956 &middot; <a href="${getSiteUrl()}" style="color:${BRAND_COLOR};text-decoration:none;">hafwear.co.uk</a></p>
       <p style="margin:8px 0 0;">
         <a href="${getSiteUrl()}/en/policies/privacy" style="color:#999;text-decoration:underline;margin:0 6px;">Privacy</a>
         <a href="${getSiteUrl()}/en/policies/terms" style="color:#999;text-decoration:underline;margin:0 6px;">Terms</a>
@@ -103,7 +106,7 @@ function emailWrapper(content: string, options: { preheader?: string } = {}): st
 function button(href: string, label: string): string {
   return `
     <div style="text-align:center;margin:24px 0;">
-      <a href="${href}" style="display:inline-block;padding:14px 32px;background:${BRAND_COLOR};color:#fff;text-decoration:none;border-radius:10px;font-weight:700;font-size:15px;">
+      <a href="${href}" style="display:inline-block;padding:14px 32px;background:${BRAND_COLOR};color:#fff;text-decoration:none;border-radius:999px;font-weight:500;font-size:15px;">
         ${label}
       </a>
     </div>`;
@@ -128,16 +131,16 @@ export async function sendWelcomeEmail(email: string, name?: string | null): Pro
 
   return send({
     to: email,
-    subject: "Welcome to Ravora!",
+    subject: "Welcome to Hafwear!",
     html: emailWrapper(
       `
-      <h1 style="margin:0 0 16px;font-size:22px;font-weight:800;color:${TEXT_COLOR};">${greeting}, welcome to Ravora!</h1>
+      <h1 style="margin:0 0 16px;font-size:22px;font-weight:500;color:${TEXT_COLOR};">${greeting}, welcome to Hafwear!</h1>
       <p style="color:${MUTED_COLOR};line-height:1.6;margin:0 0 16px;">
         Your account has been created successfully. You now have access to our full range of made-to-order apparel at fair prices.
       </p>
-      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin:0 0 16px;text-align:center;">
-        <p style="margin:0 0 4px;font-weight:700;color:#166534;font-size:18px;">🎉 10% OFF your first order</p>
-        <p style="margin:0;color:#15803d;font-size:13px;">Discount applies automatically at checkout.</p>
+      <div style="background:#FBF1DA;border-radius:4px;padding:16px;margin:0 0 16px;text-align:center;">
+        <p style="margin:0 0 4px;font-weight:700;color:#111111;font-size:18px;">10% off your first order</p>
+        <p style="margin:0;color:#5F5E5A;font-size:13px;">Discount applies automatically at checkout.</p>
       </div>
       <div style="background:#f9f9f9;border-radius:8px;padding:16px;margin:0 0 24px;">
         <p style="margin:0 0 8px;font-weight:600;color:${TEXT_COLOR};">What you can do now:</p>
@@ -145,15 +148,15 @@ export async function sendWelcomeEmail(email: string, name?: string | null): Pro
           <li>Browse our full catalog of products</li>
           <li>Save items to your wishlist</li>
           <li>Track your orders in real time</li>
-          <li>Get free shipping on orders over &euro;100</li>
+          <li>Get free delivery on orders over &pound;100</li>
         </ul>
       </div>
       ${button(`${siteUrl}/en/catalog`, "Start Shopping")}
       <p style="color:#999;font-size:13px;margin:24px 0 0;text-align:center;">
-        Standard 2-year EU warranty on all products
+        Free delivery over &pound;100 &middot; 14-day returns &middot; Dispatched from the UK
       </p>
     `,
-      { preheader: `${greeting}! Your Ravora account is ready.` },
+      { preheader: `${greeting}! Your Hafwear account is ready.` },
     ),
   });
 }
@@ -276,7 +279,7 @@ function totalsBlock(data: OrderEmailData): string {
           <td style="text-align:right;font-weight:500;font-size:14px;padding:4px 0;${shipping === 0 ? "color:#2E7D32;" : ""}">${shipping === 0 ? "Free" : formatEur(shipping)}</td>
         </tr>
         <tr>
-          <td style="color:${MUTED_COLOR};font-size:14px;padding:4px 0;">Tax (21%)</td>
+          <td style="color:${MUTED_COLOR};font-size:14px;padding:4px 0;">VAT (${VAT_RATE}%, included)</td>
           <td style="text-align:right;font-weight:500;font-size:14px;padding:4px 0;">${formatEur(toNum(data.taxAmount))}</td>
         </tr>
         ${
@@ -288,8 +291,8 @@ function totalsBlock(data: OrderEmailData): string {
             : ""
         }
         <tr>
-          <td style="padding-top:12px;border-top:2px solid #e5e5e5;font-weight:800;font-size:16px;color:${TEXT_COLOR};">Total</td>
-          <td style="padding-top:12px;border-top:2px solid #e5e5e5;text-align:right;font-weight:800;font-size:16px;color:${TEXT_COLOR};">${formatEur(toNum(data.total))}</td>
+          <td style="padding-top:12px;border-top:2px solid #e5e5e5;font-weight:600;font-size:16px;color:${TEXT_COLOR};">Total</td>
+          <td style="padding-top:12px;border-top:2px solid #e5e5e5;text-align:right;font-weight:600;font-size:16px;color:${TEXT_COLOR};">${formatEur(toNum(data.total))}</td>
         </tr>
       </table>
     </div>`;
@@ -323,7 +326,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData): Promise<
       `
       <div style="text-align:center;margin-bottom:24px;">
         <div style="width:56px;height:56px;border-radius:50%;background:#E8F5E9;display:inline-block;line-height:56px;font-size:28px;color:#2E7D32;">&#10003;</div>
-        <h1 style="margin:12px 0 4px;font-size:22px;font-weight:800;color:${TEXT_COLOR};">Order Confirmed!</h1>
+        <h1 style="margin:12px 0 4px;font-size:22px;font-weight:500;color:${TEXT_COLOR};">Order Confirmed!</h1>
         <p style="margin:0;color:#999;font-size:14px;">Order #${id}</p>
       </div>
 
@@ -357,7 +360,7 @@ export async function sendOrderInvoiceEmail(data: OrderEmailData): Promise<boole
       `
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;border-bottom:2px solid #e5e5e5;padding-bottom:16px;">
         <div>
-          <h1 style="margin:0;font-size:24px;font-weight:800;color:${TEXT_COLOR};">Invoice</h1>
+          <h1 style="margin:0;font-size:24px;font-weight:500;color:${TEXT_COLOR};">Invoice</h1>
           <p style="margin:4px 0 0;color:#999;font-size:13px;">#${id} &middot; ${date}</p>
         </div>
       </div>
@@ -406,7 +409,7 @@ export async function sendOrderInvoiceEmail(data: OrderEmailData): Promise<boole
 
       <p style="color:#999;font-size:12px;margin:24px 0 0;line-height:1.6;text-align:center;">
         VAT is included in the prices shown where applicable. This invoice serves as proof of purchase.<br />
-        For any questions, reply to this email or contact <a href="mailto:info@ravora.co.uk" style="color:${BRAND_COLOR};">info@ravora.co.uk</a>.
+        For any questions, reply to this email or contact <a href="mailto:info@hafwear.co.uk" style="color:${BRAND_COLOR};">info@hafwear.co.uk</a>.
       </p>
     `,
       { preheader: `Invoice for order #${id} — ${formatEur(toNum(data.total))}` },
@@ -427,7 +430,7 @@ export async function sendOrderShippedEmail(data: OrderEmailData): Promise<boole
       `
       <div style="text-align:center;margin-bottom:24px;">
         <div style="display:inline-block;font-size:32px;">&#128666;</div>
-        <h1 style="margin:8px 0 4px;font-size:22px;font-weight:800;color:${TEXT_COLOR};">Your order shipped!</h1>
+        <h1 style="margin:8px 0 4px;font-size:22px;font-weight:500;color:${TEXT_COLOR};">Your order shipped!</h1>
         <p style="margin:0;color:#999;font-size:14px;">Order #${id}</p>
       </div>
 
@@ -513,7 +516,7 @@ export async function sendOrderStatusEmail(
       `
       <div style="text-align:center;margin-bottom:24px;">
         <div style="width:56px;height:56px;border-radius:50%;background:${v.iconBg};display:inline-block;line-height:56px;font-size:24px;color:${v.iconColor};">${v.icon}</div>
-        <h1 style="margin:12px 0 4px;font-size:22px;font-weight:800;color:${TEXT_COLOR};">${v.title}</h1>
+        <h1 style="margin:12px 0 4px;font-size:22px;font-weight:500;color:${TEXT_COLOR};">${v.title}</h1>
         <p style="margin:0;color:#999;font-size:14px;">Order #${id}</p>
       </div>
 
@@ -536,12 +539,12 @@ export async function sendPasswordResetEmail(email: string, resetUrl: string, na
   const greeting = name ? `Hi ${escape(name)}` : "Hi there";
   return send({
     to: email,
-    subject: "Reset your Ravora password",
+    subject: "Reset your Hafwear password",
     html: emailWrapper(
       `
-      <h1 style="margin:0 0 16px;font-size:22px;font-weight:800;color:${TEXT_COLOR};">Reset your password</h1>
+      <h1 style="margin:0 0 16px;font-size:22px;font-weight:500;color:${TEXT_COLOR};">Reset your password</h1>
       <p style="color:${MUTED_COLOR};line-height:1.6;margin:0 0 16px;">
-        ${greeting}, we received a request to reset the password on your Ravora account.
+        ${greeting}, we received a request to reset the password on your Hafwear account.
         Click the button below to choose a new password. This link expires in <strong>1 hour</strong>.
       </p>
       ${button(resetUrl, "Reset Password")}
@@ -554,7 +557,7 @@ export async function sendPasswordResetEmail(email: string, resetUrl: string, na
         If you didn&rsquo;t request this, you can safely ignore this email — your password won&rsquo;t change.
       </p>
     `,
-      { preheader: "Reset your Ravora password — link expires in 1 hour." },
+      { preheader: "Reset your Hafwear password — link expires in 1 hour." },
     ),
   });
 }
@@ -583,7 +586,7 @@ export async function sendContactFormEmail(submission: ContactSubmission): Promi
     subject: `Contact: ${submission.subject}`,
     replyTo: submission.email,
     html: emailWrapper(`
-      <h1 style="margin:0 0 16px;font-size:20px;font-weight:800;color:${TEXT_COLOR};">New contact form submission</h1>
+      <h1 style="margin:0 0 16px;font-size:20px;font-weight:500;color:${TEXT_COLOR};">New contact form submission</h1>
       <table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:14px;">
         <tr>
           <td style="padding:8px 0;color:#999;width:80px;">From</td>
@@ -606,10 +609,10 @@ export async function sendContactFormEmail(submission: ContactSubmission): Promi
 export async function sendContactAutoReplyEmail(submission: ContactSubmission): Promise<boolean> {
   return send({
     to: submission.email,
-    subject: "We received your message — Ravora",
+    subject: "We received your message — Hafwear",
     html: emailWrapper(
       `
-      <h1 style="margin:0 0 16px;font-size:22px;font-weight:800;color:${TEXT_COLOR};">Thanks for reaching out!</h1>
+      <h1 style="margin:0 0 16px;font-size:22px;font-weight:500;color:${TEXT_COLOR};">Thanks for reaching out!</h1>
       <p style="color:${MUTED_COLOR};line-height:1.6;margin:0 0 16px;">
         Hi ${escape(submission.name)}, we&rsquo;ve received your message and will reply within 24 hours.
       </p>

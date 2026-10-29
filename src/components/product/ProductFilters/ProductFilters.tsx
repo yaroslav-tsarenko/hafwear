@@ -32,15 +32,16 @@ interface ProductFiltersProps {
 function FilterSection({ title, defaultOpen = true, children }: { title: string; defaultOpen?: boolean; children: React.ReactNode }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-[color:var(--color-line)] last:border-b-0">
+    <div className="border-b border-[color:var(--color-border)]">
       <button
-        className="flex w-full cursor-pointer items-center justify-between border-none bg-transparent px-5 py-4 text-[color:var(--color-text-secondary)] transition-colors hover:bg-[color:var(--color-bg-secondary)]"
+        className="flex w-full cursor-pointer items-center justify-between border-none bg-transparent py-4 text-[color:var(--color-text)]"
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
       >
-        <h3 className="eyebrow !text-[color:var(--color-text)]">{title}</h3>
-        {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        <h3 className="text-[14px] font-medium">{title}</h3>
+        {open ? <ChevronUp size={16} strokeWidth={1.5} /> : <ChevronDown size={16} strokeWidth={1.5} />}
       </button>
-      {open && <div className="px-5 pb-4">{children}</div>}
+      {open && <div className="pb-5">{children}</div>}
     </div>
   );
 }
@@ -64,12 +65,12 @@ function CategoryItem({
   return (
     <>
       <li
-        className={`flex cursor-pointer items-center rounded-lg px-2.5 py-2 text-sm transition-colors ${
+        className={`flex cursor-pointer items-center py-1.5 text-[14px] transition-colors ${
           isActive
-            ? "bg-[color:var(--color-primary-tint)] font-semibold text-[color:var(--color-primary)]"
-            : "text-[color:var(--color-text-secondary)] hover:bg-[color:var(--color-bg-secondary)] hover:text-[color:var(--color-text)]"
+            ? "font-medium text-[color:var(--color-text)] underline underline-offset-4"
+            : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text)]"
         }`}
-        style={{ paddingLeft: `${0.75 + depth * 1}rem` }}
+        style={{ paddingLeft: `${depth * 0.875}rem` }}
       >
         <span
           onClick={() => onCategoryChange(cat.slug)}
@@ -105,7 +106,7 @@ function CategoryItem({
 }
 
 const PRICE_INPUT =
-  "w-full rounded-md border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-3 py-2 text-sm text-[color:var(--color-text)] transition-colors focus:border-[color:var(--color-primary)] focus:outline-none";
+  "w-full border-b border-[color:var(--color-border-strong)] bg-transparent px-0 py-2 text-[14px] text-[color:var(--color-text)] transition-colors focus:border-[color:var(--color-text)] focus:outline-none";
 
 function PriceSection({
   title, minPrice, maxPrice, onMinPriceChange, onMaxPriceChange,
@@ -165,25 +166,25 @@ function PriceSection({
       </div>
       <div className="grid grid-cols-2 gap-1.5">
         <button
-          className="cursor-pointer rounded-md border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-2 py-1.5 text-xs font-medium text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-primary)] hover:bg-[color:var(--color-primary-tint)] hover:text-[color:var(--color-primary)]"
+          className="cursor-pointer rounded-full border border-[color:var(--color-border)] bg-transparent px-2 py-1.5 text-[12px] text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-text)] hover:text-[color:var(--color-text)]"
           onClick={() => applyPreset("", "25")}
         >
           Under £25
         </button>
         <button
-          className="cursor-pointer rounded-md border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-2 py-1.5 text-xs font-medium text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-primary)] hover:bg-[color:var(--color-primary-tint)] hover:text-[color:var(--color-primary)]"
+          className="cursor-pointer rounded-full border border-[color:var(--color-border)] bg-transparent px-2 py-1.5 text-[12px] text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-text)] hover:text-[color:var(--color-text)]"
           onClick={() => applyPreset("25", "50")}
         >
           £25–£50
         </button>
         <button
-          className="cursor-pointer rounded-md border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-2 py-1.5 text-xs font-medium text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-primary)] hover:bg-[color:var(--color-primary-tint)] hover:text-[color:var(--color-primary)]"
+          className="cursor-pointer rounded-full border border-[color:var(--color-border)] bg-transparent px-2 py-1.5 text-[12px] text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-text)] hover:text-[color:var(--color-text)]"
           onClick={() => applyPreset("50", "100")}
         >
           £50–£100
         </button>
         <button
-          className="cursor-pointer rounded-md border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-2 py-1.5 text-xs font-medium text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-primary)] hover:bg-[color:var(--color-primary-tint)] hover:text-[color:var(--color-primary)]"
+          className="cursor-pointer rounded-full border border-[color:var(--color-border)] bg-transparent px-2 py-1.5 text-[12px] text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-text)] hover:text-[color:var(--color-text)]"
           onClick={() => applyPreset("100", "")}
         >
           £100+
@@ -213,12 +214,12 @@ export function ProductFilters({
   const nav = useTranslations("nav");
 
   return (
-    <aside className="flex flex-col overflow-hidden rounded-2xl border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)]">
+    <aside className="flex flex-col border-t border-[color:var(--color-border)]">
       <FilterSection title={t("filterBy")}>
         {categories.length === 0 ? (
           <div className="flex flex-col">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="flex items-center gap-2 px-2.5 py-2">
+              <div key={i} className="flex items-center gap-2 py-2">
                 <div
                   className="h-3 flex-1 animate-pulse rounded bg-[color:var(--color-bg-tertiary)]"
                   style={{ width: `${50 + (i * 19) % 40}%` }}
@@ -228,12 +229,12 @@ export function ProductFilters({
             ))}
           </div>
         ) : (
-          <ul className="m-0 flex max-h-56 list-none flex-col gap-0.5 overflow-y-auto p-0">
+          <ul className="m-0 flex max-h-72 list-none flex-col gap-0.5 overflow-y-auto p-0">
             <li
-              className={`cursor-pointer rounded-lg px-2.5 py-2 text-sm transition-colors ${
+              className={`cursor-pointer py-1.5 text-[14px] transition-colors ${
                 !selectedCategory
-                  ? "bg-[color:var(--color-primary-tint)] font-semibold text-[color:var(--color-primary)]"
-                  : "text-[color:var(--color-text-secondary)] hover:bg-[color:var(--color-bg-secondary)] hover:text-[color:var(--color-text)]"
+                  ? "font-medium text-[color:var(--color-text)] underline underline-offset-4"
+                  : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text)]"
               }`}
               onClick={() => onCategoryChange("")}
             >
@@ -262,12 +263,12 @@ export function ProductFilters({
 
       {brands.length > 0 && (
         <FilterSection title="Brand" defaultOpen={false}>
-          <ul className="m-0 flex max-h-56 list-none flex-col gap-0.5 overflow-y-auto p-0">
+          <ul className="m-0 flex max-h-72 list-none flex-col gap-0.5 overflow-y-auto p-0">
             <li
-              className={`cursor-pointer rounded-lg px-2.5 py-2 text-sm transition-colors ${
+              className={`cursor-pointer py-1.5 text-[14px] transition-colors ${
                 !selectedBrand
-                  ? "bg-[color:var(--color-primary-tint)] font-semibold text-[color:var(--color-primary)]"
-                  : "text-[color:var(--color-text-secondary)] hover:bg-[color:var(--color-bg-secondary)] hover:text-[color:var(--color-text)]"
+                  ? "font-medium text-[color:var(--color-text)] underline underline-offset-4"
+                  : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text)]"
               }`}
               onClick={() => onBrandChange("")}
             >
@@ -276,10 +277,10 @@ export function ProductFilters({
             {brands.map((brand) => (
               <li
                 key={brand}
-                className={`cursor-pointer rounded-lg px-2.5 py-2 text-sm transition-colors ${
+                className={`cursor-pointer py-1.5 text-[14px] transition-colors ${
                   selectedBrand === brand
-                    ? "bg-[color:var(--color-primary-tint)] font-semibold text-[color:var(--color-primary)]"
-                    : "text-[color:var(--color-text-secondary)] hover:bg-[color:var(--color-bg-secondary)] hover:text-[color:var(--color-text)]"
+                    ? "font-medium text-[color:var(--color-text)] underline underline-offset-4"
+                    : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text)]"
                 }`}
                 onClick={() => onBrandChange(brand)}
               >
@@ -291,7 +292,7 @@ export function ProductFilters({
       )}
 
       <FilterSection title={t("availability")} defaultOpen={false}>
-        <label className="flex cursor-pointer items-center gap-2 py-1.5 text-sm text-[color:var(--color-text-secondary)]">
+        <label className="flex cursor-pointer items-center gap-2.5 py-1.5 text-[14px] text-[color:var(--color-text-secondary)]">
           <input
             type="checkbox"
             checked={inStock}
@@ -300,7 +301,7 @@ export function ProductFilters({
           />
           <span>{t("inStock")}</span>
         </label>
-        <label className="flex cursor-pointer items-center gap-2 py-1.5 text-sm text-[color:var(--color-text-secondary)]">
+        <label className="flex cursor-pointer items-center gap-2.5 py-1.5 text-[14px] text-[color:var(--color-text-secondary)]">
           <input
             type="checkbox"
             checked={onSale}

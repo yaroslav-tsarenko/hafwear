@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 
 interface ProductGalleryProps {
@@ -8,54 +8,78 @@ interface ProductGalleryProps {
   productName: string;
 }
 
+/**
+ * Desktop: every photo stacked in a two-column grid (first one full width),
+ * so the shopper scrolls through the product instead of clicking thumbnails.
+ * Mobile: a swipeable strip with a position counter.
+ */
 export function ProductGallery({ images, productName }: ProductGalleryProps) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [current, setCurrent] = useState(0);
+  const strip = useRef<HTMLDivElement>(null);
 
   if (images.length === 0) {
     return (
-      <div className="flex flex-col gap-3">
-        <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-[color:var(--color-line)] bg-[#EDEDED] p-3 text-[color:var(--color-text-tertiary)] shadow-[0_1px_2px_rgba(28,26,23,0.04)] sm:aspect-[4/3] sm:p-5">
-          No Image
-        </div>
+      <div className="flex aspect-[4/5] items-center justify-center bg-[color:var(--color-image-bg)] text-[14px] text-[color:var(--color-text-tertiary)]">
+        No image
       </div>
     );
   }
 
+  const onScroll = () => {
+    const el = strip.current;
+    if (!el) return;
+    setCurrent(Math.round(el.scrollLeft / el.clientWidth));
+  };
+
   return (
-    <div className="flex flex-col gap-3">
-      <div className="relative aspect-square cursor-zoom-in overflow-hidden rounded-2xl border border-[color:var(--color-line)] bg-[#EDEDED] p-3 shadow-[0_1px_2px_rgba(28,26,23,0.04)] sm:aspect-[4/3] sm:p-5">
-        <Image
-          src={images[selectedIndex].url}
-          alt={images[selectedIndex].alt || productName}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-contain"
-          priority
-        />
-      </div>
-      {images.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto p-1">
+    <>
+      {/* Mobile strip */}
+      <div className="relative md:hidden">
+        <div
+          ref={strip}
+          onScroll={onScroll}
+          className="scrollbar-none -mx-5 flex snap-x snap-mandatory overflow-x-auto sm:-mx-8"
+        >
           {images.map((image, index) => (
-            <button
-              key={image.id}
-              className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 bg-[#EDEDED] p-1 transition-all sm:h-[72px] sm:w-[72px] ${
-                index === selectedIndex
-                  ? "border-[color:var(--color-primary)] shadow-[0_0_0_2px_rgba(31,77,63,0.18)]"
-                  : "border-[color:var(--color-line)] hover:-translate-y-px hover:border-[color:var(--color-primary)]"
-              }`}
-              onClick={() => setSelectedIndex(index)}
-            >
+            <div key={image.id} className="relative aspect-[4/5] w-full shrink-0 snap-center bg-[color:var(--color-image-bg)]">
               <Image
                 src={image.url}
-                alt={image.alt || `${productName} ${index + 1}`}
+                alt={image.alt || `${productName} — photo ${index + 1}`}
                 fill
-                sizes="72px"
-                className="object-contain"
+                sizes="100vw"
+                priority={index === 0}
+                className="object-contain p-[8%] mix-blend-multiply dark:mix-blend-normal"
               />
-            </button>
+            </div>
           ))}
         </div>
-      )}
-    </div>
+        {images.length > 1 && (
+          <span className="absolute bottom-3 right-0 bg-[color:var(--color-bg)] px-2 py-1 text-[12px] tabular-nums">
+            {current + 1} / {images.length}
+          </span>
+        )}
+      </div>
+
+      {/* Desktop grid */}
+      <div className="hidden grid-cols-2 gap-2 md:grid">
+        {images.map((image, index) => (
+          <div
+            key={image.id}
+            className={`relative bg-[color:var(--color-image-bg)] ${
+              index === 0 || images.length === 2 ? "col-span-2 aspect-[4/5]" : "aspect-[4/5]"
+            }`}
+          >
+            <Image
+              src={image.url}
+              alt={image.alt || `${productName} — photo ${index + 1}`}
+              fill
+              sizes={index === 0 ? "(max-width: 1280px) 55vw, 760px" : "(max-width: 1280px) 28vw, 380px"}
+              priority={index === 0}
+              className="object-contain p-[8%] mix-blend-multiply dark:mix-blend-normal"
+            />
+          </div>
+        ))}
+      </div>
+    </>
   );
 }

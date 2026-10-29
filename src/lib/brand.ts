@@ -1,17 +1,24 @@
 /**
- * Central brand identity for ravora / JAYHALE LIMITED.
+ * Central brand identity for Hafwear / JAYHALE LIMITED.
  * Import from here instead of hardcoding company details in components.
+ *
+ * "Haf" is Welsh for summer — the company is based in Bridgend, Wales.
  */
 
 export const brand = {
-  name: "ravora",
-  displayName: "Ravora",
-  domain: "ravora.co.uk",
-  url: "https://ravora.co.uk",
-  tagline: "Refined athletic apparel.",
+  name: "hafwear",
+  displayName: "Hafwear",
+  domain: "hafwear.co.uk",
+  url: "https://hafwear.co.uk",
+  tagline: "That summer feeling, all year round.",
   description:
-    "Ravora — a curated apparel edit from JAYHALE LIMITED. Sustainably sourced tees, hoodies, bottoms and swimwear for men, women and kids. Shipped from the United Kingdom.",
-  applicationName: "Ravora",
+    "Hafwear — easy everyday clothes for the whole family. Tees, sweatshirts, hoodies, bottoms and swimwear for men, women and kids, from a small team in Bridgend, Wales.",
+  applicationName: "Hafwear",
+  story: {
+    word: "haf",
+    pronunciation: "/hɑːv/",
+    meaning: "Welsh for summer",
+  },
 
   company: {
     legalName: "JAYHALE LIMITED",
@@ -27,14 +34,14 @@ export const brand = {
   },
 
   contact: {
-    email: "info@ravora.co.uk",
-    emailB2B: "b2b@ravora.co.uk",
+    email: "info@hafwear.co.uk",
+    emailB2B: "b2b@hafwear.co.uk",
     phone: "+44 7915 921997",
     phoneHref: "tel:+447915921997",
   },
 
   social: {
-    twitter: "@ravora",
+    twitter: "@hafwear",
   },
 } as const;
 

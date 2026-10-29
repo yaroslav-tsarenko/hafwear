@@ -1,222 +1,234 @@
 /*
- * Ravora — Warm Editorial Tech design tokens.
- * Warm off-white base, deep pine primary, terracotta CTA accent.
- * Kept as CSS custom properties for legacy inline styles and cross-referenced by @theme in globals.css.
+ * Hafwear — Soft Minimal design tokens.
+ * Pale stone base, near-black ink and buttons, a muted ochre "sun" used
+ * only for small accents (logo mark, badges, highlights).
+ * Kept as CSS custom properties for inline styles and cross-referenced by @theme in globals.css.
  */
 
 :root {
   /* ── Brand ──────────────────────────────────────────────────────────── */
-  --color-primary: #1F4D3F;          /* deep forest / pine — header, key emphasis */
-  --color-primary-hover: #163A2E;
-  --color-primary-tint: #EAF1EC;     /* soft pine wash for hovers/fills */
-  --color-primary-fg: #F6F4EF;       /* text on primary surfaces */
+  --color-primary: #111111;          /* ink — buttons, key emphasis */
+  --color-primary-hover: #2B2B2A;
+  --color-primary-tint: #E7E6E2;     /* neutral wash for hovers/fills */
+  --color-primary-fg: #FFFFFF;       /* text on primary surfaces */
 
-  --color-accent: #C65B3C;           /* warm terracotta — CTAs, prices, badges */
-  --color-accent-hover: #A94A2E;
-  --color-accent-tint: rgba(198, 91, 60, 0.10);
+  --color-accent: #111111;           /* CTAs stay ink — colour comes from the product */
+  --color-accent-hover: #2B2B2A;
+  --color-accent-tint: rgba(224, 165, 38, 0.16);
   --color-accent-fg: #FFFFFF;
 
+  --color-sun: #E0A526;              /* muted ochre — logo mark, badges, highlights */
+  --color-sun-ink: #8A5F06;          /* ochre dark enough for text on light surfaces */
+  --color-sun-tint: rgba(224, 165, 38, 0.16);
+  --color-sale: #C2410C;
+
   --color-secondary: #FFFFFF;
-  --color-price: var(--color-accent);
-  --color-cta: var(--color-accent);
-  --color-cta-hover: var(--color-accent-hover);
-  --color-header: var(--color-primary);
-  --color-header-secondary: #163A2E;
+  --color-price: var(--color-text);
+  --color-cta: var(--color-primary);
+  --color-cta-hover: var(--color-primary-hover);
+  --color-header: var(--color-bg);
+  --color-header-secondary: var(--color-bg-secondary);
 
   /* Legacy aliases used across older components */
   --color-accent-light: var(--color-accent-tint);
   --color-accent-2: var(--color-primary);
   --color-accent-2-hover: var(--color-primary-hover);
-  --color-accent-3: #4E7A63;
-  --color-accent-4: #6B5A44;
+  --color-accent-3: #5E6B5A;
+  --color-accent-4: #6E675D;
 
   /* ── Surfaces ───────────────────────────────────────────────────────── */
-  --color-bg: #F6F4EF;               /* bone / warm off-white — page bg */
+  --color-bg: #F2F1EE;               /* pale stone — page bg */
   --color-bg-elevated: #FFFFFF;      /* cards, dialogs */
-  --color-bg-secondary: #EFEBE2;     /* subtle warm surface */
-  --color-bg-tertiary: #E4E0D9;      /* muted */
-  --color-bg-warm: #F3EEE4;
-  --color-bg-cool: #EAF1EC;
+  --color-bg-secondary: #EAE9E5;     /* subtle surface */
+  --color-bg-tertiary: #E1E0DB;      /* muted */
+  --color-bg-warm: #EFEBE3;
+  --color-bg-cool: #ECEDEB;
+  --color-image-bg: #E9E8E4;         /* product photo backdrop */
 
   /* ── Text ───────────────────────────────────────────────────────────── */
-  --color-text: #1C1A17;             /* near-black warm charcoal */
-  --color-text-secondary: #6B6560;   /* muted */
-  --color-text-tertiary: #96908A;    /* subtler */
-  --color-text-inverse: #F6F4EF;
+  --color-text: #111111;
+  --color-text-secondary: #5F5E5A;
+  --color-text-tertiary: #8E8C86;
+  --color-text-inverse: #FFFFFF;
 
   /* ── Lines ──────────────────────────────────────────────────────────── */
-  --color-border: #E4E0D9;
-  --color-border-hover: #C9C3B7;
-  --color-border-strong: #A9A297;
-  --color-hairline: rgba(28, 26, 23, 0.08);
+  --color-border: #DEDCD7;
+  --color-border-hover: #C4C2BC;
+  --color-border-strong: #A3A19B;
+  --color-hairline: rgba(17, 17, 17, 0.08);
 
   /* ── Status ─────────────────────────────────────────────────────────── */
-  --color-success: #4E7A63;          /* muted sage — "in stock" */
-  --color-success-light: #E7EFEA;
-  --color-warning: #B77A1F;
-  --color-warning-light: #F6ECD9;
-  --color-danger: #B54634;
-  --color-danger-light: #F4DCD5;
-  --color-info: #1F4D3F;
+  --color-success: #3F6B4F;
+  --color-success-light: #E4ECE5;
+  --color-warning: #9A6A08;
+  --color-warning-light: #F5ECD6;
+  --color-danger: #B3261E;
+  --color-danger-light: #F6DEDB;
+  --color-info: #111111;
 
-  /* ── Elevation — hairlines over heavy shadows ───────────────────────── */
-  --shadow-sm: 0 1px 2px rgba(28, 26, 23, 0.04);
-  --shadow-md: 0 4px 14px rgba(28, 26, 23, 0.06);
-  --shadow-lg: 0 12px 32px rgba(28, 26, 23, 0.08);
-  --shadow-xl: 0 24px 60px rgba(28, 26, 23, 0.12);
-  --shadow-card: 0 1px 2px rgba(28, 26, 23, 0.04);
-  --shadow-card-hover: 0 8px 24px rgba(28, 26, 23, 0.08);
-  --shadow-accent: 0 10px 24px rgba(198, 91, 60, 0.18);
-  --shadow-warm: 0 10px 24px rgba(198, 91, 60, 0.18);
+  /* ── Elevation — hairlines, almost no shadow ────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04);
+  --shadow-md: 0 4px 14px rgba(17, 17, 17, 0.05);
+  --shadow-lg: 0 12px 32px rgba(17, 17, 17, 0.07);
+  --shadow-xl: 0 24px 60px rgba(17, 17, 17, 0.10);
+  --shadow-card: none;
+  --shadow-card-hover: none;
+  --shadow-accent: 0 8px 20px rgba(17, 17, 17, 0.12);
+  --shadow-warm: 0 8px 20px rgba(224, 165, 38, 0.18);
 
-  /* ── Gradients — used sparingly, warm and subtle ─────────────────────── */
-  --gradient-primary: linear-gradient(180deg, #1F4D3F 0%, #163A2E 100%);
-  --gradient-accent: linear-gradient(180deg, #C65B3C 0%, #A94A2E 100%);
-  --gradient-warm: linear-gradient(180deg, #F6F4EF 0%, #EFEBE2 100%);
-  --gradient-cool: linear-gradient(180deg, #1F4D3F 0%, #163A2E 100%);
-  --gradient-hero: linear-gradient(180deg, #F6F4EF 0%, #EFEBE2 100%);
-  --gradient-badge: linear-gradient(180deg, #C65B3C 0%, #A94A2E 100%);
-  --gradient-mint: linear-gradient(180deg, #EAF1EC 0%, #D8E5DB 100%);
-  --gradient-sunset: linear-gradient(180deg, #F3EEE4 0%, #E9DFCE 100%);
-  --gradient-electric: linear-gradient(180deg, #1F4D3F 0%, #4E7A63 100%);
-  --gradient-card-hover: linear-gradient(180deg, rgba(31, 77, 63, 0.03) 0%, rgba(198, 91, 60, 0.03) 100%);
+  /* ── Gradients — flattened; kept for legacy references ──────────────── */
+  --gradient-primary: linear-gradient(180deg, #111111 0%, #111111 100%);
+  --gradient-accent: linear-gradient(180deg, #111111 0%, #111111 100%);
+  --gradient-warm: linear-gradient(180deg, #F2F1EE 0%, #EAE9E5 100%);
+  --gradient-cool: linear-gradient(180deg, #111111 0%, #111111 100%);
+  --gradient-hero: linear-gradient(180deg, #F2F1EE 0%, #F2F1EE 100%);
+  --gradient-badge: linear-gradient(180deg, #E0A526 0%, #E0A526 100%);
+  --gradient-mint: linear-gradient(180deg, #ECEDEB 0%, #ECEDEB 100%);
+  --gradient-sunset: linear-gradient(180deg, #EFEBE3 0%, #EFEBE3 100%);
+  --gradient-electric: linear-gradient(180deg, #111111 0%, #111111 100%);
+  --gradient-card-hover: none;
 
-  /* ── Radii — soft rounded corners ────────────────────────────────────── */
-  --radius-sm: 0.375rem;   /* 6 */
-  --radius-md: 0.625rem;   /* 10 */
-  --radius-lg: 0.875rem;   /* 14 */
-  --radius-xl: 1rem;       /* 16 */
-  --radius-2xl: 1.5rem;    /* 24 */
+  /* ── Radii — tight, quiet corners ────────────────────────────────────── */
+  --radius-sm: 0.125rem;   /* 2 */
+  --radius-md: 0.1875rem;  /* 3 */
+  --radius-lg: 0.25rem;    /* 4 */
+  --radius-xl: 0.375rem;   /* 6 */
+  --radius-2xl: 0.5rem;    /* 8 */
   --radius-pill: 9999px;
 
   /* ── Layout ─────────────────────────────────────────────────────────── */
-  --max-width: 1240px;
-  --header-height: 148px;
+  --max-width: 1440px;
+  --header-height: 64px;
   --announcement-height: 36px;
 
   /* ── Type ───────────────────────────────────────────────────────────── */
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-serif: "Cormorant Garamond", "Cormorant", ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* ── Promo tints — warm-toned, no lavender/pink ─────────────────────── */
-  --promo-bg-blue: #EAF1EC;          /* pine tint */
-  --promo-bg-warm: #F3EEE4;          /* bone */
-  --promo-bg-green: #E7EFEA;         /* sage */
-  --promo-bg-purple: #EFEBE2;        /* neutral */
-  --promo-bg-pink: #F4DCD5;          /* muted clay */
+  /* ── Promo tints — neutral stone family ─────────────────────────────── */
+  --promo-bg-blue: #ECEDEB;
+  --promo-bg-warm: #EFEBE3;
+  --promo-bg-green: #E8EAE5;
+  --promo-bg-purple: #EAE9E5;
+  --promo-bg-pink: #F1E7DC;
 }
 
 [data-theme="dark"],
 .dark {
-  /* ── Brand — vibrant on dark, matches light-theme spirit ──────────────── */
-  --color-primary: #8CD4B4;           /* fresh pine — hits AA on dark bg */
-  --color-primary-hover: #A8E0C5;
-  --color-primary-tint: rgba(140, 212, 180, 0.14);
-  --color-primary-fg: #0A100D;        /* deep near-black for text on primary */
+  /* ── Brand — inverted: light ink buttons on charcoal ────────────────── */
+  --color-primary: #EDEBE6;
+  --color-primary-hover: #FFFFFF;
+  --color-primary-tint: rgba(237, 235, 230, 0.08);
+  --color-primary-fg: #131312;
 
-  --color-accent: #F58C68;            /* rich terracotta, lifted */
-  --color-accent-hover: #FFA689;
-  --color-accent-tint: rgba(245, 140, 104, 0.15);
-  --color-accent-fg: #0A100D;
+  --color-accent: #EDEBE6;
+  --color-accent-hover: #FFFFFF;
+  --color-accent-tint: rgba(232, 178, 58, 0.16);
+  --color-accent-fg: #131312;
 
-  --color-secondary: #0A100D;
-  --color-price: var(--color-accent);
-  --color-cta: var(--color-accent);
-  --color-cta-hover: var(--color-accent-hover);
-  --color-header: #0A100D;
-  --color-header-secondary: #131916;
+  --color-sun: #E8B23A;
+  --color-sun-ink: #E8B23A;
+  --color-sun-tint: rgba(232, 178, 58, 0.16);
+  --color-sale: #F0743E;
+
+  --color-secondary: #131312;
+  --color-price: var(--color-text);
+  --color-cta: var(--color-primary);
+  --color-cta-hover: var(--color-primary-hover);
+  --color-header: var(--color-bg);
+  --color-header-secondary: var(--color-bg-secondary);
 
   --color-accent-light: var(--color-accent-tint);
   --color-accent-2: var(--color-primary);
   --color-accent-2-hover: var(--color-primary-hover);
-  --color-accent-3: #8CD4B4;
-  --color-accent-4: #B9AF9B;
+  --color-accent-3: #A9B5A4;
+  --color-accent-4: #B5AD9F;
 
-  /* ── Surfaces — 4 distinct elevation tiers so cards actually stand out ─ */
-  --color-bg: #0B100E;                /* base — deep pine-charcoal */
-  --color-bg-elevated: #15191A;       /* cards / dialogs (+7 luminance) */
-  --color-bg-secondary: #1A1E1F;      /* subtle raised strips */
-  --color-bg-tertiary: #24282A;       /* panels / rows / muted */
-  --color-bg-warm: #1D1B17;
-  --color-bg-cool: #12181A;
+  /* ── Surfaces ───────────────────────────────────────────────────────── */
+  --color-bg: #131312;
+  --color-bg-elevated: #1C1C1A;
+  --color-bg-secondary: #21211F;
+  --color-bg-tertiary: #2A2A28;
+  --color-bg-warm: #1F1D19;
+  --color-bg-cool: #1A1B1A;
+  --color-image-bg: #1E1E1C;
 
-  /* ── Text — high contrast, warm off-white ───────────────────────────── */
-  --color-text: #F4EFE3;              /* warm cream, WCAG AAA on bg */
-  --color-text-secondary: #B4ADA0;    /* muted but readable */
-  --color-text-tertiary: #82796D;     /* hint / metadata */
-  --color-text-inverse: #0A100D;
+  /* ── Text ───────────────────────────────────────────────────────────── */
+  --color-text: #EDEBE6;
+  --color-text-secondary: #ADABA5;
+  --color-text-tertiary: #7F7D77;
+  --color-text-inverse: #131312;
 
-  /* ── Lines — visible without being loud ─────────────────────────────── */
-  --color-border: #2A2E30;
-  --color-border-hover: #3D4144;
-  --color-border-strong: #55595C;
-  --color-hairline: rgba(244, 239, 227, 0.08);
+  /* ── Lines ──────────────────────────────────────────────────────────── */
+  --color-border: #2E2E2B;
+  --color-border-hover: #3F3F3B;
+  --color-border-strong: #57564F;
+  --color-hairline: rgba(237, 235, 230, 0.08);
 
-  /* ── Status — vibrant on dark ──────────────────────────────────────── */
-  --color-success: #8CD4B4;
-  --color-success-light: rgba(140, 212, 180, 0.14);
-  --color-warning: #E5B85B;
-  --color-warning-light: rgba(229, 184, 91, 0.14);
-  --color-danger: #E88871;
-  --color-danger-light: rgba(232, 136, 113, 0.14);
+  /* ── Status ─────────────────────────────────────────────────────────── */
+  --color-success: #8FBF9C;
+  --color-success-light: rgba(143, 191, 156, 0.14);
+  --color-warning: #E8B23A;
+  --color-warning-light: rgba(232, 178, 58, 0.14);
+  --color-danger: #F08A80;
+  --color-danger-light: rgba(240, 138, 128, 0.14);
+  --color-info: #EDEBE6;
 
-  /* ── Shadows — heavier for depth on dark ──────────────────────────── */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.55);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
-  --shadow-xl: 0 32px 80px rgba(0, 0, 0, 0.65);
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-card-hover: 0 14px 32px rgba(0, 0, 0, 0.55);
-  --shadow-accent: 0 12px 30px rgba(245, 140, 104, 0.35);
-  --shadow-warm: 0 12px 30px rgba(245, 140, 104, 0.25);
+  /* ── Shadows ────────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 32px 80px rgba(0, 0, 0, 0.55);
+  --shadow-card: none;
+  --shadow-card-hover: none;
+  --shadow-accent: 0 8px 20px rgba(0, 0, 0, 0.4);
+  --shadow-warm: 0 8px 20px rgba(232, 178, 58, 0.2);
 
-  /* ── Gradients — quiet, brand-tinted ──────────────────────────────── */
-  --gradient-primary: linear-gradient(180deg, #131916 0%, #0A100D 100%);
-  --gradient-accent: linear-gradient(180deg, #F58C68 0%, #C7654A 100%);
-  --gradient-warm: linear-gradient(180deg, #15191A 0%, #0B100E 100%);
-  --gradient-cool: linear-gradient(180deg, #131916 0%, #0A100D 100%);
-  --gradient-hero: linear-gradient(180deg, #0B100E 0%, #15191A 100%);
-  --gradient-badge: linear-gradient(180deg, #F58C68 0%, #C7654A 100%);
-  --gradient-mint: linear-gradient(180deg, rgba(140, 212, 180, 0.12) 0%, rgba(140, 212, 180, 0.06) 100%);
-  --gradient-sunset: linear-gradient(180deg, rgba(245, 140, 104, 0.10) 0%, rgba(245, 140, 104, 0.04) 100%);
-  --gradient-electric: linear-gradient(180deg, #8CD4B4 0%, #5FA085 100%);
-  --gradient-card-hover: linear-gradient(180deg, rgba(140, 212, 180, 0.06) 0%, rgba(245, 140, 104, 0.06) 100%);
+  /* ── Gradients ──────────────────────────────────────────────────────── */
+  --gradient-primary: linear-gradient(180deg, #1C1C1A 0%, #1C1C1A 100%);
+  --gradient-accent: linear-gradient(180deg, #EDEBE6 0%, #EDEBE6 100%);
+  --gradient-warm: linear-gradient(180deg, #1C1C1A 0%, #131312 100%);
+  --gradient-cool: linear-gradient(180deg, #1C1C1A 0%, #1C1C1A 100%);
+  --gradient-hero: linear-gradient(180deg, #131312 0%, #131312 100%);
+  --gradient-badge: linear-gradient(180deg, #E8B23A 0%, #E8B23A 100%);
+  --gradient-mint: linear-gradient(180deg, #1A1B1A 0%, #1A1B1A 100%);
+  --gradient-sunset: linear-gradient(180deg, #1F1D19 0%, #1F1D19 100%);
+  --gradient-electric: linear-gradient(180deg, #EDEBE6 0%, #EDEBE6 100%);
+  --gradient-card-hover: none;
 
-  /* ── Promo tints — brand-tinted glass ─────────────────────────────── */
-  --promo-bg-blue: rgba(140, 212, 180, 0.10);
-  --promo-bg-warm: rgba(245, 140, 104, 0.10);
-  --promo-bg-green: rgba(140, 212, 180, 0.08);
-  --promo-bg-purple: rgba(185, 176, 162, 0.06);
-  --promo-bg-pink: rgba(245, 140, 104, 0.12);
+  --promo-bg-blue: #1A1B1A;
+  --promo-bg-warm: #1F1D19;
+  --promo-bg-green: #1B1C1A;
+  --promo-bg-purple: #1C1C1A;
+  --promo-bg-pink: #221E19;
 
   /* ── Tailwind @theme tokens — override the light-theme names ──────────
      Tailwind's `@theme` block in globals.css bakes light-mode values (bone,
      paper, cream, ink, line, etc.) into :root. We remap them here so any
-     Tailwind utility built on those tokens (`bg-bone`, `text-ink`,
-     `border-line`) automatically re-themes to dark. */
-  --color-bone: #0B100E;
-  --color-paper: #15191A;
-  --color-cream: #1A1E1F;
-  --color-surface: #1A1E1F;
+     Tailwind utility built on those tokens re-themes to dark. */
+  --color-bone: #131312;
+  --color-paper: #1C1C1A;
+  --color-cream: #21211F;
+  --color-surface: #21211F;
 
-  --color-ink: #F4EFE3;
-  --color-ink-2: #B4ADA0;
-  --color-ink-3: #82796D;
+  --color-ink: #EDEBE6;
+  --color-ink-2: #ADABA5;
+  --color-ink-3: #7F7D77;
 
-  --color-line: #2A2E30;
-  --color-line-strong: #3D4144;
+  --color-line: #2E2E2B;
+  --color-line-strong: #3F3F3B;
 
-  --color-success-tint: rgba(140, 212, 180, 0.14);
-  --color-warning-tint: rgba(229, 184, 91, 0.14);
-  --color-danger-tint: rgba(232, 136, 113, 0.14);
+  --color-success-tint: rgba(143, 191, 156, 0.14);
+  --color-warning-tint: rgba(232, 178, 58, 0.14);
+  --color-danger-tint: rgba(240, 138, 128, 0.14);
 }
 
-/* ── Dark-theme surface tweaks — smooth over places that hardcoded warm
-   tones and now visually clash on the new palette. Additive only. */
+/* Photos of white apparel on a white bg look garish on dark surfaces —
+   nudge the whites so they read as off-white. */
 [data-theme="dark"] img[src*=".jpg"],
 [data-theme="dark"] img[src*=".jpeg"],
 [data-theme="dark"] img[src*=".png"],
@@ -225,7 +237,5 @@
 .dark img[src*=".jpeg"],
 .dark img[src*=".png"],
 .dark img[src*=".webp"] {
-  /* Photos of white apparel on a white bg look garish on dark surfaces —
-     nudge the whites so they read as "off-white" rather than pure white. */
-  filter: brightness(0.94) contrast(0.98);
+  filter: brightness(0.92) contrast(0.98);
 }

@@ -119,7 +119,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     ? product.reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviewCount
     : 0;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ravora.co.uk";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.co.uk";
 
   const characteristics = product.characteristics as Record<string, Record<string, string>> | null;
 
@@ -152,7 +152,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    { label: "Catalog", href: "/catalog" },
     ...categoryChain.map((cat) => ({
       label: cat.name,
       href: `/catalog/${cat.slug}`,
@@ -160,35 +159,47 @@ export default async function ProductPage({ params }: ProductPageProps) {
     { label: product.name },
   ];
 
+  const variants = product.variants.map((v) => ({
+    id: v.id,
+    name: v.name,
+    sku: v.sku,
+    price: v.price == null ? null : Number(v.price),
+    quantity: v.quantity,
+    options: (v.options && typeof v.options === "object" && !Array.isArray(v.options)
+      ? Object.fromEntries(Object.entries(v.options).map(([k, val]) => [k, String(val ?? "")]))
+      : {}) as Record<string, string>,
+  }));
+
   return (
-    <div className="mx-auto w-full max-w-[var(--max-width)] px-4 pb-16">
+    <div className="hw-container pb-24">
       <JsonLd data={jsonLd} />
 
       <Breadcrumbs items={breadcrumbItems} />
 
-      <div className="mt-2 grid grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8 lg:gap-12">
-        <div className="md:sticky md:top-[calc(var(--header-height)+1rem)]">
-          <ProductGallery images={product.images} productName={product.name} />
+      <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
+        <ProductGallery images={product.images} productName={product.name} />
+        <div className="md:sticky md:top-[calc(var(--header-height)+1.5rem)]">
+          <ProductInfo
+            id={product.id}
+            name={product.name}
+            slug={product.slug}
+            sku={product.sku}
+            price={Number(product.price)}
+            comparePrice={product.comparePrice ? Number(product.comparePrice) : null}
+            quantity={product.quantity}
+            shortDescription={product.shortDescription}
+            description={product.description}
+            brand={product.brand}
+            condition={product.condition}
+            lowStockAlert={product.lowStockAlert}
+            imageUrl={product.images[0]?.url}
+            ean={product.ean}
+            reviewCount={reviewCount}
+            avgRating={avgRating}
+            categoryPath={categoryChain}
+            variants={variants}
+          />
         </div>
-        <ProductInfo
-          id={product.id}
-          name={product.name}
-          slug={product.slug}
-          sku={product.sku}
-          price={Number(product.price)}
-          comparePrice={product.comparePrice ? Number(product.comparePrice) : null}
-          quantity={product.quantity}
-          shortDescription={product.shortDescription}
-          description={product.description}
-          brand={product.brand}
-          condition={product.condition}
-          lowStockAlert={product.lowStockAlert}
-          imageUrl={product.images[0]?.url}
-          ean={product.ean}
-          reviewCount={reviewCount}
-          avgRating={avgRating}
-          categoryPath={categoryChain}
-        />
       </div>
 
       <ProductTabs

@@ -17,7 +17,7 @@ interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Ravora Chip — replaces HeroUI's Chip.
+ * Hafwear Chip — replaces HeroUI's Chip.
  * Editorial pill: soft warm-toned surfaces, hairline borders.
  */
 export function Chip({
@@ -45,17 +45,17 @@ export function Chip({
       bordered: "bg-transparent text-[color:var(--color-text)] border border-[color:var(--color-border)]",
     },
     primary: {
-      solid: "bg-[color:var(--color-primary)] text-white border border-transparent",
+      solid: "bg-[color:var(--color-primary)] text-[color:var(--color-primary-fg)] border border-transparent",
       flat: "bg-[color:var(--color-primary-tint)] text-[color:var(--color-primary)] border border-transparent",
       bordered: "bg-transparent text-[color:var(--color-primary)] border border-[color:var(--color-primary)]/50",
     },
     secondary: {
-      solid: "bg-[color:var(--color-primary)] text-white border border-transparent",
+      solid: "bg-[color:var(--color-primary)] text-[color:var(--color-primary-fg)] border border-transparent",
       flat: "bg-[color:var(--color-primary-tint)] text-[color:var(--color-primary)] border border-transparent",
       bordered: "bg-transparent text-[color:var(--color-primary)] border border-[color:var(--color-primary)]/40",
     },
     accent: {
-      solid: "bg-[color:var(--color-accent)] text-white border border-transparent",
+      solid: "bg-[color:var(--color-accent)] text-[color:var(--color-accent-fg)] border border-transparent",
       flat: "bg-[color:var(--color-accent-tint)] text-[color:var(--color-accent)] border border-transparent",
       bordered: "bg-transparent text-[color:var(--color-accent)] border border-[color:var(--color-accent)]/50",
     },

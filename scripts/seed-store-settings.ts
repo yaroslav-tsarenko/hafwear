@@ -10,7 +10,7 @@ async function main() {
   const now = new Date().toISOString();
   await c.query(
     `INSERT INTO "StoreSettings" (id, name, description, "primaryColor", "secondaryColor", email, currency, "taxRate", "freeShippingMin", "metaTitle", "metaDescription", "updatedAt")
-     VALUES ('default', $1, $2, '#0F172A', '#FFFFFF', 'info@ravora.co.uk', 'GBP', 20, 100, $3, $4, $5)
+     VALUES ('default', $1, $2, '#111111', '#E0A526', 'info@hafwear.co.uk', 'GBP', 20, 100, $3, $4, $5)
      ON CONFLICT (id) DO UPDATE
        SET name = EXCLUDED.name,
            description = EXCLUDED.description,
@@ -22,10 +22,10 @@ async function main() {
            "metaDescription" = EXCLUDED."metaDescription",
            "updatedAt" = EXCLUDED."updatedAt"`,
     [
-      "Ravora",
-      "Refined athletic apparel for men, women and kids. Shipped from the United Kingdom.",
-      "Ravora — Refined athletic apparel",
-      "Curated apparel from Ravora — sustainably sourced tees, hoodies and swimwear for men, women and kids. Shipped from the United Kingdom.",
+      "Hafwear",
+      "Easy everyday clothes for the whole family, from a small team in Bridgend, Wales.",
+      "Hafwear — That summer feeling, all year round.",
+      "Hafwear — easy everyday clothes for the whole family. Tees, sweatshirts, hoodies, bottoms and swimwear for men, women and kids, from a small team in Bridgend, Wales.",
       now,
     ],
   );

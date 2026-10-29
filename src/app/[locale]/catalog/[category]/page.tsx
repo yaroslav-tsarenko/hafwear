@@ -29,13 +29,13 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     title: category.name,
     description:
       category.description ||
-      `Shop ${category.name} at Ravora. Browse premium made-to-order apparel — tees, hoodies, sweatshirts and more.`,
+      `Shop ${category.name} at Hafwear. Browse premium made-to-order apparel — tees, hoodies, sweatshirts and more.`,
     alternates: { canonical: `/${locale}/catalog/${category.slug}` },
     openGraph: {
-      title: `${category.name} | Ravora`,
+      title: `${category.name} | Hafwear`,
       description:
         category.description ||
-        `Shop ${category.name} products at Ravora.`,
+        `Shop ${category.name} products at Hafwear.`,
       url: `/${locale}/catalog/${category.slug}`,
     },
   };
@@ -48,7 +48,18 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
   const category = await prisma.category.findUnique({
     where: { slug },
-    select: { id: true, name: true, description: true, slug: true },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      slug: true,
+      parent: { select: { name: true, slug: true } },
+      children: {
+        where: { isActive: true },
+        orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+        select: { id: true, name: true, slug: true },
+      },
+    },
   });
 
   // Unknown/stale category slugs land on the full catalog instead of dead-ending on a 404.
@@ -79,7 +90,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
         images: {
           select: { url: true, alt: true },
           orderBy: { sortOrder: "asc" },
-          take: 1,
+          take: 2,
         },
         categories: {
           select: { category: { select: { name: true } } },
@@ -105,56 +116,76 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const basePath = `/${locale}/catalog/${category.slug}`;
 
+  const pageHref = (n: number) => (n > 1 ? `${basePath}?page=${n}` : basePath);
+
   return (
-    <div className="mx-auto w-full max-w-[var(--max-width)] px-4 pb-12 [overflow-wrap:anywhere]">
+    <div className="hw-container pb-24 [overflow-wrap:anywhere]">
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
-          { label: "Catalog", href: "/catalog" },
+          ...(category.parent
+            ? [{ label: category.parent.name, href: `/catalog/${category.parent.slug}` }]
+            : [{ label: "Shop", href: "/catalog" }]),
           { label: category.name },
         ]}
       />
 
-      <span className="eyebrow">Category</span>
-      <h1 className="mb-3 mt-2 break-words font-serif text-3xl font-medium tracking-tight text-[color:var(--color-text)] sm:text-[40px]">
-        {category.name}
-      </h1>
-
-      {category.description && (
-        <p className="mb-6 max-w-2xl text-[15px] leading-relaxed text-[color:var(--color-text-secondary)]">
-          {category.description}
+      <header className="flex flex-col gap-6 pb-10 pt-4 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-2xl">
+          {category.parent && (
+            <p className="mb-3 text-[12px] uppercase tracking-[0.12em] text-[color:var(--color-text-tertiary)]">
+              {category.parent.name}
+            </p>
+          )}
+          <h1 className="break-words font-serif text-[48px] leading-[0.98] sm:text-[64px]">{category.name}</h1>
+          {category.description && (
+            <p className="mt-4 text-[15px] leading-relaxed text-[color:var(--color-text-secondary)]">
+              {category.description}
+            </p>
+          )}
+        </div>
+        <p className="text-[13px] tabular-nums text-[color:var(--color-text-tertiary)]">
+          {total.toLocaleString()} product{total === 1 ? "" : "s"}
         </p>
+      </header>
+
+      {category.children.length > 0 && (
+        <nav aria-label="Subcategories" className="scrollbar-none -mx-1 mb-10 flex gap-2 overflow-x-auto px-1">
+          <span className="inline-flex h-9 shrink-0 items-center rounded-full bg-[color:var(--color-primary)] px-4 text-[13px] text-[color:var(--color-primary-fg)]">
+            All
+          </span>
+          {category.children.map((child) => (
+            <Link
+              key={child.id}
+              href={`/catalog/${child.slug}`}
+              className="inline-flex h-9 shrink-0 items-center rounded-full border border-[color:var(--color-border)] px-4 text-[13px] transition-colors hover:border-[color:var(--color-text)]"
+            >
+              {child.name}
+            </Link>
+          ))}
+        </nav>
       )}
 
-      <p className="mb-6 text-[13px] text-[color:var(--color-text-tertiary)]">
-        {total.toLocaleString()} product{total === 1 ? "" : "s"}
-      </p>
-
-      <ProductGrid products={products} />
+      <ProductGrid products={products} columns={4} />
 
       {totalPages > 1 && (
-        <nav
-          aria-label="Pagination"
-          className="mt-8 flex flex-wrap justify-center gap-2"
-        >
-          {page > 1 && (
-            <Link
-              href={`${basePath}?page=${page - 1}`}
-              className="rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-3.5 py-2 text-sm font-semibold text-[color:var(--color-text)] hover:border-[color:var(--color-line-strong)]"
-            >
+        <nav aria-label="Pagination" className="mt-16 flex items-center justify-center gap-6 text-[14px]">
+          {page > 1 ? (
+            <Link href={pageHref(page - 1)} className="hw-link">
               Previous
             </Link>
+          ) : (
+            <span className="text-[color:var(--color-text-tertiary)]">Previous</span>
           )}
-          <span className="px-3.5 py-2 text-sm text-[color:var(--color-text-secondary)]">
-            Page {page} of {totalPages}
+          <span className="tabular-nums text-[color:var(--color-text-secondary)]">
+            {page} / {totalPages}
           </span>
-          {page < totalPages && (
-            <Link
-              href={`${basePath}?page=${page + 1}`}
-              className="rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-3.5 py-2 text-sm font-semibold text-[color:var(--color-text)] hover:border-[color:var(--color-line-strong)]"
-            >
+          {page < totalPages ? (
+            <Link href={pageHref(page + 1)} className="hw-link">
               Next
             </Link>
+          ) : (
+            <span className="text-[color:var(--color-text-tertiary)]">Next</span>
           )}
         </nav>
       )}

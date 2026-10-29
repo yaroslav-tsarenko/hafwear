@@ -8,7 +8,7 @@ export async function GET() {
       include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } },
     });
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ravora.co.uk";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.co.uk";
 
     const headers = [
       "id", "title", "description", "availability", "condition",

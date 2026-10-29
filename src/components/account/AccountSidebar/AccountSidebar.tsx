@@ -22,7 +22,7 @@ export function AccountSidebar() {
   return (
     <aside className="w-full rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] py-4 md:sticky md:top-8 md:h-fit md:w-60 md:py-6">
       <div className="mb-3 flex items-center gap-3 border-b border-[color:var(--color-line)] px-4 pb-3 md:px-5 md:pb-5">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[color:var(--color-primary)] text-base font-bold text-white">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[color:var(--color-primary)] text-base font-bold text-[color:var(--color-primary-fg)]">
           {(user?.name?.[0] || user?.email?.[0] || "U").toUpperCase()}
         </div>
         <div className="min-w-0">

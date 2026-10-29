@@ -28,11 +28,11 @@ const DESCRIPTION_CLASS = [
   "[&_b]:font-bold [&_b]:text-[color:var(--color-text)] [&_strong]:font-bold [&_strong]:text-[color:var(--color-text)]",
   "[&_i]:italic [&_em]:italic",
   "[&_u]:underline",
-  "[&_h1]:mb-3 [&_h1]:mt-7 [&_h1]:text-[1.35rem] [&_h1]:font-serif [&_h1]:font-medium [&_h1]:tracking-tight [&_h1]:text-[color:var(--color-text)]",
-  "[&_h2]:mb-3 [&_h2]:mt-7 [&_h2]:text-[1.2rem] [&_h2]:font-serif [&_h2]:font-medium [&_h2]:tracking-tight [&_h2]:text-[color:var(--color-text)]",
-  "[&_h3]:mb-3 [&_h3]:mt-7 [&_h3]:text-[1.05rem] [&_h3]:font-serif [&_h3]:font-medium [&_h3]:tracking-tight [&_h3]:text-[color:var(--color-text)]",
+  "[&_h1]:mb-3 [&_h1]:mt-8 [&_h1]:text-[1.75rem] [&_h1]:font-serif [&_h1]:text-[color:var(--color-text)]",
+  "[&_h2]:mb-3 [&_h2]:mt-8 [&_h2]:text-[1.5rem] [&_h2]:font-serif [&_h2]:text-[color:var(--color-text)]",
+  "[&_h3]:mb-3 [&_h3]:mt-7 [&_h3]:text-[1.25rem] [&_h3]:font-serif [&_h3]:text-[color:var(--color-text)]",
   "[&_h4]:mb-3 [&_h4]:mt-7 [&_h4]:text-[0.95rem] [&_h4]:font-semibold [&_h4]:text-[color:var(--color-text)]",
-  "[&_a]:font-semibold [&_a]:text-[color:var(--color-primary)] [&_a]:underline hover:[&_a]:text-[color:var(--color-primary-hover)]",
+  "[&_a]:text-[color:var(--color-text)] [&_a]:underline [&_a]:underline-offset-4",
   "[&_ul]:mb-5 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mb-5 [&_ol]:mt-2 [&_ol]:list-decimal [&_ol]:pl-6",
   "[&_li]:my-1 [&_li]:leading-relaxed",
   "[&_hr]:my-6 [&_hr]:border-0 [&_hr]:border-t [&_hr]:border-[color:var(--color-line)]",
@@ -54,13 +54,13 @@ export function ProductTabs({ description, characteristics, reviews }: ProductTa
   );
 
   return (
-    <div className="mt-8 md:mt-12">
-      <div className="flex overflow-x-auto border-b-2 border-[color:var(--color-line)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="tablist">
+    <div id="reviews" className="mt-20 scroll-mt-24 md:mt-28">
+      <div className="flex overflow-x-auto border-b border-[color:var(--color-border)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="tablist">
         <button
-          className={`-mb-0.5 shrink-0 whitespace-nowrap border-b-2 bg-transparent px-4 py-3.5 text-sm font-semibold transition-all sm:px-7 sm:py-4 sm:text-[15px] ${
+          className={`-mb-px mr-8 shrink-0 whitespace-nowrap border-b bg-transparent py-4 text-[15px] transition-colors ${
             activeTab === "description"
-              ? "border-[color:var(--color-primary)] text-[color:var(--color-primary)]"
-              : "border-transparent text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text)]"
+              ? "border-[color:var(--color-text)] text-[color:var(--color-text)]"
+              : "border-transparent text-[color:var(--color-text-tertiary)] hover:text-[color:var(--color-text)]"
           }`}
           onClick={() => setActiveTab("description")}
           role="tab"
@@ -69,10 +69,10 @@ export function ProductTabs({ description, characteristics, reviews }: ProductTa
           {t("description")}
         </button>
         <button
-          className={`-mb-0.5 shrink-0 whitespace-nowrap border-b-2 bg-transparent px-4 py-3.5 text-sm font-semibold transition-all sm:px-7 sm:py-4 sm:text-[15px] ${
+          className={`-mb-px mr-8 shrink-0 whitespace-nowrap border-b bg-transparent py-4 text-[15px] transition-colors ${
             activeTab === "characteristics"
-              ? "border-[color:var(--color-primary)] text-[color:var(--color-primary)]"
-              : "border-transparent text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text)]"
+              ? "border-[color:var(--color-text)] text-[color:var(--color-text)]"
+              : "border-transparent text-[color:var(--color-text-tertiary)] hover:text-[color:var(--color-text)]"
           }`}
           onClick={() => setActiveTab("characteristics")}
           role="tab"
@@ -84,10 +84,10 @@ export function ProductTabs({ description, characteristics, reviews }: ProductTa
           )}
         </button>
         <button
-          className={`-mb-0.5 shrink-0 whitespace-nowrap border-b-2 bg-transparent px-4 py-3.5 text-sm font-semibold transition-all sm:px-7 sm:py-4 sm:text-[15px] ${
+          className={`-mb-px mr-8 shrink-0 whitespace-nowrap border-b bg-transparent py-4 text-[15px] transition-colors ${
             activeTab === "reviews"
-              ? "border-[color:var(--color-primary)] text-[color:var(--color-primary)]"
-              : "border-transparent text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text)]"
+              ? "border-[color:var(--color-text)] text-[color:var(--color-text)]"
+              : "border-transparent text-[color:var(--color-text-tertiary)] hover:text-[color:var(--color-text)]"
           }`}
           onClick={() => setActiveTab("reviews")}
           role="tab"
@@ -97,7 +97,7 @@ export function ProductTabs({ description, characteristics, reviews }: ProductTa
         </button>
       </div>
 
-      <div className="py-6 sm:py-8" role="tabpanel">
+      <div className="py-8 sm:py-10" role="tabpanel">
         {activeTab === "description" && (
           safeDescription ? (
             <div
@@ -114,15 +114,15 @@ export function ProductTabs({ description, characteristics, reviews }: ProductTa
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
               {groups.map(([groupName, entries]) => (
                 <div key={groupName} className="flex flex-col">
-                  <h3 className="mb-3 border-b-2 border-[color:var(--color-line)] pb-2 font-serif text-lg font-medium tracking-tight text-[color:var(--color-text)]">
+                  <h3 className="mb-3 font-serif text-[24px] text-[color:var(--color-text)]">
                     {groupName}
                   </h3>
                   <table className="w-full border-collapse">
                     <tbody>
                       {Object.entries(entries).map(([key, value], i) => (
-                        <tr key={key} className={i % 2 === 1 ? "bg-[color:var(--color-bg-secondary)]" : ""}>
-                          <td className="w-[55%] border-b border-[color:var(--color-line)] px-3 py-2.5 align-top text-sm font-normal text-[color:var(--color-text-secondary)]">{key}</td>
-                          <td className="border-b border-[color:var(--color-line)] px-3 py-2.5 align-top text-sm font-bold text-[color:var(--color-text)]">{value}</td>
+                        <tr key={key}>
+                          <td className="w-[50%] border-b border-[color:var(--color-border)] py-2.5 pr-4 align-top text-[14px] text-[color:var(--color-text-secondary)]">{key}</td>
+                          <td className="border-b border-[color:var(--color-border)] py-2.5 align-top text-[14px] text-[color:var(--color-text)]">{value}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -138,10 +138,10 @@ export function ProductTabs({ description, characteristics, reviews }: ProductTa
         {activeTab === "reviews" && (
           reviews.length > 0 ? (
             <>
-              <div className="mb-6 flex items-center gap-6 rounded-2xl bg-[color:var(--color-bg-secondary)] p-5 sm:gap-8 sm:p-6">
+              <div className="mb-8 flex items-center gap-6">
                 <div className="text-center">
-                  <div className="font-serif text-4xl font-medium tracking-tight text-[color:var(--color-text)] sm:text-5xl">{avgRating.toFixed(1)}</div>
-                  <div className="mt-1 text-lg tracking-[1px] text-[color:var(--color-accent)]">
+                  <div className="font-serif text-[56px] leading-none text-[color:var(--color-text)]">{avgRating.toFixed(1)}</div>
+                  <div className="mt-1 text-lg tracking-[1px] text-[color:var(--color-sun-ink)]">
                     {"★".repeat(Math.round(avgRating))}{"☆".repeat(5 - Math.round(avgRating))}
                   </div>
                   <div className="mt-1 text-[13px] text-[color:var(--color-text-tertiary)]">
@@ -149,14 +149,14 @@ export function ProductTabs({ description, characteristics, reviews }: ProductTa
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
+              <div className="grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
                 {reviews.map((review) => (
-                  <div key={review.id} className="rounded-2xl border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] p-5 transition-shadow hover:shadow-[0_4px_14px_rgba(28,26,23,0.06)] sm:p-6">
+                  <div key={review.id} className="border-t border-[color:var(--color-border)] pt-5">
                     <div className="mb-3 flex items-center justify-between">
-                      <span className="text-[15px] font-bold text-[color:var(--color-text)]">
+                      <span className="text-[15px] font-medium text-[color:var(--color-text)]">
                         {review.user.name || "Anonymous"}
                       </span>
-                      <span className="text-sm tracking-[1px] text-[color:var(--color-accent)]">
+                      <span className="text-sm tracking-[1px] text-[color:var(--color-sun-ink)]">
                         {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
                       </span>
                     </div>

@@ -1,32 +1,32 @@
 import { PolicyLayout, ContactBlock } from "@/components/layout/PolicyLayout/PolicyLayout";
 
-export const metadata = { title: "Terms and Conditions — Ravora" };
+export const metadata = { title: "Terms and Conditions" };
 
 export default function TermsPage() {
   return (
     <PolicyLayout title="Terms and Conditions" lastUpdated="29 May 2026">
       <p>
         These Terms and Conditions (&ldquo;Terms&rdquo;) govern your access to and use of the website
-        www.ravora.co.uk and any related pages, services, orders, purchases, communications, and
-        transactions operated under the Ravora brand.
+        www.hafwear.co.uk and any related pages, services, orders, purchases, communications, and
+        transactions operated under the Hafwear brand.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
-        In these Terms, &ldquo;Ravora&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo; means JAYHALE LIMITED.
+        In these Terms, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo; means JAYHALE LIMITED.
         &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means any person or business accessing the
         Website, placing an order, purchasing goods, or otherwise using our services.
       </p>
       <p>
         Please read these Terms carefully before placing an order. By accessing the Website, creating an
-        account, submitting an order, or purchasing goods from Ravora, you agree to be bound by these
+        account, submitting an order, or purchasing goods from Hafwear, you agree to be bound by these
         Terms.
       </p>
 
       <h2>1. Scope of These Terms</h2>
-      <p>1.1 These Terms apply to all use of the Website and all purchases of goods made through Ravora.</p>
+      <p>1.1 These Terms apply to all use of the Website and all purchases of goods made through Hafwear.</p>
       <p>
-        1.2 Ravora sells premium made-to-order apparel, including t-shirts, hoodies, sweatshirts, tank
+        1.2 Hafwear sells premium made-to-order apparel, including t-shirts, hoodies, sweatshirts, tank
         tops, and related garments and accessories, printed on demand for personal, gift, and business use.
       </p>
       <p>
@@ -56,12 +56,12 @@ export default function TermsPage() {
         details, and any other information required to process your order.
       </p>
       <p>
-        2.4 You must not use the Website or purchase goods from Ravora for any unlawful, unsafe,
+        2.4 You must not use the Website or purchase goods from Hafwear for any unlawful, unsafe,
         fraudulent, or unauthorised purpose.
       </p>
 
       <h2>3. Consumer and Business Customers</h2>
-      <p>3.1 Ravora sells to both consumers and business customers.</p>
+      <p>3.1 Hafwear sells to both consumers and business customers.</p>
       <p>
         3.2 A &ldquo;Consumer&rdquo; means an individual acting wholly or mainly outside their trade, business,
         craft, or profession.
@@ -133,7 +133,7 @@ export default function TermsPage() {
         size, colour, and design selection carefully before completing your order.
       </p>
       <p>
-        5.4 Any guidance, product description, size chart, or customer support response provided by Ravora
+        5.4 Any guidance, product description, size chart, or customer support response provided by Hafwear
         is general information only and is intended to help you select a suitable garment.
       </p>
       <p>
@@ -178,7 +178,7 @@ export default function TermsPage() {
         does not automatically mean that your order has been accepted.
       </p>
       <p>
-        7.3 A contract between you and Ravora is formed only when we accept your order, process it for
+        7.3 A contract between you and Hafwear is formed only when we accept your order, process it for
         fulfilment, or dispatch the goods, whichever occurs first.
       </p>
       <p>7.4 We may refuse, cancel, or limit any order before acceptance where:</p>
@@ -217,14 +217,14 @@ export default function TermsPage() {
       </p>
       <p>
         8.6 Currency conversion, bank fees, foreign transaction fees, card issuer fees, or exchange rate
-        differences are the responsibility of the customer and are not controlled by Ravora.
+        differences are the responsibility of the customer and are not controlled by Hafwear.
       </p>
 
       <h2>9. Payment Terms</h2>
       <p>9.1 Payment must be made at checkout.</p>
       <p>9.2 We accept secure card payments, including Visa and Mastercard.</p>
       <p>
-        9.3 Payments are processed by secure third-party payment providers. Ravora does not store your
+        9.3 Payments are processed by secure third-party payment providers. Hafwear does not store your
         full card number or full card security details.
       </p>
       <p>
@@ -245,7 +245,7 @@ export default function TermsPage() {
 
       <h2>10. Discounts, Promotions, and Free Delivery</h2>
       <p>
-        10.1 From time to time, Ravora may offer discounts, promotional codes, special prices, free
+        10.1 From time to time, Hafwear may offer discounts, promotional codes, special prices, free
         delivery thresholds, or trade pricing.
       </p>
       <p>
@@ -269,7 +269,7 @@ export default function TermsPage() {
       </p>
 
       <h2>11. Delivery and Dispatch</h2>
-      <p>11.1 Ravora dispatches orders from the United Kingdom.</p>
+      <p>11.1 Hafwear dispatches orders from the United Kingdom.</p>
       <p>
         11.2 Delivery is available to supported delivery destinations shown on the Website or at checkout.
       </p>
@@ -331,7 +331,7 @@ export default function TermsPage() {
         import VAT, taxes, brokerage fees, and local charges payable in the destination country.
       </p>
       <p>
-        12.3 Ravora has no control over customs processing times, customs decisions, import restrictions,
+        12.3 Hafwear has no control over customs processing times, customs decisions, import restrictions,
         local tax assessments, or charges imposed by authorities, couriers, or customs brokers.
       </p>
       <p>
@@ -341,7 +341,7 @@ export default function TermsPage() {
       <p>
         12.5 If an order is delayed, returned, seized, rejected, or destroyed by customs or local
         authorities due to import restrictions, unpaid charges, incorrect information provided by you, or
-        failure to comply with local requirements, Ravora will not be responsible for the resulting loss,
+        failure to comply with local requirements, Hafwear will not be responsible for the resulting loss,
         delay, or costs except where required by law.
       </p>
 
@@ -377,7 +377,7 @@ export default function TermsPage() {
         days after the day on which you receive the last parcel.
       </p>
       <p>
-        14.4 To exercise your cancellation right, you must inform us clearly by email at info@ravora.co.uk
+        14.4 To exercise your cancellation right, you must inform us clearly by email at info@hafwear.co.uk
         before the cancellation period expires.
       </p>
       <p>
@@ -430,7 +430,7 @@ export default function TermsPage() {
       <h2>16. Faulty, Damaged, or Incorrect Goods</h2>
       <p>
         16.1 If goods arrive damaged, faulty, incomplete, or incorrect, you should contact us as soon as
-        possible at info@ravora.co.uk.
+        possible at info@hafwear.co.uk.
       </p>
       <p>
         16.2 Please provide your order number, a description of the issue, and clear photos or videos
@@ -480,7 +480,7 @@ export default function TermsPage() {
       </p>
       <p>
         17.4 These statutory rights are separate from, and are not limited by, any manufacturer warranty,
-        commercial warranty, additional warranty, or return policy offered by Ravora.
+        commercial warranty, additional warranty, or return policy offered by Hafwear.
       </p>
       <p>
         17.5 Business Customers do not receive consumer statutory cancellation rights and may have more
@@ -488,7 +488,7 @@ export default function TermsPage() {
       </p>
 
       <h2>18. Additional Warranty</h2>
-      <p>18.1 Ravora may offer paid additional warranty options for selected products.</p>
+      <p>18.1 Hafwear may offer paid additional warranty options for selected products.</p>
       <p>18.2 Additional Warranty is optional and may be purchased at checkout where available.</p>
       <p>
         18.3 Unless otherwise stated on the product page or at checkout, Additional Warranty pricing is
@@ -539,7 +539,7 @@ export default function TermsPage() {
         <li>loss of profits, cleaning costs, alteration costs, or indirect losses.</li>
       </ul>
       <p>
-        18.9 To make an Additional Warranty claim, you must contact us at info@ravora.co.uk with your order
+        18.9 To make an Additional Warranty claim, you must contact us at info@hafwear.co.uk with your order
         number, proof of purchase, description of the defect, and supporting photos, videos, or diagnostic
         information where reasonably requested.
       </p>
@@ -591,7 +591,7 @@ export default function TermsPage() {
 
       <h2>20. Product Suitability and Local Requirements</h2>
       <p>
-        20.1 Products sold by Ravora are everyday apparel items produced in standard sizes and fabrics,
+        20.1 Products sold by Hafwear are everyday apparel items produced in standard sizes and fabrics,
         which may vary by product range.
       </p>
       <p>
@@ -599,7 +599,7 @@ export default function TermsPage() {
         or use in your country or region.
       </p>
       <p>
-        20.3 We do not guarantee that products purchased from Ravora will meet every local labelling,
+        20.3 We do not guarantee that products purchased from Hafwear will meet every local labelling,
         certification, or resale requirement outside the information expressly stated on the product page.
       </p>
       <p>
@@ -610,7 +610,7 @@ export default function TermsPage() {
       <h2>21. Intellectual Property</h2>
       <p>
         21.1 All content on the Website, including text, layout, branding, logos, graphics, icons, product
-        descriptions, photographs, videos, design elements, and other materials, belongs to Ravora,
+        descriptions, photographs, videos, design elements, and other materials, belongs to Hafwear,
         JAYHALE LIMITED, suppliers, manufacturers, licensors, or other rights holders.
       </p>
       <p>
@@ -689,7 +689,7 @@ export default function TermsPage() {
         misrepresentation, or any liability that cannot be excluded under applicable law.
       </p>
       <p>25.2 Nothing in these Terms limits your mandatory statutory rights as a Consumer.</p>
-      <p>25.3 Subject to sections 25.1 and 25.2, Ravora will not be liable for:</p>
+      <p>25.3 Subject to sections 25.1 and 25.2, Hafwear will not be liable for:</p>
       <ul>
         <li>indirect, incidental, special, consequential, or punitive losses;</li>
         <li>loss of profit, revenue, business, opportunity, contract, goodwill, or anticipated savings;</li>

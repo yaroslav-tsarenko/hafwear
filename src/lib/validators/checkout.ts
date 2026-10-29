@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PRODUCT_EXTRA_KEYS } from "@/lib/pricing";
 
 export const checkoutContactSchema = z.object({
   email: z.string().email("Valid email is required"),
@@ -14,6 +15,13 @@ export const checkoutShippingSchema = z.object({
   province: z.string().optional(),
   postalCode: z.string().min(1, "Postal code is required"),
   country: z.string().min(1, "Country is required"),
+});
+
+export const checkoutItemSchema = z.object({
+  productId: z.string().min(1),
+  variantId: z.string().min(1).optional(),
+  extraKey: z.enum(PRODUCT_EXTRA_KEYS).optional(),
+  quantity: z.number().int().min(1).max(999),
 });
 
 export const checkoutSchema = z.object({

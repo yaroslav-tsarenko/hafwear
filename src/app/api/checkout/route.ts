@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { checkoutSchema } from "@/lib/validators/checkout";
+import { z } from "zod";
+import { checkoutItemSchema, checkoutSchema } from "@/lib/validators/checkout";
+import { getExtra, roundMoney, shippingCostFor, unitPrice, vatIncluded } from "@/lib/pricing";
 import { getSessionUser } from "@/lib/auth";
 import { resolveDiscount } from "@/lib/discounts";
 import { spoynt } from "@/lib/payment/spoynt";
@@ -11,41 +13,62 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const validated = checkoutSchema.parse(body);
-    const { items } = body;
+    const itemsResult = z.array(checkoutItemSchema).min(1).safeParse(body.items);
 
-    if (!items || items.length === 0) {
-      return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
+    if (!itemsResult.success) {
+      return NextResponse.json({ error: "Cart is empty or invalid" }, { status: 400 });
     }
+    const items = itemsResult.data;
 
     if (!validated.contact.email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    const productIds = items.map((item: { productId: string }) => item.productId);
-    const products = await prisma.product.findMany({
-      where: { id: { in: productIds } },
-    });
+    // Every amount below is computed from the database — the browser only says what was chosen.
+    const productIds = [...new Set(items.map((item) => item.productId))];
+    const variantIds = [...new Set(items.flatMap((item) => (item.variantId ? [item.variantId] : [])))];
+    const [products, variants] = await Promise.all([
+      prisma.product.findMany({ where: { id: { in: productIds } } }),
+      variantIds.length
+        ? prisma.productVariant.findMany({ where: { id: { in: variantIds } } })
+        : Promise.resolve([]),
+    ]);
 
     const productMap = new Map(products.map((p) => [p.id, p]));
+    const variantMap = new Map(variants.map((v) => [v.id, v]));
 
     let subtotal = 0;
-    const orderItems = items.map((item: { productId: string; quantity: number; variantName?: string }) => {
+    const orderItems = [];
+    for (const item of items) {
       const product = productMap.get(item.productId);
-      if (!product) throw new Error(`Product ${item.productId} not found`);
+      if (!product) {
+        return NextResponse.json({ error: "A product in your bag is no longer available" }, { status: 400 });
+      }
 
-      const itemTotal = Number(product.price) * item.quantity;
-      subtotal += itemTotal;
+      const variant = item.variantId ? variantMap.get(item.variantId) : undefined;
+      if (item.variantId && (!variant || variant.productId !== product.id)) {
+        return NextResponse.json({ error: "A size or colour in your bag is no longer available" }, { status: 400 });
+      }
 
-      return {
+      const extra = getExtra(item.extraKey);
+      const price = unitPrice({
+        productPrice: Number(product.price),
+        variantPrice: variant?.price == null ? null : Number(variant.price),
+        extraKey: extra.key,
+      });
+      const itemTotal = roundMoney(price * item.quantity);
+      subtotal = roundMoney(subtotal + itemTotal);
+
+      orderItems.push({
         productId: product.id,
-        productName: product.name,
-        productSku: product.sku,
-        variantName: item.variantName || null,
+        productName: extra.nameSuffix ? `${product.name} ${extra.nameSuffix}` : product.name,
+        productSku: variant?.sku ?? product.sku,
+        variantName: variant?.name ?? null,
         quantity: item.quantity,
-        price: product.price,
+        price,
         total: itemTotal,
-      };
-    });
+      });
+    }
 
     const discount = await resolveDiscount({
       userId: user?.id ?? null,
@@ -53,15 +76,14 @@ export async function POST(request: NextRequest) {
       code: validated.discountCode ?? null,
     });
 
-    const discountAmount = discount ? +(subtotal * (discount.percent / 100)).toFixed(2) : 0;
-    const discountedSubtotal = subtotal - discountAmount;
+    const discountAmount = discount ? roundMoney(subtotal * (discount.percent / 100)) : 0;
+    const discountedSubtotal = roundMoney(subtotal - discountAmount);
 
-    const taxRate = 21;
     // Prices are VAT-inclusive: derive the tax already contained in the price
     // rather than adding it on top of the total.
-    const taxAmount = +(discountedSubtotal - discountedSubtotal / (1 + taxRate / 100)).toFixed(2);
-    const shippingCost = discountedSubtotal >= 100 ? 0 : 5.99;
-    const total = +(discountedSubtotal + shippingCost).toFixed(2);
+    const taxAmount = vatIncluded(discountedSubtotal);
+    const shippingCost = shippingCostFor(validated.shippingMethod, discountedSubtotal);
+    const total = roundMoney(discountedSubtotal + shippingCost);
 
     const storeSettings = await prisma.storeSettings.findFirst();
     const currency = storeSettings?.currency || "GBP";

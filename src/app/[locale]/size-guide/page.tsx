@@ -5,7 +5,7 @@ import { ArrowRight, Ruler, Info } from "lucide-react";
 export const metadata: Metadata = {
   title: "Size Guide",
   description:
-    "Ravora sizing guide — find your fit across our men's, women's and kids' collections. Chest, waist and hip measurements in cm and inches.",
+    "Hafwear sizing guide — find your fit across our men's, women's and kids' collections. Chest, waist and hip measurements in cm and inches.",
 };
 
 const ADULT_TOPS = [
@@ -84,7 +84,7 @@ export default function SizeGuidePage() {
     <div className="mx-auto w-full max-w-[var(--container-content)] px-4 pb-20 pt-8 sm:px-6 lg:px-8">
       {/* Hero */}
       <div className="mb-10 flex flex-col gap-3 border-b border-[color:var(--color-line)] pb-8 sm:mb-14">
-        <span className="eyebrow">Ravora · Guide</span>
+        <span className="eyebrow">Hafwear · Guide</span>
         <h1 className="font-serif text-[36px] font-medium leading-tight tracking-tight text-[color:var(--color-text)] sm:text-[52px]">
           Size guide
         </h1>
@@ -169,7 +169,7 @@ export default function SizeGuidePage() {
               stretch and shrinkage of our organic and recycled fabrics. If
               your order doesn't fit as expected, we offer 14-day returns
               — see our <Link href="/policies/returns" className="text-[color:var(--color-primary)] underline">returns policy</Link> or
-              email <a href="mailto:info@ravora.co.uk" className="text-[color:var(--color-primary)] underline">info@ravora.co.uk</a>.
+              email <a href="mailto:info@hafwear.co.uk" className="text-[color:var(--color-primary)] underline">info@hafwear.co.uk</a>.
             </p>
           </div>
         </div>

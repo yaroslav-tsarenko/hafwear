@@ -36,7 +36,7 @@ const faqs = [
   },
   {
     q: "How do I contact customer support?",
-    a: "You can reach us via our contact form or email at info@ravora.co.uk. We aim to respond within 24 hours on weekdays.",
+    a: "You can reach us via our contact form or email at info@hafwear.co.uk. We aim to respond within 24 hours on weekdays.",
   },
 ];
 

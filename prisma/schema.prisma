@@ -74,7 +74,7 @@ model Address {
 
 model StoreSettings {
   id              String   @id @default("default")
-  name            String   @default("Ravora")
+  name            String   @default("Hafwear")
   description     String?
   logoUrl         String?
   faviconUrl      String?
@@ -84,7 +84,7 @@ model StoreSettings {
   phone           String?
   address         String?
   currency        String   @default("EUR")
-  taxRate         Decimal  @default(21)
+  taxRate         Decimal  @default(20)
   freeShippingMin Decimal?
   metaTitle       String?
   metaDescription String?

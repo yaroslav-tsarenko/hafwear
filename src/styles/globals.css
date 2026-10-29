@@ -9,68 +9,72 @@
  */
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
 
   /* Semantic colors — the whole app builds from these */
-  --color-bone: #F6F4EF;
+  --color-bone: #F2F1EE;
   --color-paper: #FFFFFF;
-  --color-cream: #EFEBE2;
-  --color-surface: #EFEBE2;
+  --color-cream: #EAE9E5;
+  --color-surface: #EAE9E5;
 
-  --color-ink: #1C1A17;
-  --color-ink-2: #6B6560;
-  --color-ink-3: #96908A;
+  --color-ink: #111111;
+  --color-ink-2: #5F5E5A;
+  --color-ink-3: #8E8C86;
 
-  --color-primary: #1F4D3F;
-  --color-primary-hover: #163A2E;
-  --color-primary-tint: #EAF1EC;
-  --color-primary-fg: #F6F4EF;
+  --color-primary: #111111;
+  --color-primary-hover: #2B2B2A;
+  --color-primary-tint: #E7E6E2;
+  --color-primary-fg: #FFFFFF;
 
-  --color-accent: #C65B3C;
-  --color-accent-hover: #A94A2E;
-  --color-accent-tint: #F3E1D9;
+  --color-accent: #111111;
+  --color-accent-hover: #2B2B2A;
+  --color-accent-tint: #F5E8C9;
   --color-accent-fg: #FFFFFF;
 
-  --color-line: #E4E0D9;
-  --color-line-strong: #C9C3B7;
+  --color-sun: #E0A526;
+  --color-sale: #C2410C;
 
-  --color-success: #4E7A63;
-  --color-success-tint: #E7EFEA;
-  --color-warning: #B77A1F;
-  --color-warning-tint: #F6ECD9;
-  --color-danger: #B54634;
-  --color-danger-tint: #F4DCD5;
+  --color-line: #DEDCD7;
+  --color-line-strong: #C4C2BC;
 
-  /* Rounded corners */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.625rem;
-  --radius-lg: 0.875rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
+  --color-success: #3F6B4F;
+  --color-success-tint: #E4ECE5;
+  --color-warning: #9A6A08;
+  --color-warning-tint: #F5ECD6;
+  --color-danger: #B3261E;
+  --color-danger-tint: #F6DEDB;
+
+  /* Tight, quiet corners */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.1875rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.5rem;
 
   /* Container */
-  --container-content: 1240px;
+  --container-content: 1440px;
 
-  /* Editorial type scale */
+  /* Type scale */
   --text-eyebrow: 0.6875rem;         /* 11 */
   --text-eyebrow--line-height: 1.2;
-  --text-eyebrow--letter-spacing: 0.14em;
+  --text-eyebrow--letter-spacing: 0.12em;
 
-  --text-display: 3rem;              /* 48 */
-  --text-display--line-height: 1.05;
-  --text-display--letter-spacing: -0.02em;
+  --text-display: 3.5rem;            /* 56 */
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.01em;
 
-  --text-editorial: 2.25rem;         /* 36 */
-  --text-editorial--line-height: 1.1;
-  --text-editorial--letter-spacing: -0.02em;
+  --text-editorial: 2.5rem;          /* 40 */
+  --text-editorial--line-height: 1.05;
+  --text-editorial--letter-spacing: -0.01em;
 }
 
 /* Dark-mode variant: `dark:*` utilities activate on .dark ancestor. */
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
 /* ── Base layer ──────────────────────────────────────────────────────── */
+@layer base {
 
 *,
 *::before,
@@ -95,6 +99,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "ss01", "cv11";
+  letter-spacing: -0.005em;
 }
 
 a {
@@ -129,6 +134,7 @@ img {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-border-strong);
 }
+}
 
 /* Hide native scrollbar on horizontally-scrolling strips (e.g. header
    category rail, trending pills). Cross-browser: Firefox uses
@@ -144,6 +150,7 @@ img {
   display: none;
 }
 
+@layer components {
 /* ── Legacy helpers kept for compatibility ───────────────────────────── */
 
 .section-padding {
@@ -169,16 +176,16 @@ img {
 
 .section-title {
   font-family: var(--font-serif);
-  font-size: 2rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-size: 2.25rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   color: var(--color-text);
   line-height: 1.1;
 }
 
 @media (min-width: 768px) {
   .section-title {
-    font-size: 2.75rem;
+    font-size: 3rem;
   }
 }
 
@@ -195,14 +202,14 @@ img {
 }
 
 .glass {
-  background: rgba(246, 244, 239, 0.72);
+  background: rgba(242, 241, 238, 0.8);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
 .dark .glass,
 [data-theme="dark"] .glass {
-  background: rgba(11, 16, 14, 0.72);
+  background: rgba(19, 19, 18, 0.8);
   border: 1px solid var(--color-hairline);
 }
 
@@ -222,7 +229,38 @@ img {
 
 .editorial-heading {
   font-family: var(--font-serif);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+
+/* Instrument Serif ships a single 400 weight — never let the browser fake bold. */
+.font-serif {
+  font-synthesis: none;
+}
+
+/* Container used by the redesigned storefront */
+.hw-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-content);
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px) {
+  .hw-container { padding-inline: 2rem; }
+}
+@media (min-width: 1280px) {
+  .hw-container { padding-inline: 3rem; }
+}
+
+/* Underlined text link that thickens on hover */
+.hw-link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  transition: text-decoration-thickness 150ms ease;
+}
+.hw-link:hover {
+  text-decoration-thickness: 2px;
+}
 }

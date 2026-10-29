@@ -1,18 +1,18 @@
 import { PolicyLayout, ContactBlock } from "@/components/layout/PolicyLayout/PolicyLayout";
 
-export const metadata = { title: "Payment Policy — Ravora" };
+export const metadata = { title: "Payment Policy" };
 
 export default function PaymentPolicyPage() {
   return (
     <PolicyLayout title="Payment Policy" lastUpdated="29 May 2026">
       <p>
         This Payment Policy explains how payments are accepted, processed, verified, refunded, and handled
-        for purchases made through www.ravora.co.uk.
+        for purchases made through www.hafwear.co.uk.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
-        In this Policy, &ldquo;Ravora&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo;
+        In this Policy, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo;
         means JAYHALE LIMITED. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means any
         person or business placing an order through the Website.
       </p>
@@ -27,7 +27,7 @@ export default function PaymentPolicyPage() {
         charges, additional warranty options, and any other paid services or charges displayed at checkout.
       </p>
       <p>
-        1.2 Ravora sells premium made-to-order apparel, including t-shirts, hoodies, sweatshirts, tanks,
+        1.2 Hafwear sells premium made-to-order apparel, including t-shirts, hoodies, sweatshirts, tanks,
         accessories, and related products.
       </p>
       <p>
@@ -52,7 +52,7 @@ export default function PaymentPolicyPage() {
         card issuer or bank may apply its own exchange rate, conversion fee, or foreign transaction fee.
       </p>
       <p>
-        2.5 Ravora does not control exchange rates, bank conversion fees, card issuer charges, or foreign
+        2.5 Hafwear does not control exchange rates, bank conversion fees, card issuer charges, or foreign
         transaction fees.
       </p>
 
@@ -72,7 +72,7 @@ export default function PaymentPolicyPage() {
       </ul>
       <p>3.3 Prices may change at any time before an order is placed.</p>
       <p>
-        3.4 Price changes will not affect orders already accepted by Ravora, except where there has been
+        3.4 Price changes will not affect orders already accepted by Hafwear, except where there has been
         an obvious pricing, currency, tax, discount, or technical error.
       </p>
       <p>
@@ -81,14 +81,14 @@ export default function PaymentPolicyPage() {
       </p>
 
       <h2>4. Accepted Payment Methods</h2>
-      <p>4.1 Ravora accepts secure card payments using:</p>
+      <p>4.1 Hafwear accepts secure card payments using:</p>
       <ul>
         <li>Visa</li>
         <li>Mastercard</li>
       </ul>
       <p>
         4.2 Other payment methods are not accepted unless they are expressly displayed at checkout or agreed
-        by Ravora in writing.
+        by Hafwear in writing.
       </p>
       <p>
         4.3 We do not currently offer cash on delivery, payment on account, open credit terms, cheque
@@ -104,7 +104,7 @@ export default function PaymentPolicyPage() {
         approve, decline, or review the transaction.
       </p>
       <p>
-        5.3 Ravora does not guarantee that your payment will be accepted. Payment approval depends on
+        5.3 Hafwear does not guarantee that your payment will be accepted. Payment approval depends on
         your card issuer, bank, payment provider, fraud checks, authentication requirements, available
         funds, transaction limits, and other factors outside our control.
       </p>
@@ -118,9 +118,9 @@ export default function PaymentPolicyPage() {
       </p>
 
       <h2>6. Card Security and Payment Data</h2>
-      <p>6.1 Ravora takes payment security seriously.</p>
+      <p>6.1 Hafwear takes payment security seriously.</p>
       <p>
-        6.2 Card payments are handled through secure third-party payment providers. Ravora does not store
+        6.2 Card payments are handled through secure third-party payment providers. Hafwear does not store
         your full card number, full card security code, or complete card credentials on its own systems.
       </p>
       <p>6.3 We may receive limited payment-related information from payment providers, such as:</p>
@@ -165,7 +165,7 @@ export default function PaymentPolicyPage() {
         be processed.
       </p>
       <p>
-        8.2 Ravora is not responsible for payment failures caused by your bank, card issuer, payment
+        8.2 Hafwear is not responsible for payment failures caused by your bank, card issuer, payment
         provider, insufficient funds, incorrect card details, authentication failure, transaction limits,
         network issues, or fraud controls.
       </p>
@@ -179,7 +179,7 @@ export default function PaymentPolicyPage() {
 
       <h2>9. Fraud Prevention and Payment Reviews</h2>
       <p>
-        9.1 To protect customers, Ravora, payment providers, and card networks, transactions may be
+        9.1 To protect customers, Hafwear, payment providers, and card networks, transactions may be
         screened for fraud, abuse, unauthorised activity, sanctions risk, and payment security concerns.
       </p>
       <p>
@@ -210,7 +210,7 @@ export default function PaymentPolicyPage() {
         address, VAT/tax details, and any other information required for invoicing.
       </p>
       <p>
-        10.3 Where applicable, Ravora may issue order confirmations, payment confirmations, receipts, VAT
+        10.3 Where applicable, Hafwear may issue order confirmations, payment confirmations, receipts, VAT
         invoices, or commercial invoices.
       </p>
       <p>
@@ -242,7 +242,7 @@ export default function PaymentPolicyPage() {
       </p>
 
       <h2>12. International Payments, Customs, and Import Charges</h2>
-      <p>12.1 Ravora dispatches orders from the United Kingdom.</p>
+      <p>12.1 Hafwear dispatches orders from the United Kingdom.</p>
       <p>
         12.2 For orders delivered outside the United Kingdom, your order may be subject to customs clearance,
         import duties, import VAT, local taxes, brokerage fees, courier handling fees, customs clearance
@@ -250,14 +250,14 @@ export default function PaymentPolicyPage() {
       </p>
       <p>
         12.3 Unless expressly stated otherwise at checkout, such customs and import charges are not included
-        in the product price, delivery price, or payment collected by Ravora.
+        in the product price, delivery price, or payment collected by Hafwear.
       </p>
       <p>
         12.4 You are responsible for paying any customs duties, import VAT, taxes, brokerage fees, handling
         charges, and local charges imposed in the destination country.
       </p>
       <p>
-        12.5 Ravora does not control customs authorities, customs delays, import tax assessments, courier
+        12.5 Hafwear does not control customs authorities, customs delays, import tax assessments, courier
         clearance fees, or local charges.
       </p>
       <p>
@@ -309,7 +309,7 @@ export default function PaymentPolicyPage() {
       </p>
       <p>
         14.5 If you validly cancel or return the product before the Additional Warranty begins and a refund
-        is required by law or approved by Ravora, the related Additional Warranty charge may also be
+        is required by law or approved by Hafwear, the related Additional Warranty charge may also be
         refunded.
       </p>
 
@@ -328,18 +328,18 @@ export default function PaymentPolicyPage() {
       </p>
       <p>
         15.5 Currency conversion differences, card issuer fees, foreign transaction fees, and bank charges
-        are not controlled by Ravora and are not refundable by Ravora.
+        are not controlled by Hafwear and are not refundable by Hafwear.
       </p>
       <p>
         15.6 Customs duties, import VAT, local taxes, brokerage fees, courier handling fees, customs
-        clearance fees, and other local charges are not charged by Ravora and are not refundable by
-        Ravora.
+        clearance fees, and other local charges are not charged by Hafwear and are not refundable by
+        Hafwear.
       </p>
 
       <h2>16. Chargebacks and Payment Disputes</h2>
       <p>
         16.1 If you have a problem with an order, payment, delivery, return, refund, or warranty claim, you
-        should contact us first at info@ravora.co.uk so we can investigate and try to resolve the issue.
+        should contact us first at info@hafwear.co.uk so we can investigate and try to resolve the issue.
       </p>
       <p>
         16.2 If you open a chargeback, card dispute, or payment dispute, we may be required to provide
@@ -366,7 +366,7 @@ export default function PaymentPolicyPage() {
         17.1 Business Customers must pay in full at checkout unless we expressly agree otherwise in writing.
       </p>
       <p>
-        17.2 Ravora does not offer credit terms, open account purchasing, or deferred payment to Business
+        17.2 Hafwear does not offer credit terms, open account purchasing, or deferred payment to Business
         Customers unless separately approved in writing.
       </p>
       <p>
