@@ -1,8 +1,6 @@
 "use client";
 
 import { Link } from "@/i18n/routing";
-import { Button } from "@/components/ui/Button";
-import { PackageOpen } from "lucide-react";
 
 interface EmptyStateProps {
   title: string;
@@ -12,40 +10,19 @@ interface EmptyStateProps {
   icon?: React.ReactNode;
 }
 
-export function EmptyState({
-  title,
-  subtitle,
-  actionLabel,
-  actionHref,
-  icon,
-}: EmptyStateProps) {
+export function EmptyState({ title, subtitle, actionLabel, actionHref, icon }: EmptyStateProps) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "4rem 1rem",
-        textAlign: "center",
-        gap: "1rem",
-      }}
-    >
-      <div style={{ color: "var(--color-text-tertiary)" }}>
-        {icon || <PackageOpen size={48} />}
-      </div>
-      <h3 style={{ fontSize: "1.25rem", fontWeight: 600, color: "var(--color-text)" }}>
-        {title}
-      </h3>
-      {subtitle && (
-        <p style={{ color: "var(--color-text-secondary)", maxWidth: "24rem" }}>
-          {subtitle}
-        </p>
-      )}
+    <div className="flex flex-col items-center justify-center gap-4 px-4 py-20 text-center">
+      {icon && <div className="text-[color:var(--color-text-tertiary)]">{icon}</div>}
+      <h3 className="font-serif text-[32px] leading-tight text-[color:var(--color-text)]">{title}</h3>
+      {subtitle && <p className="max-w-sm text-[15px] text-[color:var(--color-text-secondary)]">{subtitle}</p>}
       {actionLabel && actionHref && (
-        <Button as={Link} href={actionHref} color="primary" variant="flat">
+        <Link
+          href={actionHref}
+          className="mt-2 inline-flex h-11 items-center rounded-full bg-[color:var(--color-primary)] px-6 text-[14px] font-medium text-[color:var(--color-primary-fg)] transition-colors hover:bg-[color:var(--color-primary-hover)]"
+        >
           {actionLabel}
-        </Button>
+        </Link>
       )}
     </div>
   );

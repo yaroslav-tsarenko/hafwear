@@ -1,35 +1,29 @@
 import { Link } from "@/i18n/routing";
-import { Home, Search, LifeBuoy } from "lucide-react";
-
-const links = [
-  { href: "/", label: "Home", Icon: Home },
-  { href: "/catalog", label: "Browse catalog", Icon: Search },
-  { href: "/contact", label: "Contact us", Icon: LifeBuoy },
-];
+import { HafwearMark } from "@/components/layout/HafwearLogo";
 
 export default function NotFound() {
   return (
-    <div className="mx-auto flex w-full max-w-[var(--container-content)] flex-col items-center px-4 py-24 text-center sm:px-6 lg:px-8">
-      <span className="eyebrow">Error 404</span>
-      <h1 className="mt-2 font-serif text-4xl font-medium tracking-tight text-[color:var(--color-text)] sm:text-5xl">
-        This page has moved on
-      </h1>
-      <p className="mt-4 max-w-md text-[15px] leading-relaxed text-[color:var(--color-text-secondary)]">
-        The page you were looking for doesn&apos;t exist or has been relocated. Let&apos;s get
-        you back to something worth browsing.
+    <div className="hw-container flex flex-col items-center py-28 text-center">
+      <HafwearMark size={48} className="text-[color:var(--color-text)]" />
+      <p className="mt-8 text-[12px] uppercase tracking-[0.12em] text-[color:var(--color-text-tertiary)]">Error 404</p>
+      <h1 className="mt-4 font-serif text-[48px] leading-none sm:text-[64px]">This page has gone for a walk.</h1>
+      <p className="mt-5 max-w-md text-[15px] leading-relaxed text-[color:var(--color-text-secondary)]">
+        The page you were looking for doesn&apos;t exist or has moved. Let&apos;s get you back to something
+        worth browsing.
       </p>
-
-      <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-        {links.map(({ href, label, Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-6 py-3 text-sm font-semibold text-[color:var(--color-text)] transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
-          >
-            <Icon size={16} strokeWidth={1.75} />
-            {label}
-          </Link>
-        ))}
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-6">
+        <Link
+          href="/"
+          className="inline-flex h-12 items-center rounded-full bg-[color:var(--color-primary)] px-7 text-[15px] font-medium text-[color:var(--color-primary-fg)] transition-colors hover:bg-[color:var(--color-primary-hover)]"
+        >
+          Back to home
+        </Link>
+        <Link href="/catalog" className="hw-link text-[15px]">
+          Shop all
+        </Link>
+        <Link href="/contact" className="hw-link text-[15px]">
+          Contact us
+        </Link>
       </div>
     </div>
   );

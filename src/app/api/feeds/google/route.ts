@@ -8,7 +8,7 @@ export async function GET() {
       include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } },
     });
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ravora.co.uk";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.co.uk";
 
     const items = products
       .map((product) => {
@@ -38,7 +38,7 @@ export async function GET() {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
   <channel>
-    <title>Ravora Product Feed</title>
+    <title>Hafwear Product Feed</title>
     <link>${siteUrl}</link>
     <description>Product feed for Google Merchant Center</description>
 ${items}

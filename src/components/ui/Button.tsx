@@ -26,9 +26,9 @@ interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 /**
- * Ravora Button — warm-editorial:
- *   primary  = terracotta filled  (main CTA — buy, subscribe, submit)
- *   secondary= pine outline       (secondary action — view, browse)
+ * Hafwear Button — soft minimal pills:
+ *   primary  = ink filled         (main CTA — buy, subscribe, submit)
+ *   secondary= ink outline        (secondary action — view, browse)
  *   ghost    = quiet inline       (tertiary — cancel, learn more)
  */
 export function Button({
@@ -57,21 +57,21 @@ export function Button({
   const base =
     "inline-flex items-center justify-center gap-2 font-medium tracking-tight " +
     "transition-[background-color,border-color,color,transform,box-shadow] duration-200 " +
-    "select-none whitespace-nowrap rounded-[var(--radius-md)] " +
+    "select-none whitespace-nowrap rounded-full " +
     "disabled:cursor-not-allowed disabled:opacity-60 " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)]";
 
   const sizes: Record<Size, string> = {
     sm: isIconOnly ? "h-8 w-8 text-sm" : "h-8 px-3 text-[13px]",
-    md: isIconOnly ? "h-10 w-10 text-sm" : "h-10 px-4 text-sm",
+    md: isIconOnly ? "h-10 w-10 text-sm" : "h-11 px-5 text-sm",
     lg: isIconOnly ? "h-12 w-12" : "h-12 px-6 text-[15px]",
   };
 
   const variants: Record<string, string> = {
     primary:
-      "bg-[color:var(--color-accent)] text-white border border-transparent hover:bg-[color:var(--color-accent-hover)] active:translate-y-[1px]",
+      "bg-[color:var(--color-accent)] text-[color:var(--color-accent-fg)] border border-transparent hover:bg-[color:var(--color-accent-hover)] active:translate-y-[1px]",
     secondary:
-      "bg-transparent text-[color:var(--color-primary)] border border-[color:var(--color-primary)] hover:bg-[color:var(--color-primary-tint)]",
+      "bg-transparent text-[color:var(--color-text)] border border-[color:var(--color-text)] hover:bg-[color:var(--color-text)] hover:text-[color:var(--color-bg)]",
     outline:
       "bg-transparent text-[color:var(--color-text)] border border-[color:var(--color-border)] hover:border-[color:var(--color-border-strong)] hover:bg-[color:var(--color-bg-secondary)]",
     ghost:

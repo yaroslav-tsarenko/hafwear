@@ -298,7 +298,7 @@ function CheckoutContent() {
               }`}
             >
               {isDone ? (
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--color-primary)] text-white">
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--color-primary)] text-[color:var(--color-primary-fg)]">
                   <Check size={12} strokeWidth={3} />
                 </div>
               ) : (
@@ -515,7 +515,7 @@ function CheckoutContent() {
                         i < cart.items.length - 1 ? "border-b border-[color:var(--color-line)]" : ""
                       }`}
                     >
-                      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-[color:var(--color-line)] bg-white">
+                      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-[color:var(--color-image-bg)]">
                         {item.imageUrl ? (
                           <Image src={item.imageUrl} alt={item.name} fill sizes="56px" className="object-contain p-1" />
                         ) : (
@@ -586,7 +586,7 @@ function CheckoutContent() {
           <div className="mb-5 flex flex-col gap-2.5 border-b border-[color:var(--color-line)] pb-5">
             {cart.items.map((item) => (
               <div key={item.id} className="flex items-center gap-3">
-                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-[color:var(--color-line)] bg-white">
+                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-[color:var(--color-image-bg)]">
                   {item.imageUrl ? (
                     <Image src={item.imageUrl} alt={item.name} fill sizes="40px" className="object-contain p-0.5" />
                   ) : (
@@ -594,7 +594,7 @@ function CheckoutContent() {
                       <ImageOff size={14} />
                     </div>
                   )}
-                  <div className="absolute -right-1 -top-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[color:var(--color-text-secondary)] text-[10px] font-bold text-white">
+                  <div className="absolute -right-1 -top-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[color:var(--color-text-secondary)] text-[10px] font-bold text-[color:var(--color-bg)]">
                     {item.quantity}
                   </div>
                 </div>
@@ -647,7 +647,7 @@ function CheckoutContent() {
                     type="button"
                     onClick={applyPromo}
                     disabled={!promoInput.trim() || applyingPromo}
-                    className={`rounded-xl border-none bg-[color:var(--color-accent)] px-3.5 text-[13px] font-semibold text-white transition-opacity ${
+                    className={`rounded-xl border-none bg-[color:var(--color-accent)] px-3.5 text-[13px] font-semibold text-[color:var(--color-accent-fg)] transition-opacity ${
                       promoInput.trim() && !applyingPromo ? "cursor-pointer opacity-100 hover:bg-[color:var(--color-accent-hover)]" : "cursor-not-allowed opacity-50"
                     }`}
                   >

@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { brand } from "@/lib/brand";
 import { JsonLd } from "@/components/shared/SEO/JsonLd";
-import { MarketplaceHome } from "@/components/home/MarketplaceHome/MarketplaceHome";
-import {
-  getBrandSections,
-  TOP_BRANDS,
-  type CategorySection,
-  type HomepageCategory,
-  type HomepageProduct,
-} from "@/lib/homepage-products";
+import { HomeHero } from "@/components/home/HomeHero";
+import { DepartmentTiles, type DepartmentTile } from "@/components/home/DepartmentTiles";
+import { ProductRow } from "@/components/home/ProductRow";
+import { StoryBlock } from "@/components/home/StoryBlock";
+import { CategoryIndex, type CategoryIndexItem } from "@/components/home/CategoryIndex";
+import { Promises } from "@/components/home/Promises";
+import type { CardProduct } from "@/components/product/ProductCard/ProductCard";
 
 export const revalidate = 60;
 
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
   };
 }
 
-// Minimal product columns for card rendering — keeps payload small.
+// Minimal product columns for card rendering — two images for the hover swap.
 const cardSelect = {
   id: true,
   name: true,
@@ -34,119 +35,38 @@ const cardSelect = {
   price: true,
   comparePrice: true,
   quantity: true,
-  status: true,
-  isFeatured: true,
-  brand: true,
-  createdAt: true,
   images: {
     select: { url: true, alt: true },
     orderBy: { sortOrder: "asc" as const },
-    take: 1,
+    take: 2,
   },
   categories: {
-    select: { category: { select: { name: true, slug: true } } },
-    take: 3,
+    select: { category: { select: { name: true } } },
+    take: 1,
   },
-} as const;
+} satisfies Prisma.ProductSelect;
 
 type CategoryFlat = {
   id: string;
   name: string;
   slug: string;
-  description: string | null;
   imageUrl: string | null;
   parentId: string | null;
-  sortOrder: number;
-  isActive: boolean;
 };
 
 type CategoryNode = CategoryFlat & {
   children: CategoryNode[];
-  productCount: number;
-  descendantProductCount: number;
+  total: number;
 };
 
-function serializeProducts<T>(items: T[]): HomepageProduct[] {
-  return JSON.parse(JSON.stringify(items)) as HomepageProduct[];
-}
-
-function buildCategoryTree(
-  categories: CategoryFlat[],
-  countsById: Map<string, number>,
-): CategoryNode[] {
-  const nodeMap = new Map<string, CategoryNode>();
-  const roots: CategoryNode[] = [];
-
-  for (const category of categories) {
-    nodeMap.set(category.id, {
-      ...category,
-      children: [],
-      productCount: countsById.get(category.id) || 0,
-      descendantProductCount: 0,
-    });
-  }
-
-  for (const node of nodeMap.values()) {
-    if (node.parentId && nodeMap.has(node.parentId)) {
-      nodeMap.get(node.parentId)!.children.push(node);
-    } else {
-      roots.push(node);
-    }
-  }
-
-  const fillDescendantCount = (node: CategoryNode): number => {
-    let total = node.productCount;
-    for (const child of node.children) total += fillDescendantCount(child);
-    node.descendantProductCount = total;
-    return total;
-  };
-  for (const root of roots) fillDescendantCount(root);
-
-  return roots;
-}
-
-function collectDescendantIds(node: CategoryNode): string[] {
-  const out: string[] = [node.id];
-  for (const child of node.children) out.push(...collectDescendantIds(child));
-  return out;
-}
-
-function collectDescendantSlugs(node: CategoryNode): string[] {
-  const out: string[] = [node.slug];
-  for (const child of node.children) out.push(...collectDescendantSlugs(child));
-  return out;
-}
-
-function toHomepageCategory(node: CategoryNode): HomepageCategory {
-  return {
-    id: node.id,
-    name: node.name,
-    slug: node.slug,
-    description: node.description,
-    imageUrl: node.imageUrl,
-    _count: { products: node.productCount },
-    children: node.children.map(toHomepageCategory),
-  };
-}
-
 const getActiveCategoriesFlat = unstable_cache(
-  async (): Promise<CategoryFlat[]> => {
-    return prisma.category.findMany({
+  async (): Promise<CategoryFlat[]> =>
+    prisma.category.findMany({
       where: { isActive: true },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        description: true,
-        imageUrl: true,
-        parentId: true,
-        sortOrder: true,
-        isActive: true,
-      },
-    });
-  },
-  ["home-active-categories-v1"],
+      select: { id: true, name: true, slug: true, imageUrl: true, parentId: true },
+    }),
+  ["home-active-categories-v2"],
   { revalidate: 300, tags: ["categories"] },
 );
 
@@ -163,246 +83,142 @@ const getCategoryProductCounts = unstable_cache(
   { revalidate: 60, tags: ["products", "categories"] },
 );
 
-async function fetchProducts(args: {
-  where: import("@prisma/client").Prisma.ProductWhereInput;
-  orderBy: import("@prisma/client").Prisma.ProductOrderByWithRelationInput;
-  take: number;
-}) {
-  return prisma.product.findMany({
-    where: args.where,
-    orderBy: args.orderBy,
-    take: args.take,
-    select: cardSelect,
-  });
+function buildTree(categories: CategoryFlat[], counts: Map<string, number>): CategoryNode[] {
+  const nodes = new Map<string, CategoryNode>();
+  const roots: CategoryNode[] = [];
+  for (const c of categories) nodes.set(c.id, { ...c, children: [], total: 0 });
+  for (const node of nodes.values()) {
+    const parent = node.parentId ? nodes.get(node.parentId) : undefined;
+    if (parent) parent.children.push(node);
+    else roots.push(node);
+  }
+  const fill = (n: CategoryNode): number => {
+    n.total = (counts.get(n.id) || 0) + n.children.reduce((s, c) => s + fill(c), 0);
+    return n.total;
+  };
+  roots.forEach(fill);
+  return roots;
 }
+
+function findBySlug(nodes: CategoryNode[], slug: string): CategoryNode | undefined {
+  for (const n of nodes) {
+    if (n.slug === slug) return n;
+    const found = findBySlug(n.children, slug);
+    if (found) return found;
+  }
+  return undefined;
+}
+
+function descendantIds(node: CategoryNode): string[] {
+  return [node.id, ...node.children.flatMap(descendantIds)];
+}
+
+const visible: Prisma.ProductWhereInput = { status: "ACTIVE", images: { some: {} } };
+
+async function coverImage(node: CategoryNode): Promise<string | null> {
+  if (node.imageUrl) return node.imageUrl;
+  const product = await prisma.product.findFirst({
+    where: { ...visible, categories: { some: { categoryId: { in: descendantIds(node) } } } },
+    orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
+    select: { images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 1 } },
+  });
+  return product?.images[0]?.url ?? null;
+}
+
+function serialize<T>(rows: T): CardProduct[] {
+  return JSON.parse(JSON.stringify(rows)) as CardProduct[];
+}
+
+const DEPARTMENTS = [
+  { label: "Women", slug: "women" },
+  { label: "Men", slug: "men" },
+  { label: "Kids", slug: "kids" },
+  { label: "Swim", slug: "women-swimwear" },
+];
 
 async function getHomeData() {
   try {
-    const [
-      heroSlides,
-      dealCards,
-      promoSmall,
-      promoWide,
-      brands,
-      sections,
-      tabs,
-      utilityLinks,
-      promoStripItems,
-      categoriesFlat,
-      countsMap,
-      featuredRows,
-      saleRows,
-      newRows,
-      popularRows,
-      brandRows,
-    ] = await Promise.all([
-      prisma.banner.findMany({ where: { isActive: true, type: "HERO" }, orderBy: { sortOrder: "asc" } }),
-      prisma.banner.findMany({ where: { isActive: true, type: "DEAL_CARD" }, orderBy: { sortOrder: "asc" } }),
-      prisma.banner.findMany({ where: { isActive: true, type: "PROMO_SMALL" }, orderBy: { sortOrder: "asc" } }),
-      prisma.banner.findMany({ where: { isActive: true, type: "PROMO_WIDE" }, orderBy: { sortOrder: "asc" } }),
-      prisma.brand.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
-      prisma.homepageSection.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
-      prisma.homepageTab.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
-      prisma.utilityLink.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
-      prisma.promoStripItem.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
+    const [categoriesFlat, counts, featured, newest, popular, saleCandidates] = await Promise.all([
       getActiveCategoriesFlat(),
       getCategoryProductCounts().then((entries) => new Map(entries)),
-      fetchProducts({
-        where: { status: "ACTIVE", isFeatured: true, images: { some: {} } },
+      prisma.product.findFirst({
+        where: { ...visible, isFeatured: true },
         orderBy: { createdAt: "desc" },
-        take: 10,
+        select: cardSelect,
       }),
-      fetchProducts({
-        where: { status: "ACTIVE", comparePrice: { not: null }, images: { some: {} } },
+      prisma.product.findMany({ where: visible, orderBy: { createdAt: "desc" }, take: 9, select: cardSelect }),
+      prisma.product.findMany({
+        where: visible,
+        orderBy: [{ orderItems: { _count: "desc" } }, { isFeatured: "desc" }, { createdAt: "desc" }],
+        take: 8,
+        select: cardSelect,
+      }),
+      prisma.product.findMany({
+        where: { ...visible, comparePrice: { not: null } },
         orderBy: { createdAt: "desc" },
-        take: 15,
-      }),
-      fetchProducts({
-        where: { status: "ACTIVE", images: { some: {} } },
-        orderBy: { createdAt: "desc" },
-        take: 10,
-      }),
-      fetchProducts({
-        where: { status: "ACTIVE", images: { some: {} } },
-        orderBy: { quantity: "desc" },
-        take: 10,
-      }),
-      fetchProducts({
-        where: { status: "ACTIVE", brand: { in: TOP_BRANDS }, images: { some: {} } },
-        orderBy: { createdAt: "desc" },
-        take: 120,
+        take: 24,
+        select: cardSelect,
       }),
     ]);
 
-    const categoryTree = buildCategoryTree(categoriesFlat, countsMap);
-    const homepageCategories = categoryTree.map(toHomepageCategory);
+    const tree = buildTree(categoriesFlat, counts);
 
-    // Build category sections: pick top categories by descendant product count, then fetch products per section.
-    const candidateNodes = [
-      ...categoryTree,
-      ...categoryTree.flatMap((root) => root.children),
-    ]
-      .filter((node) => node.descendantProductCount > 0)
-      .sort((a, b) => b.descendantProductCount - a.descendantProductCount)
-      .slice(0, 6);
-
-    const sectionResults = await Promise.all(
-      candidateNodes.map(async (node) => {
-        const ids = collectDescendantIds(node);
-        const items = await fetchProducts({
-          where: {
-            status: "ACTIVE",
-            images: { some: {} },
-            categories: { some: { categoryId: { in: ids } } },
-          },
-          orderBy: { createdAt: "desc" },
-          take: 10,
-        });
-        return { node, items };
-      }),
+    const departmentNodes = DEPARTMENTS.map((d) => ({ ...d, node: findBySlug(tree, d.slug) })).filter(
+      (d): d is typeof d & { node: CategoryNode } => !!d.node && d.node.total > 0,
     );
 
-    const categorySections: CategorySection[] = sectionResults.map(({ node, items }) => {
-      const tabChildren = node.children.filter((c) => c.descendantProductCount > 0);
-      return {
-        category: toHomepageCategory(node),
-        products: serializeProducts(items),
-        tabs:
-          tabChildren.length > 0
-            ? [
-                { label: "All", slugs: collectDescendantSlugs(node) },
-                ...tabChildren.map((c) => ({ label: c.name, slugs: collectDescendantSlugs(c) })),
-              ]
-            : [],
-        totalCount: node.descendantProductCount,
-      };
-    });
+    // Second-level categories make the most useful index (Women › T-shirts, Kids › Hoodies…).
+    const indexNodes = tree
+      .flatMap((root) => root.children.map((child) => ({ root, child })))
+      .filter(({ child }) => child.total > 0)
+      .sort((a, b) => b.child.total - a.child.total)
+      .slice(0, 10);
 
-    // Admin-configured sections — use the targeted lists we already fetched.
-    const featuredProducts = serializeProducts(featuredRows);
-    const saleProducts = serializeProducts(saleRows);
-    const newProducts = serializeProducts(newRows);
-    const popularProducts = serializeProducts(popularRows);
-    const brandProducts = serializeProducts(brandRows);
+    const [departmentImages, indexImages] = await Promise.all([
+      Promise.all(departmentNodes.map((d) => coverImage(d.node))),
+      Promise.all(indexNodes.map(({ child }) => coverImage(child))),
+    ]);
 
-    const sectionProducts: Record<string, HomepageProduct[]> = {};
-    for (const section of sections) {
-      let pool: HomepageProduct[] = [];
-      switch (section.filterType) {
-        case "featured":
-          pool = featuredProducts;
-          break;
-        case "onSale":
-          pool = saleProducts;
-          break;
-        case "popular":
-          pool = popularProducts;
-          break;
-        case "category":
-          if (section.categorySlug) {
-            const node = findNodeBySlug(categoryTree, section.categorySlug);
-            if (node) {
-              const ids = collectDescendantIds(node);
-              const items = await fetchProducts({
-                where: {
-                  status: "ACTIVE",
-                  images: { some: {} },
-                  categories: { some: { categoryId: { in: ids } } },
-                },
-                orderBy: { createdAt: "desc" },
-                take: section.maxProducts,
-              });
-              pool = serializeProducts(items);
-            }
-          }
-          break;
-        case "newest":
-        case "all":
-        default:
-          pool = newProducts;
-          break;
-      }
-      sectionProducts[section.slug] = pool.slice(0, section.maxProducts);
-    }
-
-    const brandSections = getBrandSections(brandProducts, TOP_BRANDS, 8);
-
-    // Surface both departments and their subcategories so the "Shop by category"
-    // grid stays rich even when only a couple of root departments exist.
-    const showcaseNodes = [
-      ...categoryTree,
-      ...categoryTree.flatMap((root) => root.children),
-    ]
-      .filter((node) => node.descendantProductCount > 0)
-      .sort((a, b) => b.descendantProductCount - a.descendantProductCount)
-      .slice(0, 12);
-
-    // Backfill a representative image from a real product for any category that
-    // has no imageUrl of its own, so every card shows a relevant photo.
-    const showcaseImages = await Promise.all(
-      showcaseNodes.map(async (node) => {
-        if (node.imageUrl) return node.imageUrl;
-        const withImage = await prisma.product.findFirst({
-          where: {
-            status: "ACTIVE",
-            images: { some: {} },
-            categories: { some: { categoryId: { in: collectDescendantIds(node) } } },
-          },
-          orderBy: { createdAt: "desc" },
-          select: { images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 1 } },
-        });
-        return withImage?.images[0]?.url ?? null;
-      }),
-    );
-
-    const categoryShowcase = showcaseNodes.map((node, i) => ({
-      id: node.id,
-      name: node.name,
-      slug: node.slug,
-      imageUrl: showcaseImages[i],
-      productCount: node.descendantProductCount,
+    const departments: DepartmentTile[] = departmentNodes.map((d, i) => ({
+      label: d.label,
+      href: `/catalog/${d.slug}`,
+      imageUrl: departmentImages[i],
+      count: d.node.total,
     }));
 
+    const categoryIndex: CategoryIndexItem[] = indexNodes.map(({ root, child }, i) => ({
+      id: child.id,
+      label: `${root.name} · ${child.name}`,
+      slug: child.slug,
+      imageUrl: indexImages[i],
+      count: child.total,
+    }));
+
+    const heroProduct = featured ?? newest[0] ?? null;
+    const newProducts = newest.filter((p) => p.id !== heroProduct?.id).slice(0, 8);
+    const saleProducts = saleCandidates
+      .filter((p) => Number(p.comparePrice) > Number(p.price))
+      .slice(0, 4);
+
     return {
-      heroSlides,
-      dealCards,
-      promoSmall,
-      promoWide,
-      brands,
-      sections,
-      tabs,
-      utilityLinks,
-      promoStripItems,
-      sectionProducts,
-      categories: homepageCategories,
-      featuredProducts,
-      saleProducts,
-      newProducts,
-      popularProducts,
-      categorySections,
-      brandSections,
-      categoryShowcase,
+      heroProduct: heroProduct ? serialize([heroProduct])[0] : null,
+      departments,
+      newProducts: serialize(newProducts),
+      popularProducts: serialize(popular),
+      saleProducts: serialize(saleProducts),
+      categoryIndex,
     };
   } catch (e) {
     console.error("Homepage data fetch error:", e);
     return {
-      heroSlides: [], dealCards: [], promoSmall: [], promoWide: [],
-      brands: [], sections: [], tabs: [], utilityLinks: [],
-      promoStripItems: [], sectionProducts: {}, categories: [],
-      featuredProducts: [], saleProducts: [], newProducts: [],
-      popularProducts: [], categorySections: [], brandSections: [],
-      categoryShowcase: [],
+      heroProduct: null,
+      departments: [],
+      newProducts: [],
+      popularProducts: [],
+      saleProducts: [],
+      categoryIndex: [],
     };
   }
-}
-
-function findNodeBySlug(roots: CategoryNode[], slug: string): CategoryNode | null {
-  for (const root of roots) {
-    if (root.slug === slug) return root;
-    const found = findNodeBySlug(root.children, slug);
-    if (found) return found;
-  }
-  return null;
 }
 
 export default async function HomePage() {
@@ -414,17 +230,45 @@ export default async function HomePage() {
         data={{
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "Ravora",
-          legalName: "JAYHALE LIMITED",
-          alternateName: ["ravora.co.uk"],
-          url: "https://ravora.co.uk",
-          sameAs: ["https://ravora.co.uk"],
-          description:
-            "Ravora — refined athletic apparel for men, women and kids. Sustainably sourced tees, hoodies, bottoms and swimwear. Shipped from the United Kingdom.",
+          name: brand.displayName,
+          legalName: brand.company.legalName,
+          alternateName: [brand.domain],
+          url: brand.url,
+          email: brand.contact.email,
+          description: brand.description,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: `${brand.company.address.line1}, ${brand.company.address.line2}`,
+            addressLocality: brand.company.address.city,
+            addressRegion: brand.company.address.region,
+            postalCode: brand.company.address.postcode,
+            addressCountry: "GB",
+          },
         }}
       />
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <MarketplaceHome data={data as any} />
+      <HomeHero product={data.heroProduct} />
+      <DepartmentTiles tiles={data.departments} />
+      <ProductRow
+        title="New in"
+        subtitle="Fresh from the studio this week."
+        products={data.newProducts}
+        viewAllHref="/catalog?sort=newest"
+        viewAllLabel="Shop all new in"
+      />
+      <StoryBlock />
+      <CategoryIndex items={data.categoryIndex} />
+      <ProductRow
+        title="Most loved"
+        products={data.popularProducts}
+        viewAllHref="/catalog?sort=popular"
+      />
+      <ProductRow
+        title="On sale"
+        products={data.saleProducts}
+        viewAllHref="/catalog?onSale=true"
+        viewAllLabel="Shop the sale"
+      />
+      <Promises />
     </>
   );
 }

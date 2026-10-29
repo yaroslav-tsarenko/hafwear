@@ -168,7 +168,7 @@ function SpoyntMockContent() {
             <h2 className="text-xs font-bold uppercase tracking-wider text-[#96908A] mb-4">Order Summary</h2>
             <div className="flex items-center justify-between mb-4 pb-4 border-b border-[#E4E0D9]">
               <div>
-                <p className="font-serif text-lg font-medium text-[#1F4D3F]">Ravora Store</p>
+                <p className="font-serif text-lg font-medium text-[#1F4D3F]">Hafwear Store</p>
                 <p className="text-xs text-[#96908A] mt-0.5">Order ID: #{order?.orderNumber.slice(-8).toUpperCase()}</p>
               </div>
               <div className="text-right">
@@ -319,7 +319,7 @@ function SpoyntMockContent() {
                       </div>
                       <h3 className="font-serif text-2xl font-semibold text-[#1F4D3F]">Payment Successful</h3>
                       <p className="text-sm text-[#6B6560] mt-2">Your payment has been processed successfully.</p>
-                      <p className="text-xs text-[#96908A] mt-1">Redirecting you back to Ravora Store...</p>
+                      <p className="text-xs text-[#96908A] mt-1">Redirecting you back to Hafwear Store...</p>
                     </>
                   )}
 
@@ -330,7 +330,7 @@ function SpoyntMockContent() {
                       </div>
                       <h3 className="font-serif text-2xl font-semibold text-[#B77A1F]">Payment Pending</h3>
                       <p className="text-sm text-[#6B6560] mt-2">Your payment is currently being authorized.</p>
-                      <p className="text-xs text-[#96908A] mt-1">Redirecting you back to Ravora Store...</p>
+                      <p className="text-xs text-[#96908A] mt-1">Redirecting you back to Hafwear Store...</p>
                     </>
                   )}
 

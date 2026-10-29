@@ -1,18 +1,18 @@
 import { PolicyLayout, ContactBlock } from "@/components/layout/PolicyLayout/PolicyLayout";
 
-export const metadata = { title: "Cookie Policy — Ravora" };
+export const metadata = { title: "Cookie Policy" };
 
 export default function CookiePolicyPage() {
   return (
     <PolicyLayout title="Cookie Policy" lastUpdated="29 May 2026">
       <p>
-        This Cookie Policy explains how JAYHALE LIMITED, trading as Ravora, uses cookies and similar
-        technologies on www.ravora.co.uk.
+        This Cookie Policy explains how JAYHALE LIMITED, trading as Hafwear, uses cookies and similar
+        technologies on www.hafwear.co.uk.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
-        In this Cookie Policy, &ldquo;Ravora&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or
+        In this Cookie Policy, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or
         &ldquo;our&rdquo; means JAYHALE LIMITED. &ldquo;You&rdquo; or &ldquo;your&rdquo; means any visitor,
         customer, account holder, business customer, or user of the Website.
       </p>
@@ -50,7 +50,7 @@ export default function CookiePolicyPage() {
       </p>
       <p>2.3 Cookies may be:</p>
       <ul>
-        <li>first-party cookies, set directly by Ravora; or</li>
+        <li>first-party cookies, set directly by Hafwear; or</li>
         <li>third-party cookies, set by external providers whose services we use, such as analytics, payment, security, advertising, or embedded service providers.</li>
       </ul>
       <p>2.4 Cookies may also be:</p>
@@ -200,7 +200,7 @@ export default function CookiePolicyPage() {
         marketing campaigns.
       </p>
       <p>
-        8.2 These cookies may be set by Ravora or by third-party advertising and marketing partners.
+        8.2 These cookies may be set by Hafwear or by third-party advertising and marketing partners.
       </p>
       <p>
         8.3 Marketing cookies may track your browsing activity across websites and may be used to create a
@@ -249,7 +249,7 @@ export default function CookiePolicyPage() {
         9.3 Some payment and security cookies are strictly necessary for checkout and fraud prevention.
         Others may be controlled by the relevant third-party provider.
       </p>
-      <p>9.4 Ravora does not store your full card number or full card security code.</p>
+      <p>9.4 Hafwear does not store your full card number or full card security code.</p>
 
       <h2>10. Third-Party Cookies</h2>
       <p>10.1 Some cookies may be set by third-party providers that support our Website.</p>

@@ -11,9 +11,9 @@ interface PriceDisplayProps {
 }
 
 const sizeClass: Record<NonNullable<PriceDisplayProps["size"]>, { current: string; compare: string }> = {
-  sm: { current: "text-[15px]", compare: "text-xs" },
-  md: { current: "text-xl", compare: "text-sm" },
-  lg: { current: "text-3xl", compare: "text-base" },
+  sm: { current: "text-[14px]", compare: "text-[13px]" },
+  md: { current: "text-[18px]", compare: "text-[14px]" },
+  lg: { current: "text-[22px]", compare: "text-[16px]" },
 };
 
 export function PriceDisplay({ price, comparePrice, size = "md", className }: PriceDisplayProps) {
@@ -21,18 +21,16 @@ export function PriceDisplay({ price, comparePrice, size = "md", className }: Pr
   const isOnSale = !!(comparePrice && comparePrice > price);
 
   return (
-    <div className={`flex items-baseline gap-2 ${className ?? ""}`}>
+    <div className={`flex items-baseline gap-2 tabular-nums ${className ?? ""}`}>
       <span
-        className={`font-semibold tracking-tight ${sizeClass[size].current} ${
-          isOnSale ? "text-[color:var(--color-accent)]" : "text-[color:var(--color-text)]"
+        className={`${sizeClass[size].current} ${
+          isOnSale ? "text-[color:var(--color-sale)]" : "text-[color:var(--color-text)]"
         }`}
       >
         {formatPrice(convert(price), currency)}
       </span>
       {isOnSale && (
-        <span
-          className={`${sizeClass[size].compare} text-[color:var(--color-text-tertiary)] line-through`}
-        >
+        <span className={`${sizeClass[size].compare} text-[color:var(--color-text-tertiary)] line-through`}>
           {formatPrice(convert(comparePrice!), currency)}
         </span>
       )}

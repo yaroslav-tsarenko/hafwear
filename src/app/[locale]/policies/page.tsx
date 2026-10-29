@@ -1,7 +1,7 @@
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { Link } from "@/i18n/routing";
 
-export const metadata = { title: "Policies — Ravora" };
+export const metadata = { title: "Policies" };
 
 const policies = [
   { label: "Terms and Conditions", href: "/policies/terms" },
@@ -15,28 +15,29 @@ const policies = [
 
 export default function PoliciesIndexPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 pb-16">
+    <div className="hw-container pb-24">
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Policies" }]} />
-      <span className="eyebrow">Legal</span>
-      <h1 className="mb-4 mt-2 font-serif text-3xl font-medium tracking-tight text-[color:var(--color-text)] sm:text-[40px]">
+      <div className="mx-auto max-w-3xl">
+      <h1 className="mb-5 mt-4 font-serif text-[44px] leading-none sm:text-[56px]">
         Policies
       </h1>
       <p className="mb-6 text-[15px] leading-relaxed text-[color:var(--color-text-secondary)]">
-        Please review our policies below. These policies govern your use of the Ravora website and
+        Please review our policies below. These policies govern your use of the Hafwear website and
         any purchases made through it.
       </p>
-      <ul className="m-0 flex list-none flex-col gap-2 p-0">
+      <ul className="m-0 flex list-none flex-col border-t border-[color:var(--color-border)] p-0">
         {policies.map((policy) => (
           <li key={policy.href}>
             <Link
               href={policy.href}
-              className="block rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-4 py-3.5 text-[15px] font-semibold text-[color:var(--color-text)] transition-colors hover:border-[color:var(--color-primary)] hover:bg-[color:var(--color-primary-tint)]"
+              className="flex items-center justify-between border-b border-[color:var(--color-border)] py-4 text-[16px] text-[color:var(--color-text)] hover:underline hover:underline-offset-4"
             >
               {policy.label}
             </Link>
           </li>
         ))}
       </ul>
+      </div>
     </div>
   );
 }

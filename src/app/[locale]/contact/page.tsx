@@ -18,8 +18,8 @@ const INPUT_CLASS =
   "w-full rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-4 py-2.5 text-sm text-[color:var(--color-text)] placeholder:text-[color:var(--color-text-tertiary)] focus:border-[color:var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[color:var(--color-primary)]/20 transition-colors";
 
 const CONTACT_INFO = [
-  { icon: Mail, title: "Email Us", detail: "info@ravora.co.uk", sub: "General inquiries — reply within 24h" },
-  { icon: Mail, title: "Wholesale (B2B)", detail: "b2b@ravora.co.uk", sub: "Bulk and trade orders" },
+  { icon: Mail, title: "Email Us", detail: "info@hafwear.co.uk", sub: "General inquiries — reply within 24h" },
+  { icon: Mail, title: "Wholesale (B2B)", detail: "b2b@hafwear.co.uk", sub: "Bulk and trade orders" },
   { icon: MapPin, title: "Our Office", detail: "Bridgend, Mid Glamorgan", sub: "JAYHALE LIMITED", tooltip: "Academy House, 11 Dunraven Place, Bridgend, Mid Glamorgan, CF31 1JF, United Kingdom\nCompany No. 16020956" },
   { icon: Clock, title: "Working Hours", detail: "Mon–Fri 09:00–18:00", sub: "GMT" },
 ];

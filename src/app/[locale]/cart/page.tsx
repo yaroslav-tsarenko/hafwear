@@ -4,11 +4,10 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, ArrowRight, ShieldCheck, Trash2, Package, Truck, ImageOff } from "lucide-react";
+import { ArrowRight, Lock, ImageOff } from "lucide-react";
 import { useCart } from "@/providers/CartProvider";
 import { useCurrency } from "@/providers/CurrencyProvider";
 import { QuantitySelector } from "@/components/shared/QuantitySelector/QuantitySelector";
-import { PriceDisplay } from "@/components/shared/PriceDisplay/PriceDisplay";
 import { EmptyState } from "@/components/shared/EmptyState/EmptyState";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { formatPrice } from "@/lib/utils/format-price";
@@ -21,182 +20,153 @@ export default function CartPage() {
 
   const freeShippingThreshold = convert(100);
   const subtotalConverted = convert(cart.subtotal);
+  const remaining = Math.max(0, freeShippingThreshold - subtotalConverted);
+  const progress = Math.min(100, (subtotalConverted / freeShippingThreshold) * 100);
 
   return (
-    <div className="mx-auto w-full max-w-[var(--max-width)] px-4 pb-16">
-      <Breadcrumbs items={[{ label: nav("home"), href: "/" }, { label: t("title") }]} />
+    <div className="hw-container pb-24">
+      <Breadcrumbs items={[{ label: nav("home"), href: "/" }, { label: "Bag" }]} />
 
-      <motion.h1
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-4 font-serif text-3xl font-medium tracking-tight text-[color:var(--color-text)] sm:mb-6 sm:text-[40px]"
-      >
-        {t("title")}{" "}
+      <h1 className="pb-10 pt-4 font-serif text-[48px] leading-none sm:text-[64px]">
+        Your bag
         {cart.items.length > 0 && (
-          <span className="text-[color:var(--color-text-tertiary)]">
-            ({cart.itemCount} {cart.itemCount === 1 ? "item" : "items"})
+          <span className="ml-3 align-middle font-sans text-[15px] text-[color:var(--color-text-tertiary)]">
+            {cart.itemCount} {cart.itemCount === 1 ? "item" : "items"}
           </span>
         )}
-      </motion.h1>
+      </h1>
 
       {cart.items.length === 0 ? (
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }}>
-          <EmptyState
-            title={t("empty")}
-            subtitle={t("emptySubtitle")}
-            actionLabel={t("continueShopping")}
-            actionHref="/catalog"
-            icon={<ShoppingCart size={48} />}
-          />
-        </motion.div>
+        <EmptyState
+          title={t("empty")}
+          subtitle={t("emptySubtitle")}
+          actionLabel={t("continueShopping")}
+          actionHref="/catalog"
+        />
       ) : (
-        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_380px] lg:gap-10">
-          {/* Cart Items */}
-          <div className="overflow-hidden rounded-2xl border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)]">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[color:var(--color-line)] bg-[color:var(--color-bg-secondary)] px-4 py-3 sm:px-6 sm:py-4">
-              <div className="flex items-center gap-2">
-                <Package size={16} className="text-[color:var(--color-text-secondary)]" />
-                <span className="text-[13px] font-semibold text-[color:var(--color-text-secondary)]">
-                  {cart.itemCount} {cart.itemCount === 1 ? "item" : "items"} in your cart
-                </span>
-              </div>
-              {subtotalConverted >= freeShippingThreshold && (
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-[color:var(--color-success)]">
-                  <Truck size={14} />
-                  Free shipping
-                </div>
-              )}
-            </div>
-
-            <AnimatePresence mode="popLayout">
-              {cart.items.map((item, index) => (
-                <motion.div
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1fr_400px] lg:gap-16">
+          <ul className="border-t border-[color:var(--color-border)]">
+            <AnimatePresence initial={false}>
+              {cart.items.map((item) => (
+                <motion.li
                   key={item.id}
                   layout
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20, height: 0, padding: 0, margin: 0 }}
-                  transition={{ delay: index * 0.05, duration: 0.25 }}
-                  className="flex items-start gap-3.5 p-4 sm:items-center sm:gap-5 sm:p-5 sm:px-6 [&+&]:border-t [&+&]:border-[color:var(--color-line)]"
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex gap-5 overflow-hidden border-b border-[color:var(--color-border)] py-6"
                 >
-                  <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-lg border border-[color:var(--color-line)] bg-white sm:h-[100px] sm:w-[100px]">
+                  <Link
+                    href={`/product/${item.slug}`}
+                    className="relative aspect-[4/5] w-24 shrink-0 overflow-hidden bg-[color:var(--color-image-bg)] sm:w-32"
+                  >
                     {item.imageUrl ? (
                       <Image
                         src={item.imageUrl}
                         alt={item.name}
                         fill
-                        sizes="100px"
-                        className="object-contain p-2"
+                        sizes="128px"
+                        className="object-contain p-2 mix-blend-multiply dark:mix-blend-normal"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-[color:var(--color-text-tertiary)]">
-                        <ImageOff size={24} />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                    <Link
-                      href={`/product/${item.slug}`}
-                      className="line-clamp-2 break-words text-sm font-semibold text-[color:var(--color-text)] hover:text-[color:var(--color-primary)] sm:text-[15px] [overflow-wrap:anywhere]"
-                    >
-                      {item.name}
-                    </Link>
-                    {item.variantName && (
-                      <span className="text-xs text-[color:var(--color-text-tertiary)]">
-                        {item.variantName}
+                      <span className="flex h-full w-full items-center justify-center text-[color:var(--color-text-tertiary)]">
+                        <ImageOff size={20} strokeWidth={1.25} />
                       </span>
                     )}
-                    <span className="text-xs text-[color:var(--color-text-tertiary)]">
-                      SKU: {item.sku}
-                    </span>
+                  </Link>
 
-                    <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-1 sm:pt-2">
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <Link
+                          href={`/product/${item.slug}`}
+                          className="line-clamp-2 break-words text-[15px] hover:underline hover:underline-offset-4 [overflow-wrap:anywhere]"
+                        >
+                          {item.name}
+                        </Link>
+                        {item.variantName && (
+                          <p className="mt-1 text-[13px] text-[color:var(--color-text-secondary)]">{item.variantName}</p>
+                        )}
+                        <p className="mt-1 text-[12px] text-[color:var(--color-text-tertiary)]">
+                          {formatPrice(convert(item.price), currency)} each
+                        </p>
+                      </div>
+                      <span className="shrink-0 text-[15px] tabular-nums">
+                        {formatPrice(convert(item.price * item.quantity), currency)}
+                      </span>
+                    </div>
+
+                    <div className="mt-auto flex items-center justify-between gap-3 pt-4">
                       <QuantitySelector
+                        size="sm"
                         quantity={item.quantity}
                         maxQuantity={item.maxQuantity}
                         onChange={(qty) => updateQuantity(item.productId, qty, item.variantId)}
                       />
-                      <div className="ml-auto flex items-center gap-2 sm:gap-4">
-                        <PriceDisplay price={item.price * item.quantity} size="sm" />
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => removeItem(item.productId, item.variantId)}
-                          className="flex h-8 w-8 items-center justify-center rounded-lg border-none bg-transparent text-[color:var(--color-text-tertiary)] transition-colors hover:bg-[color:var(--color-bg-secondary)] hover:text-[color:var(--color-danger)]"
-                          aria-label="Remove"
-                        >
-                          <Trash2 size={16} />
-                        </motion.button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeItem(item.productId, item.variantId)}
+                        className="text-[13px] text-[color:var(--color-text-secondary)] underline underline-offset-4 hover:text-[color:var(--color-text)]"
+                      >
+                        {t("remove")}
+                      </button>
                     </div>
                   </div>
-                </motion.div>
+                </motion.li>
               ))}
             </AnimatePresence>
-          </div>
+          </ul>
 
-          {/* Order Summary */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="rounded-2xl border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] p-5 sm:p-7 lg:sticky lg:top-[calc(var(--header-height)+var(--announcement-height)+1rem)]"
-          >
-            <h2 className="mb-5 font-serif text-xl font-medium tracking-tight text-[color:var(--color-text)]">
-              Order Summary
-            </h2>
+          <aside className="bg-[color:var(--color-bg-secondary)] p-6 sm:p-8 lg:sticky lg:top-[calc(var(--header-height)+1.5rem)]">
+            <h2 className="font-serif text-[30px] leading-none">Summary</h2>
 
-            <div className="mb-5 flex flex-col gap-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-[color:var(--color-text-secondary)]">{t("subtotal")}</span>
-                <span className="font-medium text-[color:var(--color-text)]">{formatPrice(convert(cart.subtotal), currency)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-[color:var(--color-text-secondary)]">{t("shipping")}</span>
-                <span className={`font-semibold ${cart.shippingCost === 0 ? "text-[color:var(--color-success)]" : "text-[color:var(--color-text)]"}`}>
-                  {cart.shippingCost > 0 ? formatPrice(convert(cart.shippingCost), currency) : "Free"}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-[color:var(--color-text-secondary)]">{t("tax")}</span>
-                <span className="font-medium text-[color:var(--color-text-tertiary)]">Included</span>
-              </div>
-
-              {subtotalConverted < freeShippingThreshold && (
-                <div className="flex items-center gap-1.5 rounded-lg bg-[color:var(--color-bg-secondary)] px-3 py-2.5 text-xs text-[color:var(--color-text-secondary)]">
-                  <Truck size={14} />
-                  Add {formatPrice(freeShippingThreshold - subtotalConverted, currency)} more for free shipping
-                </div>
+            <div className="mt-6">
+              {remaining > 0 ? (
+                <p className="text-[13px] text-[color:var(--color-text-secondary)]">
+                  You&apos;re {formatPrice(remaining, currency)} away from free delivery.
+                </p>
+              ) : (
+                <p className="text-[13px]">You&apos;ve unlocked free delivery.</p>
               )}
-
-              <div className="mt-1 flex justify-between border-t-2 border-[color:var(--color-line)] pt-4 text-xl font-bold text-[color:var(--color-text)]">
-                <span>{t("total")}</span>
-                <span>{formatPrice(convert(cart.total), currency)}</span>
+              <div className="mt-2 h-[3px] w-full bg-[color:var(--color-border)]" aria-hidden>
+                <div className="h-full bg-[color:var(--color-sun)] transition-[width]" style={{ width: `${progress}%` }} />
               </div>
             </div>
 
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                href="/checkout"
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-[color:var(--color-accent)] px-5 py-4 text-base font-semibold text-white transition-colors hover:bg-[color:var(--color-accent-hover)]"
-              >
-                {t("checkout")} <ArrowRight size={18} />
-              </Link>
-            </motion.div>
+            <dl className="mt-6 flex flex-col gap-3 text-[14px]">
+              <div className="flex justify-between">
+                <dt className="text-[color:var(--color-text-secondary)]">{t("subtotal")}</dt>
+                <dd className="tabular-nums">{formatPrice(convert(cart.subtotal), currency)}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-[color:var(--color-text-secondary)]">{t("shipping")}</dt>
+                <dd className="tabular-nums">
+                  {cart.shippingCost > 0 ? formatPrice(convert(cart.shippingCost), currency) : "Free"}
+                </dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-[color:var(--color-text-secondary)]">VAT</dt>
+                <dd className="text-[color:var(--color-text-secondary)]">Included</dd>
+              </div>
+              <div className="mt-2 flex justify-between border-t border-[color:var(--color-border-strong)] pt-4 text-[17px]">
+                <dt>{t("total")}</dt>
+                <dd className="tabular-nums">{formatPrice(convert(cart.total), currency)}</dd>
+              </div>
+            </dl>
 
             <Link
-              href="/catalog"
-              className="mt-3.5 block text-center text-sm font-semibold text-[color:var(--color-primary)] hover:text-[color:var(--color-primary-hover)]"
+              href="/checkout"
+              className="mt-8 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[color:var(--color-primary)] text-[15px] font-medium text-[color:var(--color-primary-fg)] transition-colors hover:bg-[color:var(--color-primary-hover)]"
             >
+              {t("checkout")} <ArrowRight size={16} />
+            </Link>
+            <Link href="/catalog" className="hw-link mt-4 block text-center text-[14px]">
               {t("continueShopping")}
             </Link>
 
-            <div className="mt-5 flex items-center justify-center gap-1.5 border-t border-[color:var(--color-line)] pt-4 text-xs text-[color:var(--color-text-tertiary)]">
-              <ShieldCheck size={14} />
-              Secure checkout with SSL encryption
-            </div>
-          </motion.div>
+            <p className="mt-6 flex items-center justify-center gap-1.5 border-t border-[color:var(--color-border)] pt-5 text-[12px] text-[color:var(--color-text-tertiary)]">
+              <Lock size={12} /> Secure checkout · 14-day returns
+            </p>
+          </aside>
         </div>
       )}
     </div>

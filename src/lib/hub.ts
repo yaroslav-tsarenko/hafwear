@@ -51,7 +51,7 @@ export async function sendOrderToHub(orderId: string): Promise<boolean> {
     const storeSettings = await prisma.storeSettings.findFirst();
     const currency = storeSettings?.currency || "GBP";
 
-    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://ravora.co.uk").replace(/\/+$/, "");
+    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.co.uk").replace(/\/+$/, "");
     const adminUrl = `${siteUrl}/admin/orders/${order.id}`;
 
     // Parse the shippingAddress JSON stored on the order
