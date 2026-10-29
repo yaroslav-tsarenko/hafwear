@@ -15,6 +15,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useCurrency } from "@/providers/CurrencyProvider";
 import { checkoutSchema, type CheckoutFormData } from "@/lib/validators/checkout";
 import { formatPrice } from "@/lib/utils/format-price";
+import { SHIPPING_RATES, VAT_RATE, isFreeShippingEligible, roundMoney, shippingCostFor, vatIncluded } from "@/lib/pricing";
 import { COUNTRIES } from "@/lib/countries";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { toast } from "sonner";
@@ -31,9 +32,9 @@ interface AppliedDiscount {
 }
 
 const SHIPPING_METHODS = [
-  { key: "standard", label: "Standard Shipping", time: "5-7 business days", price: 5.99, icon: Truck },
-  { key: "express", label: "Express Shipping", time: "2-3 business days", price: 12.99, icon: Truck },
-  { key: "free", label: "Economy Shipping", time: "7-14 business days", price: 0, icon: Truck },
+  { key: "standard", label: "Standard Shipping", time: "5-7 business days", price: SHIPPING_RATES.standard, icon: Truck },
+  { key: "express", label: "Express Shipping", time: "2-3 business days", price: SHIPPING_RATES.express, icon: Truck },
+  { key: "free", label: "Economy Shipping", time: "7-14 business days", price: SHIPPING_RATES.free, icon: Truck },
 ];
 
 const stepIcons = [Mail, MapPin, CreditCard];
@@ -94,6 +95,7 @@ function CheckoutContent() {
     formState: { errors },
     watch,
     trigger,
+    setValue,
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
@@ -115,17 +117,23 @@ function CheckoutContent() {
   const steps = [t("contact"), t("shipping"), t("review")];
   const selectedMethod = watch("shippingMethod");
   const selectedCountry = watch("shipping.country");
-  const availableMethods = cart.subtotal >= 100
-    ? SHIPPING_METHODS
-    : SHIPPING_METHODS.filter((m) => m.key !== "free");
-  const shippingPrice = SHIPPING_METHODS.find((m) => m.key === selectedMethod)?.price ?? 5.99;
 
   const countryData = COUNTRIES.find((c) => c.code === selectedCountry);
   const phoneHint = countryData ? `${countryData.phone} XX XXX XXXX` : "+44 XX XXX XXXX";
 
-  const discountAmount = discount ? +(cart.subtotal * (discount.percent / 100)).toFixed(2) : 0;
-  const discountedSubtotal = Math.max(cart.subtotal - discountAmount, 0);
-  const finalShipping = discountedSubtotal >= 100 && selectedMethod === "free" ? 0 : shippingPrice;
+  // Same maths as /api/checkout (src/lib/pricing.ts), so the total shown is the total charged.
+  const discountAmount = discount ? roundMoney(cart.subtotal * (discount.percent / 100)) : 0;
+  const discountedSubtotal = Math.max(roundMoney(cart.subtotal - discountAmount), 0);
+  const freeEligible = isFreeShippingEligible(discountedSubtotal);
+  const availableMethods = freeEligible ? SHIPPING_METHODS : SHIPPING_METHODS.filter((m) => m.key !== "free");
+  const finalShipping = shippingCostFor(selectedMethod, discountedSubtotal);
+  const finalTotal = roundMoney(discountedSubtotal + finalShipping);
+  const vatAmount = vatIncluded(discountedSubtotal);
+
+  // Free economy delivery can drop out of reach (e.g. a discount lowers the subtotal) — fall back to standard.
+  useEffect(() => {
+    if (!freeEligible && selectedMethod === "free") setValue("shippingMethod", "standard");
+  }, [freeEligible, selectedMethod, setValue]);
 
   useEffect(() => {
     let cancelled = false;
@@ -190,8 +198,9 @@ function CheckoutContent() {
           discountCode: discount?.source === "code" ? discount.code : undefined,
           items: cart.items.map((item) => ({
             productId: item.productId,
+            variantId: item.variantId,
+            extraKey: item.extraKey,
             quantity: item.quantity,
-            variantName: item.variantName,
           })),
         }),
       });
@@ -677,12 +686,12 @@ function CheckoutContent() {
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[color:var(--color-text-secondary)]">Tax</span>
-              <span className="font-medium text-[color:var(--color-text-tertiary)]">Included</span>
+              <span className="text-[color:var(--color-text-secondary)]">VAT ({VAT_RATE}%, included)</span>
+              <span className="font-medium text-[color:var(--color-text-tertiary)]">{formatPrice(convert(vatAmount), currency)}</span>
             </div>
             <div className="mt-1.5 flex justify-between border-t-2 border-[color:var(--color-line)] pt-3.5 text-lg font-bold text-[color:var(--color-text)]">
               <span>Total</span>
-              <span>{formatPrice(convert(discountedSubtotal + finalShipping), currency)}</span>
+              <span>{formatPrice(convert(finalTotal), currency)}</span>
             </div>
           </div>
 

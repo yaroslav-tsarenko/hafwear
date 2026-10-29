@@ -163,6 +163,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     id: v.id,
     name: v.name,
     sku: v.sku,
+    price: v.price == null ? null : Number(v.price),
     quantity: v.quantity,
     options: (v.options && typeof v.options === "object" && !Array.isArray(v.options)
       ? Object.fromEntries(Object.entries(v.options).map(([k, val]) => [k, String(val ?? "")]))

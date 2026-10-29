@@ -4,13 +4,15 @@ import { createContext, useContext, useEffect, useState, useCallback, type React
 import type { Cart, CartItem } from "@/types/cart";
 import { toast } from "sonner";
 import { CartToast } from "@/components/cart/CartToast/CartToast";
+import { estimatedShipping, roundMoney, vatIncluded } from "@/lib/pricing";
 
 interface CartContextType {
   cart: Cart;
   isLoaded: boolean;
   addItem: (item: Omit<CartItem, "id">) => void;
-  removeItem: (productId: string, variantId?: string) => void;
-  updateQuantity: (productId: string, quantity: number, variantId?: string) => void;
+  /** Both take the cart line id — the same product can sit on several lines (size, add-on). */
+  removeItem: (lineId: string) => void;
+  updateQuantity: (lineId: string, quantity: number) => void;
   clearCart: () => void;
   itemCount: number;
   cartBounce: number;
@@ -29,13 +31,18 @@ const emptyCart: Cart = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-function calculateTotals(items: CartItem[], taxRate: number = 21): Cart {
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+function lineId(item: Pick<CartItem, "productId" | "variantId" | "extraKey">): string {
+  return `${item.productId}-${item.variantId || "default"}-${item.extraKey || "none"}`;
+}
+
+function calculateTotals(items: CartItem[]): Cart {
+  const subtotal = roundMoney(items.reduce((sum, item) => sum + item.price * item.quantity, 0));
   // Prices are VAT-inclusive: the tax is already contained in the price, so
   // derive its portion instead of adding it on top of the total.
-  const taxAmount = subtotal - subtotal / (1 + taxRate / 100);
-  const shippingCost = subtotal > 0 ? (subtotal >= 100 ? 0 : 5.99) : 0;
-  const total = subtotal + shippingCost;
+  const taxAmount = vatIncluded(subtotal);
+  // The cheapest method; the checkout recalculates once a method is chosen.
+  const shippingCost = estimatedShipping(subtotal);
+  const total = roundMoney(subtotal + shippingCost);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return { items, subtotal, taxAmount, shippingCost, total, itemCount };
@@ -50,7 +57,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem(CART_STORAGE_KEY);
     if (stored) {
       try {
-        const items = JSON.parse(stored) as CartItem[];
+        // Re-key saved lines so carts stored before add-ons were part of the id still merge correctly.
+        const items = (JSON.parse(stored) as CartItem[]).map((item) => ({ ...item, id: lineId(item) }));
         setCart(calculateTotals(items));
       } catch {
         localStorage.removeItem(CART_STORAGE_KEY);
@@ -67,11 +75,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addItem = useCallback(
     (newItem: Omit<CartItem, "id">) => {
       const currentItems = cart.items;
-      const existingIndex = currentItems.findIndex(
-        (item) =>
-          item.productId === newItem.productId &&
-          item.variantId === newItem.variantId
-      );
+      const id = lineId(newItem);
+      const existingIndex = currentItems.findIndex((item) => lineId(item) === id);
 
       let updatedItems: CartItem[];
       if (existingIndex >= 0) {
@@ -85,7 +90,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       } else {
         updatedItems = [
           ...currentItems,
-          { ...newItem, id: `${newItem.productId}-${newItem.variantId || "default"}` },
+          { ...newItem, id },
         ];
       }
 
@@ -99,28 +104,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
             quantity={newItem.quantity}
           />
         ),
-        { duration: 2500, id: `cart-add-${newItem.productId}-${newItem.variantId || "default"}` }
+        { duration: 2500, id: `cart-add-${id}` }
       );
     },
     [cart.items, persistCart]
   );
 
   const removeItem = useCallback(
-    (productId: string, variantId?: string) => {
-      const updatedItems = cart.items.filter(
-        (item) =>
-          !(item.productId === productId && item.variantId === variantId)
-      );
+    (id: string) => {
+      const updatedItems = cart.items.filter((item) => item.id !== id);
       persistCart(updatedItems);
-      toast.success("Removed from cart", { id: `cart-remove-${productId}-${variantId || "default"}` });
+      toast.success("Removed from your bag", { id: `cart-remove-${id}` });
     },
     [cart.items, persistCart]
   );
 
   const updateQuantity = useCallback(
-    (productId: string, quantity: number, variantId?: string) => {
+    (id: string, quantity: number) => {
       const updatedItems = cart.items.map((item) => {
-        if (item.productId === productId && item.variantId === variantId) {
+        if (item.id === id) {
           return { ...item, quantity: Math.max(1, Math.min(quantity, item.maxQuantity)) };
         }
         return item;

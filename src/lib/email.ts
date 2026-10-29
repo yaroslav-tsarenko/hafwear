@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { VAT_RATE } from "@/lib/pricing";
 
 let resend: Resend | null = null;
 
@@ -278,7 +279,7 @@ function totalsBlock(data: OrderEmailData): string {
           <td style="text-align:right;font-weight:500;font-size:14px;padding:4px 0;${shipping === 0 ? "color:#2E7D32;" : ""}">${shipping === 0 ? "Free" : formatEur(shipping)}</td>
         </tr>
         <tr>
-          <td style="color:${MUTED_COLOR};font-size:14px;padding:4px 0;">Tax (21%)</td>
+          <td style="color:${MUTED_COLOR};font-size:14px;padding:4px 0;">VAT (${VAT_RATE}%, included)</td>
           <td style="text-align:right;font-weight:500;font-size:14px;padding:4px 0;">${formatEur(toNum(data.taxAmount))}</td>
         </tr>
         ${

@@ -84,7 +84,7 @@ model StoreSettings {
   phone           String?
   address         String?
   currency        String   @default("EUR")
-  taxRate         Decimal  @default(21)
+  taxRate         Decimal  @default(20)
   freeShippingMin Decimal?
   metaTitle       String?
   metaDescription String?

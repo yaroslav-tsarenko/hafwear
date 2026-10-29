@@ -10,23 +10,14 @@ import { useCart } from "@/providers/CartProvider";
 import { useCurrency } from "@/providers/CurrencyProvider";
 import { formatPrice } from "@/lib/utils/format-price";
 import { Link, useRouter } from "@/i18n/routing";
-
-/**
- * Optional apparel add-ons offered on the PDP alongside the main product —
- * flat-priced. Naming keys are kept aligned with the "warrantyOption{n}year"
- * translations so we don't have to churn every locale.
- */
-const EXTRAS_OPTIONS = [
-  { key: "none", labelKey: "noWarranty" as const,          nameSuffix: "",                        price: 0 },
-  { key: "gift", labelKey: "warrantyOption1year" as const, nameSuffix: "+ gift wrap",             price: 3.99 },
-  { key: "care", labelKey: "warrantyOption2year" as const, nameSuffix: "+ care kit",              price: 6.99 },
-  { key: "prio", labelKey: "warrantyOption3year" as const, nameSuffix: "+ priority dispatch",     price: 4.99 },
-];
+import { PRODUCT_EXTRAS, unitPrice } from "@/lib/pricing";
 
 export interface ProductVariantOption {
   id: string;
   name: string;
   sku: string;
+  /** The variant's own price; null means it sells at the product price. */
+  price: number | null;
   quantity: number;
   options: Record<string, string>;
 }
@@ -156,8 +147,13 @@ export function ProductInfo({
   const outOfStock = variants.length ? (variant ? variant.quantity <= 0 : !variants.some((v) => v.quantity > 0)) : stockQuantity <= 0;
   const lowStock = !outOfStock && availableQty <= lowStockAlert;
 
-  const extra = EXTRAS_OPTIONS[selectedExtra] ?? EXTRAS_OPTIONS[0];
-  const totalPrice = price + extra.price;
+  const extra = PRODUCT_EXTRAS[selectedExtra] ?? PRODUCT_EXTRAS[0];
+  const variantPrices = variants.map((v) => v.price ?? price);
+  const fromPrice = variantPrices.length ? Math.min(...variantPrices) : price;
+  const hasPriceRange = variantPrices.some((p) => p !== fromPrice);
+  // What one unit costs right now: the chosen variant (or the cheapest one) — the add-on is shown separately.
+  const displayPrice = variant ? (variant.price ?? price) : fromPrice;
+  const totalPrice = unitPrice({ productPrice: price, variantPrice: variant?.price, extraKey: extra.key });
   const cartName = extra.nameSuffix ? `${name} ${extra.nameSuffix}` : name;
 
   const add = (): boolean => {
@@ -177,6 +173,7 @@ export function ProductInfo({
       maxQuantity: availableQty,
       variantId: variant?.id,
       variantName: variant?.name,
+      extraKey: extra.key === "none" ? undefined : extra.key,
     });
     return true;
   };
@@ -203,7 +200,7 @@ export function ProductInfo({
     }
   };
 
-  const isOnSale = !!(comparePrice && comparePrice > price);
+  const isOnSale = !variant && !!(comparePrice && comparePrice > price);
   const savingsPercent = isOnSale ? Math.round(((comparePrice! - price) / comparePrice!) * 100) : 0;
   const department = categoryPath[0];
 
@@ -222,7 +219,8 @@ export function ProductInfo({
       </h1>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <PriceDisplay price={price} comparePrice={comparePrice} size="lg" />
+        {!variant && hasPriceRange && <span className="text-[15px] text-[color:var(--color-text-secondary)]">From</span>}
+        <PriceDisplay price={displayPrice} comparePrice={variant ? null : comparePrice} size="lg" />
         {isOnSale && (
           <span className="bg-[color:var(--color-sale)] px-2 py-1 text-[11px] font-medium leading-none text-white">
             −{savingsPercent}%
@@ -300,7 +298,7 @@ export function ProductInfo({
       <div className="mt-8">
         <p className="mb-3 text-[14px] font-medium">{t("warranty")}</p>
         <div className="grid grid-cols-2 gap-2">
-          {EXTRAS_OPTIONS.map((opt, idx) => (
+          {PRODUCT_EXTRAS.map((opt, idx) => (
             <button
               key={opt.key}
               type="button"

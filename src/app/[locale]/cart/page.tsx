@@ -11,6 +11,7 @@ import { QuantitySelector } from "@/components/shared/QuantitySelector/QuantityS
 import { EmptyState } from "@/components/shared/EmptyState/EmptyState";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { formatPrice } from "@/lib/utils/format-price";
+import { FREE_SHIPPING_THRESHOLD } from "@/lib/pricing";
 
 export default function CartPage() {
   const t = useTranslations("cart");
@@ -18,7 +19,7 @@ export default function CartPage() {
   const { cart, updateQuantity, removeItem } = useCart();
   const { currency, convert } = useCurrency();
 
-  const freeShippingThreshold = convert(100);
+  const freeShippingThreshold = convert(FREE_SHIPPING_THRESHOLD);
   const subtotalConverted = convert(cart.subtotal);
   const remaining = Math.max(0, freeShippingThreshold - subtotalConverted);
   const progress = Math.min(100, (subtotalConverted / freeShippingThreshold) * 100);
@@ -100,11 +101,11 @@ export default function CartPage() {
                         size="sm"
                         quantity={item.quantity}
                         maxQuantity={item.maxQuantity}
-                        onChange={(qty) => updateQuantity(item.productId, qty, item.variantId)}
+                        onChange={(qty) => updateQuantity(item.id, qty)}
                       />
                       <button
                         type="button"
-                        onClick={() => removeItem(item.productId, item.variantId)}
+                        onClick={() => removeItem(item.id)}
                         className="text-[13px] text-[color:var(--color-text-secondary)] underline underline-offset-4 hover:text-[color:var(--color-text)]"
                       >
                         {t("remove")}
