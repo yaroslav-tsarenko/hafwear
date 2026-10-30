@@ -1,5 +1,5 @@
 /**
- * Central brand identity for Hafwear / JAYHALE LIMITED.
+ * Central brand identity for Hafwear / ELVARDO LTD.
  * Import from here instead of hardcoding company details in components.
  *
  * "Haf" is Welsh for summer — the company is based in Bridgend, Wales.
@@ -8,8 +8,8 @@
 export const brand = {
   name: "hafwear",
   displayName: "Hafwear",
-  domain: "hafwear.co.uk",
-  url: "https://hafwear.co.uk",
+  domain: "hafwear.com",
+  url: "https://hafwear.com",
   tagline: "That summer feeling, all year round.",
   description:
     "Hafwear — easy everyday clothes for the whole family. Tees, sweatshirts, hoodies, bottoms and swimwear for men, women and kids, from a small team in Bridgend, Wales.",
@@ -21,7 +21,7 @@ export const brand = {
   },
 
   company: {
-    legalName: "JAYHALE LIMITED",
+    legalName: "ELVARDO LTD",
     number: "16020956",
     address: {
       line1: "Academy House",
@@ -34,8 +34,8 @@ export const brand = {
   },
 
   contact: {
-    email: "info@hafwear.co.uk",
-    emailB2B: "b2b@hafwear.co.uk",
+    email: "info@hafwear.com",
+    emailB2B: "info@hafwear.com",
     phone: "+44 7915 921997",
     phoneHref: "tel:+447915921997",
   },

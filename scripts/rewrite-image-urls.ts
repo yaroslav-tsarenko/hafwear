@@ -3,9 +3,9 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 // Moves every stored image URL from the legacy CDN host to the Hafwear CDN.
-// Run only after images.hafwear.co.uk serves the same bucket.
+// Run only after images.hafwear.com serves the same bucket.
 const OLD_HOST = process.env.OLD_IMAGE_HOST || "https://images.ravora.co.uk/";
-const NEW_HOST = process.env.NEW_IMAGE_HOST || "https://images.hafwear.co.uk/";
+const NEW_HOST = process.env.NEW_IMAGE_HOST || "https://images.hafwear.com/";
 
 async function main() {
   const connectionString = process.env.DIRECT_URL || process.env.DATABASE_URL;

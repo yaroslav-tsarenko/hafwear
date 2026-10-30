@@ -8,13 +8,13 @@ export default function ReturnsPolicyPage() {
       <p>
         This Returns, Refunds and Cancellation Policy explains how order cancellations, consumer returns,
         refunds, damaged goods, faulty goods, incorrect goods, and restricted returns are handled for
-        purchases made through www.hafwear.co.uk.
+        purchases made through www.hafwear.com.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
         In this Policy, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo;
-        means JAYHALE LIMITED. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means any
+        means ELVARDO LTD. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means any
         person or business placing an order through the Website.
       </p>
       <p>
@@ -62,7 +62,7 @@ export default function ReturnsPolicyPage() {
       <h2>3. Cancelling an Order Before Dispatch</h2>
       <p>3.1 You may request cancellation of an order before it has been dispatched.</p>
       <p>
-        3.2 To request cancellation, contact us as soon as possible at info@hafwear.co.uk and include your
+        3.2 To request cancellation, contact us as soon as possible at info@hafwear.com and include your
         order number.
       </p>
       <p>
@@ -93,7 +93,7 @@ export default function ReturnsPolicyPage() {
         days after the day you receive the final parcel.
       </p>
       <p>
-        4.4 To exercise your cancellation right, you must clearly notify us by email at info@hafwear.co.uk
+        4.4 To exercise your cancellation right, you must clearly notify us by email at info@hafwear.com
         before the cancellation period expires.
       </p>
       <p>4.5 Your email should include:</p>
@@ -168,7 +168,7 @@ export default function ReturnsPolicyPage() {
       <h2>7. Faulty, Damaged, or Incorrect Goods</h2>
       <p>
         7.1 If goods arrive faulty, damaged, incomplete, or incorrect, please contact us as soon as possible
-        at info@hafwear.co.uk.
+        at info@hafwear.com.
       </p>
       <p>7.2 Please include:</p>
       <ul>
@@ -252,7 +252,7 @@ export default function ReturnsPolicyPage() {
       </p>
 
       <h2>10. Return Procedure</h2>
-      <p>10.1 To start a return, contact us at info@hafwear.co.uk.</p>
+      <p>10.1 To start a return, contact us at info@hafwear.com.</p>
       <p>10.2 Please include:</p>
       <ul>
         <li>order number;</li>

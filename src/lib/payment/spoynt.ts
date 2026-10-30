@@ -76,7 +76,7 @@ class SpoyntService {
     const localizedPendingUrl = `${siteUrl}/${params.locale}/order/confirmed?orderId=${params.orderId}&status=pending`;
     // Spoynt restricts localhost URLs for callback_url. If local, fallback to public URL for validation.
     const cleanSiteUrl = siteUrl.includes("localhost") || siteUrl.includes("127.0.0.1")
-      ? "https://hafwear.co.uk"
+      ? "https://hafwear.com"
       : siteUrl;
     const callbackUrl = `${cleanSiteUrl}/api/payment/spoynt-callback`;
 

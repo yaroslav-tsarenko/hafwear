@@ -7,13 +7,13 @@ export default function TermsPage() {
     <PolicyLayout title="Terms and Conditions" lastUpdated="29 May 2026">
       <p>
         These Terms and Conditions (&ldquo;Terms&rdquo;) govern your access to and use of the website
-        www.hafwear.co.uk and any related pages, services, orders, purchases, communications, and
+        www.hafwear.com and any related pages, services, orders, purchases, communications, and
         transactions operated under the Hafwear brand.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
-        In these Terms, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo; means JAYHALE LIMITED.
+        In these Terms, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo; means ELVARDO LTD.
         &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means any person or business accessing the
         Website, placing an order, purchasing goods, or otherwise using our services.
       </p>
@@ -377,7 +377,7 @@ export default function TermsPage() {
         days after the day on which you receive the last parcel.
       </p>
       <p>
-        14.4 To exercise your cancellation right, you must inform us clearly by email at info@hafwear.co.uk
+        14.4 To exercise your cancellation right, you must inform us clearly by email at info@hafwear.com
         before the cancellation period expires.
       </p>
       <p>
@@ -430,7 +430,7 @@ export default function TermsPage() {
       <h2>16. Faulty, Damaged, or Incorrect Goods</h2>
       <p>
         16.1 If goods arrive damaged, faulty, incomplete, or incorrect, you should contact us as soon as
-        possible at info@hafwear.co.uk.
+        possible at info@hafwear.com.
       </p>
       <p>
         16.2 Please provide your order number, a description of the issue, and clear photos or videos
@@ -539,7 +539,7 @@ export default function TermsPage() {
         <li>loss of profits, cleaning costs, alteration costs, or indirect losses.</li>
       </ul>
       <p>
-        18.9 To make an Additional Warranty claim, you must contact us at info@hafwear.co.uk with your order
+        18.9 To make an Additional Warranty claim, you must contact us at info@hafwear.com with your order
         number, proof of purchase, description of the defect, and supporting photos, videos, or diagnostic
         information where reasonably requested.
       </p>
@@ -611,7 +611,7 @@ export default function TermsPage() {
       <p>
         21.1 All content on the Website, including text, layout, branding, logos, graphics, icons, product
         descriptions, photographs, videos, design elements, and other materials, belongs to Hafwear,
-        JAYHALE LIMITED, suppliers, manufacturers, licensors, or other rights holders.
+        ELVARDO LTD, suppliers, manufacturers, licensors, or other rights holders.
       </p>
       <p>
         21.2 You may use the Website only for personal, business, or purchasing purposes in accordance with

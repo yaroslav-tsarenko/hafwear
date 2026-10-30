@@ -12,7 +12,7 @@ export async function GET() {
       },
     });
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.co.uk";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.com";
 
     const feed = products.map((product) => ({
       id: product.id,

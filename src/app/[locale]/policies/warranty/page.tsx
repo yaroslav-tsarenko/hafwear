@@ -7,13 +7,13 @@ export default function WarrantyPolicyPage() {
     <PolicyLayout title="Warranty Policy" lastUpdated="29 May 2026">
       <p>
         This Warranty Policy explains how statutory rights, legal guarantees, manufacturer warranties, and
-        paid Additional Warranty options apply to products purchased through www.hafwear.co.uk.
+        paid Additional Warranty options apply to products purchased through www.hafwear.com.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
         In this Policy, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo;
-        means JAYHALE LIMITED. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means any
+        means ELVARDO LTD. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means any
         person or business purchasing goods through the Website.
       </p>
       <p>
@@ -266,7 +266,7 @@ export default function WarrantyPolicyPage() {
       </p>
 
       <h2>11. How to Make a Warranty Claim</h2>
-      <p>11.1 To make a warranty claim, contact us at info@hafwear.co.uk.</p>
+      <p>11.1 To make a warranty claim, contact us at info@hafwear.com.</p>
       <p>11.2 Please provide:</p>
       <ul>
         <li>your full name;</li>

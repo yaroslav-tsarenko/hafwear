@@ -19,7 +19,7 @@ async function main() {
       id: "default",
       name: "Hafwear",
       description: "Refined athletic apparel for men, women and kids. Shipped from the United Kingdom.",
-      email: "info@hafwear.co.uk",
+      email: "info@hafwear.com",
       currency: "GBP",
       taxRate: 20,
       freeShippingMin: 100,

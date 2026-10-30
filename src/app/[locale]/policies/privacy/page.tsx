@@ -6,15 +6,15 @@ export default function PrivacyPolicyPage() {
   return (
     <PolicyLayout title="Privacy Policy" lastUpdated="29 May 2026">
       <p>
-        This Privacy Policy explains how JAYHALE LIMITED, trading as Hafwear, collects, uses, stores, shares,
-        and protects personal data when you visit www.hafwear.co.uk, create an account, place an order,
+        This Privacy Policy explains how ELVARDO LTD, trading as Hafwear, collects, uses, stores, shares,
+        and protects personal data when you visit www.hafwear.com, create an account, place an order,
         contact us, use our services, or otherwise interact with us.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
         In this Privacy Policy, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or
-        &ldquo;our&rdquo; means JAYHALE LIMITED. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or
+        &ldquo;our&rdquo; means ELVARDO LTD. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or
         &ldquo;your&rdquo; means any person using the Website, placing an order, creating an account,
         contacting us, or interacting with our services.
       </p>
@@ -48,7 +48,7 @@ export default function PrivacyPolicyPage() {
       <p>
         2.1 For the purposes of applicable data protection laws, including the UK General Data Protection
         Regulation, the Data Protection Act 2018, and, where applicable, the EU General Data Protection
-        Regulation, JAYHALE LIMITED is the data controller of your personal data.
+        Regulation, ELVARDO LTD is the data controller of your personal data.
       </p>
       <p>2.2 This means we determine why and how your personal data is processed.</p>
       <p>2.3 You can contact us about privacy matters using the following details:</p>
@@ -411,7 +411,7 @@ export default function PrivacyPolicyPage() {
       </p>
       <p>
         8.3 You can unsubscribe from marketing communications at any time by using the unsubscribe link in
-        the relevant email or contacting us at info@hafwear.co.uk.
+        the relevant email or contacting us at info@hafwear.com.
       </p>
       <p>
         8.4 Even if you unsubscribe from marketing, we may still send you service messages, such as order
@@ -571,7 +571,7 @@ export default function PrivacyPolicyPage() {
         14.2 These rights are not absolute and may be subject to legal conditions, exemptions, identity
         verification, and our legal obligations.
       </p>
-      <p>14.3 To exercise your rights, please contact us at info@hafwear.co.uk.</p>
+      <p>14.3 To exercise your rights, please contact us at info@hafwear.com.</p>
       <p>14.4 We may need to verify your identity before responding to a request.</p>
       <p>
         14.5 We aim to respond to valid data protection requests within the timeframe required by applicable
@@ -581,7 +581,7 @@ export default function PrivacyPolicyPage() {
       <h2>15. Complaints</h2>
       <p>
         15.1 If you have concerns about how we handle your personal data, please contact us first at
-        info@hafwear.co.uk so we can try to resolve the matter.
+        info@hafwear.com so we can try to resolve the matter.
       </p>
       <p>
         15.2 If you are in the United Kingdom, you have the right to lodge a complaint with the Information
@@ -629,7 +629,7 @@ export default function PrivacyPolicyPage() {
       <p>18.2 We do not knowingly collect personal data from children.</p>
       <p>
         18.3 If you believe that a child has provided personal data to us, please contact us at
-        info@hafwear.co.uk and we will take appropriate steps to review and delete the information where
+        info@hafwear.com and we will take appropriate steps to review and delete the information where
         required.
       </p>
 

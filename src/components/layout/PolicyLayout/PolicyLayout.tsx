@@ -36,15 +36,13 @@ export function ContactBlock() {
   return (
     <div className="mt-2 bg-[color:var(--color-bg-secondary)] px-5 py-4 text-sm leading-relaxed">
       <p>
-        <strong>JAYHALE LIMITED</strong>, trading as Hafwear
+        <strong>ELVARDO LTD</strong>, trading as Hafwear
         <br />
         Registration number: 16020956
         <br />
         Registered office: Academy House, 11 Dunraven Place, Bridgend, Mid Glamorgan, CF31 1JF, United Kingdom
         <br />
-        General email: info@hafwear.co.uk
-        <br />
-        Wholesale (B2B): b2b@hafwear.co.uk
+        Email (general and wholesale enquiries): info@hafwear.com
       </p>
     </div>
   );

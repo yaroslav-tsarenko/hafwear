@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.hafwear.co.uk",
+        hostname: "images.hafwear.com",
       },
       // Legacy CDN host — product image URLs in the database still point here
       // until scripts/rewrite-image-urls.ts is run against the new CDN.

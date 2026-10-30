@@ -6,14 +6,14 @@ export default function CookiePolicyPage() {
   return (
     <PolicyLayout title="Cookie Policy" lastUpdated="29 May 2026">
       <p>
-        This Cookie Policy explains how JAYHALE LIMITED, trading as Hafwear, uses cookies and similar
-        technologies on www.hafwear.co.uk.
+        This Cookie Policy explains how ELVARDO LTD, trading as Hafwear, uses cookies and similar
+        technologies on www.hafwear.com.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
         In this Cookie Policy, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or
-        &ldquo;our&rdquo; means JAYHALE LIMITED. &ldquo;You&rdquo; or &ldquo;your&rdquo; means any visitor,
+        &ldquo;our&rdquo; means ELVARDO LTD. &ldquo;You&rdquo; or &ldquo;your&rdquo; means any visitor,
         customer, account holder, business customer, or user of the Website.
       </p>
       <p>

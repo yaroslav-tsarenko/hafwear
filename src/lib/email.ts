@@ -1,7 +1,28 @@
 import { Resend } from "resend";
+import nodemailer, { type Transporter } from "nodemailer";
 import { VAT_RATE } from "@/lib/pricing";
 
+// Mail goes out through SMTP (the info@hafwear.com Spacemail mailbox) when
+// SMTP_* is configured, otherwise through Resend as before.
+
 let resend: Resend | null = null;
+let smtp: Transporter | null = null;
+
+function getSmtp(): Transporter | null {
+  const { SMTP_HOST, SMTP_USER, SMTP_PASSWORD } = process.env;
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASSWORD) return null;
+  if (!smtp) {
+    const port = Number(process.env.SMTP_PORT || 465);
+    smtp = nodemailer.createTransport({
+      host: SMTP_HOST,
+      port,
+      // true only for implicit TLS (465); 587 upgrades with STARTTLS.
+      secure: port === 465,
+      auth: { user: SMTP_USER, pass: SMTP_PASSWORD },
+    });
+  }
+  return smtp;
+}
 
 function getResend(): Resend | null {
   if (!process.env.RESEND_API_KEY) return null;
@@ -10,19 +31,23 @@ function getResend(): Resend | null {
 }
 
 function getFrom(): string {
+  if (getSmtp()) {
+    // Most SMTP servers only allow sending as the authenticated mailbox.
+    return process.env.SMTP_FROM || `Hafwear <${process.env.SMTP_USER}>`;
+  }
   return (
     process.env.RESEND_FROM_EMAIL ||
     process.env.RESEND_FROM ||
-    "Hafwear <noreply@hafwear.co.uk>"
+    "Hafwear <info@hafwear.com>"
   );
 }
 
 function getReplyTo(): string | undefined {
-  return process.env.RESEND_REPLY_TO || undefined;
+  return process.env.SMTP_REPLY_TO || process.env.RESEND_REPLY_TO || undefined;
 }
 
 function getSiteUrl(): string {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.co.uk";
+  const raw = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.com";
   return raw.replace(/\/+$/, "");
 }
 
@@ -41,9 +66,20 @@ interface SendArgs {
 }
 
 async function send({ to, subject, html, replyTo }: SendArgs): Promise<boolean> {
+  const transport = getSmtp();
+  if (transport) {
+    try {
+      await transport.sendMail({ from: getFrom(), to, subject, html, replyTo: replyTo ?? getReplyTo() });
+      return true;
+    } catch (err) {
+      console.error(`[Email] SMTP send failed → ${subject} to ${to}:`, err);
+      return false;
+    }
+  }
+
   const r = getResend();
   if (!r) {
-    console.log(`[Email] Skipped (Resend not configured) → ${subject} to ${to}`);
+    console.log(`[Email] Skipped (no SMTP or Resend configured) → ${subject} to ${to}`);
     return false;
   }
   try {
@@ -91,7 +127,7 @@ function emailWrapper(content: string, options: { preheader?: string } = {}): st
     </div>
     <div style="text-align:center;margin-top:24px;font-size:12px;color:#999;line-height:1.6;">
       <p style="margin:0 0 4px;">&copy; ${new Date().getFullYear()} Hafwear &middot; <em>haf</em> is Welsh for summer.</p>
-      <p style="margin:0;">JAYHALE LIMITED &middot; Bridgend, Mid Glamorgan, Academy House, 11 Dunraven Place &middot; Reg. 16020956 &middot; <a href="${getSiteUrl()}" style="color:${BRAND_COLOR};text-decoration:none;">hafwear.co.uk</a></p>
+      <p style="margin:0;">ELVARDO LTD &middot; Bridgend, Mid Glamorgan, Academy House, 11 Dunraven Place &middot; Reg. 16020956 &middot; <a href="${getSiteUrl()}" style="color:${BRAND_COLOR};text-decoration:none;">hafwear.com</a></p>
       <p style="margin:8px 0 0;">
         <a href="${getSiteUrl()}/en/policies/privacy" style="color:#999;text-decoration:underline;margin:0 6px;">Privacy</a>
         <a href="${getSiteUrl()}/en/policies/terms" style="color:#999;text-decoration:underline;margin:0 6px;">Terms</a>
@@ -388,7 +424,7 @@ export async function sendOrderInvoiceEmail(data: OrderEmailData): Promise<boole
           <td style="width:50%;vertical-align:top;padding-right:12px;">
             <p style="margin:0 0 4px;font-size:11px;color:#999;text-transform:uppercase;letter-spacing:0.06em;font-weight:700;">From</p>
             <p style="margin:0;font-size:13px;color:${TEXT_COLOR};line-height:1.55;">
-              <strong>JAYHALE LIMITED</strong><br />
+              <strong>ELVARDO LTD</strong><br />
               Registration number: 16020956<br />
               Academy House, 11 Dunraven Place<br />
               Bridgend, Mid Glamorgan<br />
@@ -409,7 +445,7 @@ export async function sendOrderInvoiceEmail(data: OrderEmailData): Promise<boole
 
       <p style="color:#999;font-size:12px;margin:24px 0 0;line-height:1.6;text-align:center;">
         VAT is included in the prices shown where applicable. This invoice serves as proof of purchase.<br />
-        For any questions, reply to this email or contact <a href="mailto:info@hafwear.co.uk" style="color:${BRAND_COLOR};">info@hafwear.co.uk</a>.
+        For any questions, reply to this email or contact <a href="mailto:info@hafwear.com" style="color:${BRAND_COLOR};">info@hafwear.com</a>.
       </p>
     `,
       { preheader: `Invoice for order #${id} — ${formatEur(toNum(data.total))}` },

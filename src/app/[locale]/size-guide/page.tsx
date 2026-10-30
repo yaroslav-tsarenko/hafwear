@@ -169,7 +169,7 @@ export default function SizeGuidePage() {
               stretch and shrinkage of our organic and recycled fabrics. If
               your order doesn't fit as expected, we offer 14-day returns
               — see our <Link href="/policies/returns" className="text-[color:var(--color-primary)] underline">returns policy</Link> or
-              email <a href="mailto:info@hafwear.co.uk" className="text-[color:var(--color-primary)] underline">info@hafwear.co.uk</a>.
+              email <a href="mailto:info@hafwear.com" className="text-[color:var(--color-primary)] underline">info@hafwear.com</a>.
             </p>
           </div>
         </div>

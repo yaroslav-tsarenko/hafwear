@@ -6,14 +6,14 @@ export default function ShippingPolicyPage() {
   return (
     <PolicyLayout title="Shipping Policy" lastUpdated="29 May 2026">
       <p>
-        This Shipping Policy explains how orders placed through www.hafwear.co.uk are processed,
+        This Shipping Policy explains how orders placed through www.hafwear.com are processed,
         dispatched, delivered, and handled in the event of delivery issues.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
         In this Policy, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo;
-        means JAYHALE LIMITED. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means the
+        means ELVARDO LTD. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means the
         person or business placing an order through the Website.
       </p>
       <p>
@@ -321,7 +321,7 @@ export default function ShippingPolicyPage() {
       </p>
       <p>
         13.3 If goods arrive damaged, missing, incomplete, or incorrect, please contact us as soon as
-        possible at info@hafwear.co.uk.
+        possible at info@hafwear.com.
       </p>
       <p>
         13.4 Please include your order number, a description of the issue, and clear photos or videos of the
@@ -348,7 +348,7 @@ export default function ShippingPolicyPage() {
       </p>
       <p>
         14.2 If tracking shows an unusual delay, failed delivery, customs hold, or no movement for an
-        extended period, please contact us at info@hafwear.co.uk.
+        extended period, please contact us at info@hafwear.com.
       </p>
       <p>
         14.3 We may need to open an investigation with the courier before confirming that a parcel is lost.

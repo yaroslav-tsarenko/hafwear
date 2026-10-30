@@ -18,9 +18,8 @@ const INPUT_CLASS =
   "w-full rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-bg-elevated)] px-4 py-2.5 text-sm text-[color:var(--color-text)] placeholder:text-[color:var(--color-text-tertiary)] focus:border-[color:var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[color:var(--color-primary)]/20 transition-colors";
 
 const CONTACT_INFO = [
-  { icon: Mail, title: "Email Us", detail: "info@hafwear.co.uk", sub: "General inquiries — reply within 24h" },
-  { icon: Mail, title: "Wholesale (B2B)", detail: "b2b@hafwear.co.uk", sub: "Bulk and trade orders" },
-  { icon: MapPin, title: "Our Office", detail: "Bridgend, Mid Glamorgan", sub: "JAYHALE LIMITED", tooltip: "Academy House, 11 Dunraven Place, Bridgend, Mid Glamorgan, CF31 1JF, United Kingdom\nCompany No. 16020956" },
+  { icon: Mail, title: "Email Us", detail: "info@hafwear.com", sub: "Orders, sizing and wholesale — reply within 24h" },
+  { icon: MapPin, title: "Our Office", detail: "Bridgend, Mid Glamorgan", sub: "ELVARDO LTD", tooltip: "Academy House, 11 Dunraven Place, Bridgend, Mid Glamorgan, CF31 1JF, United Kingdom\nCompany No. 16020956" },
   { icon: Clock, title: "Working Hours", detail: "Mon–Fri 09:00–18:00", sub: "GMT" },
 ];
 
@@ -84,7 +83,7 @@ export default function ContactPage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="mb-8 grid grid-cols-2 gap-3 sm:mb-12 sm:gap-4 lg:grid-cols-4"
+        className="mb-8 grid grid-cols-1 gap-3 sm:mb-12 sm:grid-cols-3 sm:gap-4"
       >
         {CONTACT_INFO.map((info, i) => (
           <motion.div

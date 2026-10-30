@@ -7,13 +7,13 @@ export default function PaymentPolicyPage() {
     <PolicyLayout title="Payment Policy" lastUpdated="29 May 2026">
       <p>
         This Payment Policy explains how payments are accepted, processed, verified, refunded, and handled
-        for purchases made through www.hafwear.co.uk.
+        for purchases made through www.hafwear.com.
       </p>
       <p>The Website is operated by:</p>
       <ContactBlock />
       <p>
         In this Policy, &ldquo;Hafwear&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo;
-        means JAYHALE LIMITED. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means any
+        means ELVARDO LTD. &ldquo;Customer&rdquo;, &ldquo;you&rdquo; or &ldquo;your&rdquo; means any
         person or business placing an order through the Website.
       </p>
       <p>
@@ -339,7 +339,7 @@ export default function PaymentPolicyPage() {
       <h2>16. Chargebacks and Payment Disputes</h2>
       <p>
         16.1 If you have a problem with an order, payment, delivery, return, refund, or warranty claim, you
-        should contact us first at info@hafwear.co.uk so we can investigate and try to resolve the issue.
+        should contact us first at info@hafwear.com so we can investigate and try to resolve the issue.
       </p>
       <p>
         16.2 If you open a chargeback, card dispute, or payment dispute, we may be required to provide

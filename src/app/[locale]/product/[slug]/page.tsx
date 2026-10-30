@@ -120,7 +120,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     ? product.reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviewCount
     : 0;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.co.uk";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.com";
 
   const characteristics = product.characteristics as Record<string, Record<string, string>> | null;
 

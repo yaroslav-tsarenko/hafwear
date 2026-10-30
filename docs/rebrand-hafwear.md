@@ -3,11 +3,11 @@
 Agreed via quiz on 2026-10-29. Products and catalogue stay unchanged.
 
 ## Name & domain
-- **Hafwear** — "haf" is Welsh for "summer"; the company (JAYHALE LIMITED) is based in Bridgend, Wales.
-- Primary: **hafwear.co.uk**. Also register **hafwear.com** → 301 to .co.uk.
+- **Hafwear** — "haf" is Welsh for "summer"; the company (ELVARDO LTD) is based in Bridgend, Wales.
+- Primary: **hafwear.com**. Also register **hafwear.com** → 301 to .co.uk.
   Both were unregistered per Verisign / Nominet WHOIS on 2026-10-29 (register before announcing; check UKIPO trademarks).
-- Email: info@hafwear.co.uk, b2b@hafwear.co.uk.
-- **Ravora is dropped entirely** — no redirect, no mentions. Images move off images.ravora.co.uk to a new CDN host (images.hafwear.co.uk).
+- Email: info@hafwear.com, info@hafwear.com.
+- **Ravora is dropped entirely** — no redirect, no mentions. Images move off images.ravora.co.uk to a new CDN host (images.hafwear.com).
 
 ## Positioning
 - Audience: the whole family (25–45), quality everyday basics for themselves and their kids at fair prices.
