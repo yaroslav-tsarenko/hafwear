@@ -124,9 +124,6 @@ export function Footer() {
               <a href={`mailto:${brand.contact.email}`} className="hover:underline hover:underline-offset-4">
                 {brand.contact.email}
               </a>
-              <a href={brand.contact.phoneHref} className="hover:underline hover:underline-offset-4">
-                {brand.contact.phone}
-              </a>
             </div>
             <div className="mt-5 flex items-center gap-1">
               {process.env.NEXT_PUBLIC_INSTAGRAM_URL && (

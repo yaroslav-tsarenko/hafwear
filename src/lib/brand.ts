@@ -36,8 +36,6 @@ export const brand = {
   contact: {
     email: "info@hafwear.com",
     emailB2B: "info@hafwear.com",
-    phone: "+44 7915 921997",
-    phoneHref: "tel:+447915921997",
   },
 
   social: {
