@@ -9,6 +9,11 @@ import { spoynt } from "@/lib/payment/spoynt";
 
 export async function POST(request: NextRequest) {
   try {
+    // Refuse before writing an order if this deployment can't take payments.
+    if (!spoynt.isConfigured()) {
+      return NextResponse.json({ error: "Checkout is temporarily unavailable" }, { status: 503 });
+    }
+
     const user = await getSessionUser();
 
     const body = await request.json();

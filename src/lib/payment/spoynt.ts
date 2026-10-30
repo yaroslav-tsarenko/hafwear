@@ -38,8 +38,14 @@ class SpoyntService {
   }
 
   isMockMode(): boolean {
-    // If API Key is not configured, we run in mock mode
-    return !process.env.SPOYNT_API_KEY;
+    // Mock payments are for local development only. A production build without
+    // keys must never accept fake payments — it shares the order database.
+    return !process.env.SPOYNT_API_KEY && process.env.NODE_ENV !== "production";
+  }
+
+  /** Real keys are present, or we're in local mock mode. */
+  isConfigured(): boolean {
+    return !!(process.env.SPOYNT_API_KEY && process.env.SPOYNT_PRIVATE_KEY) || this.isMockMode();
   }
 
   async createPaymentInvoice(params: {
@@ -80,6 +86,10 @@ class SpoyntService {
 
     // reference_id contains orderId and timestamp to make it unique per checkout attempt
     const referenceId = `${params.orderId}-${Date.now()}`;
+
+    if (!this.isConfigured()) {
+      throw new Error("Payments are not configured: set SPOYNT_API_KEY and SPOYNT_PRIVATE_KEY");
+    }
 
     if (this.isMockMode()) {
       console.log(`[Spoynt Mock] Creating mock payment invoice for order: ${params.orderId}`);
@@ -194,6 +204,11 @@ class SpoyntService {
   }
 
   verifyCallbackSignature(rawBody: string, signature: string | null): boolean {
+    // The development fallback key is public — only trust it in local mock mode.
+    if (!this.privateKey && !this.isMockMode()) {
+      console.error("[Spoynt] SPOYNT_PRIVATE_KEY is not set; rejecting callback.");
+      return false;
+    }
     const verificationKey = this.privateKey || "local-development-private-key-123";
 
     if (!signature) {
