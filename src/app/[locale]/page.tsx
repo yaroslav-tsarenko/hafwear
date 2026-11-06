@@ -12,7 +12,7 @@ import { CategoryIndex, type CategoryIndexItem } from "@/components/home/Categor
 import { Promises } from "@/components/home/Promises";
 import type { CardProduct } from "@/components/product/ProductCard/ProductCard";
 
-export const revalidate = 60;
+export const revalidate = 86400;
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;

@@ -151,7 +151,7 @@ export async function GET(request: NextRequest) {
       page,
       pageSize,
       totalPages: Math.ceil(total / pageSize),
-    });
+    }, { headers: status ? { "Cache-Control": "no-store" } : { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400", "CDN-Cache-Control": "public, s-maxage=3600", "Vercel-CDN-Cache-Control": "public, s-maxage=3600" } });
   } catch (error) {
     console.error("Error fetching products:", error);
     return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });

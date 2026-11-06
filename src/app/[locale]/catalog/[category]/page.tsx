@@ -6,7 +6,7 @@ import { ProductGrid } from "@/components/product/ProductGrid/ProductGrid";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { getDescendantCategoryIds } from "@/lib/category-tree";
 
-export const revalidate = 60;
+export const revalidate = 86400;
 
 const PAGE_SIZE = 60;
 
