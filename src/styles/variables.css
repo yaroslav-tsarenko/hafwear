@@ -102,8 +102,8 @@
   --announcement-height: 36px;
 
   /* ── Type ───────────────────────────────────────────────────────────── */
-  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-display), ui-serif, Georgia, serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);

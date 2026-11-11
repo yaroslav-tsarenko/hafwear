@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { rebrand } from "@/lib/brand";
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,11 +12,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json([]);
     }
 
+    // Names in the shared catalogue still carry the old brand; let "hafwear" find them.
+    const dbQuery = query.replace(/hafwear/gi, "ravora");
     const products = await prisma.product.findMany({
       where: {
         status: "ACTIVE",
         OR: [
-          { name: { contains: query, mode: "insensitive" } },
+          { name: { contains: dbQuery, mode: "insensitive" } },
           { sku: { contains: query, mode: "insensitive" } },
           { description: { contains: query, mode: "insensitive" } },
           { brand: { contains: query, mode: "insensitive" } },
@@ -32,7 +35,7 @@ export async function GET(request: NextRequest) {
       orderBy: { name: "asc" },
     });
 
-    return NextResponse.json(products, {
+    return NextResponse.json(products.map((p) => ({ ...p, name: rebrand(p.name) })), {
       headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=86400" },
     });
   } catch (error) {

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { rebrand } from "@/lib/brand";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/routing";
@@ -103,7 +104,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
   const products = productsRaw.map((p) => ({
     id: p.id,
-    name: p.name,
+    name: rebrand(p.name),
     slug: p.slug,
     sku: p.sku,
     price: Number(p.price),

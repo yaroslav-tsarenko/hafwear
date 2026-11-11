@@ -57,6 +57,9 @@ interface ProductInfoProps {
   avgRating?: number;
   categoryPath?: { name: string; slug: string }[];
   variants?: ProductVariantOption[];
+  /** Options picked when the page opens (e.g. the colour shown in the photos). */
+  initialSelected?: Record<string, string>;
+  onOptionChange?: (key: string, value: string) => void;
 }
 
 function Disclosure({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
@@ -95,11 +98,13 @@ export function ProductInfo({
   avgRating = 0,
   categoryPath = [],
   variants = [],
+  initialSelected,
+  onOptionChange,
 }: ProductInfoProps) {
   const t = useTranslations("product");
   const [qty, setQty] = useState(1);
   const [selectedExtra, setSelectedExtra] = useState(0);
-  const [selected, setSelected] = useState<Record<string, string>>({});
+  const [selected, setSelected] = useState<Record<string, string>>(() => initialSelected ?? {});
   const [attempted, setAttempted] = useState(false);
   const { addItem } = useCart();
   const { currency, convert } = useCurrency();
@@ -272,6 +277,7 @@ export function ProductInfo({
                         onClick={() => {
                           setSelected((prev) => ({ ...prev, [group.key]: v }));
                           setQty(1);
+                          onOptionChange?.(group.key, v);
                         }}
                         className={`inline-flex h-10 items-center justify-center rounded-full border px-4 text-[13px] transition-colors ${
                           isSize ? "min-w-[3.25rem]" : ""

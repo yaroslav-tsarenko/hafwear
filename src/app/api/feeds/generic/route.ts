@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rebrand } from "@/lib/brand";
 import { prisma } from "@/lib/prisma";
 import { absoluteImageUrl } from "@/lib/media";
 
@@ -16,7 +17,7 @@ export async function GET() {
 
     const feed = products.map((product) => ({
       id: product.id,
-      name: product.name,
+      name: rebrand(product.name),
       sku: product.sku,
       slug: product.slug,
       description: product.description,

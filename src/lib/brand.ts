@@ -53,3 +53,13 @@ export const brandAddressLine = [
 ].join(", ");
 
 export const brandLegalLine = `${brand.company.legalName} · Company No. ${brand.company.number} · ${brand.company.address.line1}, ${brand.company.address.line2}, ${brand.company.address.city}, ${brand.company.address.postcode}, ${brand.company.address.country}`;
+
+/**
+ * The catalogue is shared with the previous brand (Ravora) in one database, so
+ * product names and photo captions there still say "RAVORA". Rename on display
+ * only — never in the DB, which the other store still reads. Use on text, not URLs.
+ */
+const OLD_BRAND = /\bravora\b/gi;
+export function rebrand<T extends string | null | undefined>(text: T): T {
+  return (text ? text.replace(OLD_BRAND, brand.displayName) : text) as T;
+}

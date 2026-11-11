@@ -1,9 +1,10 @@
 import { unstable_cache } from "next/cache";
+import { rebrand } from "@/lib/brand";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ProductGallery } from "@/components/product/ProductGallery/ProductGallery";
-import { ProductInfo } from "@/components/product/ProductInfo/ProductInfo";
+import { ProductDetail, type ColorImages } from "@/components/product/ProductDetail/ProductDetail";
+import variantImages from "@/data/variant-images.json";
 import { ProductTabs } from "@/components/product/ProductTabs/ProductTabs";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { JsonLd } from "@/components/shared/SEO/JsonLd";
@@ -55,6 +56,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   });
 
   if (!product) return {};
+  product.name = rebrand(product.name);
 
   return {
     title: product.metaTitle || product.name,
@@ -109,6 +111,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   });
 
   if (!product || product.status === "ARCHIVED") notFound();
+  product.name = rebrand(product.name);
+  for (const img of product.images) img.alt = rebrand(img.alt);
 
   const primaryCategory = product.categories[0]?.category;
   const categoryChain = primaryCategory
@@ -177,31 +181,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <Breadcrumbs items={breadcrumbItems} />
 
-      <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
-        <ProductGallery images={product.images} productName={product.name} />
-        <div className="md:sticky md:top-[calc(var(--header-height)+1.5rem)]">
-          <ProductInfo
-            id={product.id}
-            name={product.name}
-            slug={product.slug}
-            sku={product.sku}
-            price={Number(product.price)}
-            comparePrice={product.comparePrice ? Number(product.comparePrice) : null}
-            quantity={product.quantity}
-            shortDescription={product.shortDescription}
-            description={product.description}
-            brand={product.brand}
-            condition={product.condition}
-            lowStockAlert={product.lowStockAlert}
-            imageUrl={product.images[0]?.url}
-            ean={product.ean}
-            reviewCount={reviewCount}
-            avgRating={avgRating}
-            categoryPath={categoryChain}
-            variants={variants}
-          />
-        </div>
-      </div>
+      <ProductDetail
+        images={product.images}
+        colorImages={(variantImages as Record<string, ColorImages>)[product.sku] ?? null}
+        id={product.id}
+        name={product.name}
+        slug={product.slug}
+        sku={product.sku}
+        price={Number(product.price)}
+        comparePrice={product.comparePrice ? Number(product.comparePrice) : null}
+        quantity={product.quantity}
+        shortDescription={product.shortDescription}
+        description={product.description}
+        brand={product.brand}
+        condition={product.condition}
+        lowStockAlert={product.lowStockAlert}
+        ean={product.ean}
+        reviewCount={reviewCount}
+        avgRating={avgRating}
+        categoryPath={categoryChain}
+        variants={variants}
+      />
 
       <ProductTabs
         description={product.description}

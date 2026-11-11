@@ -1,6 +1,7 @@
 "use client";
 
 import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
+import { rebrand } from "@/lib/brand";
 import { Link } from "@/i18n/routing";
 import { ImageOff } from "lucide-react";
 import { useCurrency } from "@/providers/CurrencyProvider";
@@ -50,7 +51,7 @@ export function ProductCard({
           <>
             <SafeImage
               src={primary.url}
-              alt={primary.alt || product.name}
+              alt={rebrand(primary.alt || product.name)}
               fill
               sizes={sizes}
               priority={priority}
@@ -95,7 +96,7 @@ export function ProductCard({
           <span className="text-[12px] text-[color:var(--color-text-tertiary)]">{category}</span>
         )}
         <h3 className="line-clamp-2 text-[14px] leading-snug text-[color:var(--color-text)] group-hover:underline group-hover:underline-offset-4">
-          {product.name}
+          {rebrand(product.name)}
         </h3>
         <div className="flex items-baseline gap-2 text-[14px] tabular-nums">
           <span className={isOnSale ? "text-[color:var(--color-sale)]" : "text-[color:var(--color-text)]"}>

@@ -1,18 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Inter_Tight, Instrument_Serif } from "next/font/google";
+import { Schibsted_Grotesk, Brygada_1918 } from "next/font/google";
 import { brand } from "@/lib/brand";
 import "@/styles/globals.css";
 
-const interTight = Inter_Tight({
-  variable: "--font-inter-tight",
-  subsets: ["latin"],
+// Body: an editorial grotesk with a bit of bite; display: an old-style serif with true italics.
+const bodyFont = Schibsted_Grotesk({
+  variable: "--font-body",
+  subsets: ["latin", "latin-ext"],
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  weight: "400",
+const displayFont = Brygada_1918({
+  variable: "--font-display",
+  subsets: ["latin", "latin-ext"],
   style: ["normal", "italic"],
   display: "swap",
 });
@@ -60,7 +60,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${interTight.variable} ${instrumentSerif.variable} h-full antialiased`}
+      className={`${bodyFont.variable} ${displayFont.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

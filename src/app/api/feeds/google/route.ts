@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rebrand } from "@/lib/brand";
 import { prisma } from "@/lib/prisma";
 import { absoluteImageUrl } from "@/lib/media";
 
@@ -19,8 +20,8 @@ export async function GET() {
 
         return `    <item>
       <g:id>${escapeXml(product.id)}</g:id>
-      <title>${escapeXml(product.name)}</title>
-      <description>${escapeXml(product.description || product.name)}</description>
+      <title>${escapeXml(rebrand(product.name))}</title>
+      <description>${escapeXml(product.description || rebrand(product.name))}</description>
       <link>${siteUrl}/en/product/${escapeXml(product.slug)}</link>
       <g:image_link>${escapeXml(imageUrl)}</g:image_link>
       <g:price>${price}</g:price>

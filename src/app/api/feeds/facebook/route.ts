@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rebrand } from "@/lib/brand";
 import { prisma } from "@/lib/prisma";
 import { absoluteImageUrl } from "@/lib/media";
 
@@ -18,8 +19,8 @@ export async function GET() {
 
     const rows = products.map((product) => [
       product.id,
-      product.name,
-      (product.description || product.name).replace(/,/g, " "),
+      rebrand(product.name),
+      (product.description || rebrand(product.name)).replace(/,/g, " "),
       product.quantity > 0 ? "in stock" : "out of stock",
       product.condition,
       `${Number(product.price).toFixed(2)} EUR`,

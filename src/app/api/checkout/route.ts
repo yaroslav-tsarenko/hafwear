@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rebrand } from "@/lib/brand";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { checkoutItemSchema, checkoutSchema } from "@/lib/validators/checkout";
@@ -66,7 +67,7 @@ export async function POST(request: NextRequest) {
 
       orderItems.push({
         productId: product.id,
-        productName: extra.nameSuffix ? `${product.name} ${extra.nameSuffix}` : product.name,
+        productName: extra.nameSuffix ? `${rebrand(product.name)} ${extra.nameSuffix}` : rebrand(product.name),
         productSku: variant?.sku ?? product.sku,
         variantName: variant?.name ?? null,
         quantity: item.quantity,

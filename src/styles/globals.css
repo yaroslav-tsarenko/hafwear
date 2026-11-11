@@ -9,9 +9,9 @@
  */
 
 @theme {
-  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-serif: var(--font-display), ui-serif, Georgia, serif;
 
   /* Semantic colors — the whole app builds from these */
   --color-bone: #F2F1EE;
@@ -98,7 +98,6 @@ body {
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "ss01", "cv11";
   letter-spacing: -0.005em;
 }
 
@@ -234,7 +233,7 @@ img {
   line-height: 1.05;
 }
 
-/* Instrument Serif ships a single 400 weight — never let the browser fake bold. */
+/* Headings use real font weights and italics only — never let the browser fake them. */
 .font-serif {
   font-synthesis: none;
 }
