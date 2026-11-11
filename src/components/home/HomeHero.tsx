@@ -1,4 +1,5 @@
 import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
+import { rebrand } from "@/lib/brand";
 import { Link } from "@/i18n/routing";
 import { ArrowRight } from "lucide-react";
 import { brand } from "@/lib/brand";
@@ -51,7 +52,7 @@ export function HomeHero({ product }: HomeHeroProps) {
             <div className="relative aspect-[4/5] overflow-hidden bg-[color:var(--color-image-bg)]">
               <SafeImage
                 src={image.url}
-                alt={image.alt || product.name}
+                alt={rebrand(image.alt || product.name)}
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -59,7 +60,7 @@ export function HomeHero({ product }: HomeHeroProps) {
               />
             </div>
             <p className="mt-3 flex items-center justify-between text-[13px] text-[color:var(--color-text-secondary)]">
-              <span className="line-clamp-1">{product.name}</span>
+              <span className="line-clamp-1">{rebrand(product.name)}</span>
               <span className="shrink-0 pl-4 group-hover:underline group-hover:underline-offset-4">View</span>
             </p>
           </Link>
