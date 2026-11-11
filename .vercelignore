@@ -1,8 +1,8 @@
 .env
 .env.*
 !.env.example
-data
-references
-policy
+/data
+/references
+/policy
 .claude
-addons
+/addons
