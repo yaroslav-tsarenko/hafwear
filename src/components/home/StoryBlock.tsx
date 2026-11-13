@@ -8,8 +8,9 @@ export function StoryBlock() {
       <div className="hw-container grid gap-10 py-20 md:grid-cols-[1fr_1.1fr] md:items-center lg:py-28">
         <div className="flex flex-col items-start">
           <HafwearMark size={56} className="text-[color:var(--color-text)]" />
-          <p className="mt-8 font-serif text-[96px] italic leading-none sm:text-[128px]">{brand.story.word}</p>
-          <p className="mt-4 text-[15px] text-[color:var(--color-text-secondary)]">
+          {/* Brygada's italic "f" has a long descender — the extra line height keeps it off the caption. */}
+          <p className="mt-6 font-serif text-[96px] italic leading-[1.2] sm:text-[128px]">{brand.story.word}</p>
+          <p className="mt-3 text-[15px] text-[color:var(--color-text-secondary)]">
             {brand.story.pronunciation} · noun · {brand.story.meaning}
           </p>
         </div>
