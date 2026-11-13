@@ -109,10 +109,11 @@ async function variantsOf(productId: number): Promise<Variant[]> {
   return out;
 }
 
-const styleCache = new Map<number, { placement: string; print_area_width: number; print_area_height: number; mockup_styles: Style[] }[]>();
+type StyleGroup = { placement: string; technique?: string; print_area_width: number; print_area_height: number; mockup_styles: Style[] };
+const styleCache = new Map<number, StyleGroup[]>();
 async function stylesOf(productId: number) {
   if (!styleCache.has(productId)) {
-    const j = await pf<{ data: { placement: string; print_area_width: number; print_area_height: number; mockup_styles: Style[] }[] }>(
+    const j = await pf<{ data: StyleGroup[] }>(
       `/v2/catalog-products/${productId}/mockup-styles`,
     );
     styleCache.set(productId, j.data);
@@ -121,37 +122,58 @@ async function stylesOf(productId: number) {
 }
 
 /**
- * A chest-width logo, as a share of the garment's own print area — a toddler tee
- * prints 8x10 inches, an adult tee 12x16, and a fixed size is rejected on the
- * small ones.
+ * Not every garment takes a plain printed logo on the chest: a sports tee is
+ * DTF, an urban sweatshirt is embroidery only, a pocket tee prints on the
+ * pocket, fleece shorts on the leg. Pick the closest placement the garment
+ * actually offers for this view, and print it the way that placement wants.
  */
-async function logoPosition(productId: number, placement: string) {
-  const group = (await stylesOf(productId)).find((g) => g.placement === placement);
-  const areaWidth = group?.print_area_width ?? 12;
-  const areaHeight = group?.print_area_height ?? 16;
-  const width = Math.round(areaWidth * 0.35 * 100) / 100;
-  const height = Math.round((width / 3) * 100) / 100;
+const PLACEMENTS = {
+  front: ["front", "front_large", "front_dtf", "pocket", "embroidery_chest_center", "embroidery_chest_left", "leg_front_left", "leg_front_right"],
+  back: ["back", "back_dtf", "embroidery_back", "leg_back_left", "leg_back_right"],
+} as const;
+
+async function resolvePlacement(productId: number, view: "front" | "back", person: boolean) {
+  const groups = await stylesOf(productId);
+  const viewName = view === "back" ? "Back" : "Front";
+  const ranked = [...groups].sort(
+    (a, b) => rank(PLACEMENTS[view], a.placement) - rank(PLACEMENTS[view], b.placement),
+  );
+  const group = ranked.find(
+    (g) => rank(PLACEMENTS[view], g.placement) < 99 && g.mockup_styles.some((s) => s.view_name === viewName),
+  );
+  if (!group) return null;
+
+  const inView = group.mockup_styles.filter((s) => s.view_name === viewName);
+  const plain = ["Flat", "Ghost", "On Hanger", "Wrinkled", "Folded"];
+  const style = person
+    ? inView.find((s) => /Lifestyle|Men's|Women's/.test(s.category_name) && !plain.includes(s.category_name))
+    : inView.find((s) => plain.includes(s.category_name)) ?? inView.find((s) => /Ghost|Flat/.test(s.category_name));
+
+  // A chest-width logo as a share of the garment's own print area: a toddler tee
+  // prints 8x10 inches, an adult tee 12x16, and a fixed size is rejected on the small ones.
+  const areaWidth = group.print_area_width ?? 12;
+  const areaHeight = group.print_area_height ?? 16;
+  const width = Math.round(Math.min(areaWidth * 0.35, areaWidth) * 100) / 100;
+  const height = Math.round(Math.min(width / 3, areaHeight) * 100) / 100;
+
   return {
-    area_width: areaWidth,
-    area_height: areaHeight,
-    width,
-    height,
-    top: Math.round(areaHeight * 0.2 * 100) / 100,
-    left: Math.round(((areaWidth - width) / 2) * 100) / 100,
+    placement: group.placement,
+    technique: group.technique ?? "dtg",
+    styleId: (style ?? inView[0]).id,
+    position: {
+      area_width: areaWidth,
+      area_height: areaHeight,
+      width,
+      height,
+      top: Math.round(Math.min(areaHeight * 0.2, areaHeight - height) * 100) / 100,
+      left: Math.round(((areaWidth - width) / 2) * 100) / 100,
+    },
   };
 }
 
-/** A plain product shot for catalogue photos, a model shot where the original had one. */
-async function pickStyle(productId: number, placement: string, person: boolean): Promise<number | null> {
-  const group = (await stylesOf(productId)).find((g) => g.placement === placement);
-  if (!group) return null;
-  const view = placement === "back" ? "Back" : "Front";
-  const inView = group.mockup_styles.filter((s) => s.view_name === view);
-  const plain = ["Flat", "Ghost", "On Hanger", "Wrinkled", "Folded"];
-  const wanted = person
-    ? inView.find((s) => /Lifestyle|Men's|Women's/.test(s.category_name) && !plain.includes(s.category_name))
-    : inView.find((s) => plain.includes(s.category_name)) ?? inView.find((s) => /Ghost|Flat/.test(s.category_name));
-  return (wanted ?? inView[0])?.id ?? null;
+function rank(order: readonly string[], placement: string): number {
+  const i = order.indexOf(placement);
+  return i === -1 ? 99 : i;
 }
 
 /** Group the photos we can redo in Printful by product + view, so one task covers many colours. */
@@ -242,12 +264,11 @@ async function run(limit?: number) {
     const key = `${g.productId}:${g.placement}:${g.person}`;
     const started = Date.now();
     try {
-      const [variants, styleId, position] = await Promise.all([
+      const [variants, target] = await Promise.all([
         variantsOf(g.productId),
-        pickStyle(g.productId, g.placement, g.person),
-        logoPosition(g.productId, g.placement),
+        resolvePlacement(g.productId, g.placement, g.person),
       ]);
-      if (!styleId) throw new Error(`no mockup style for ${g.placement}`);
+      if (!target) throw new Error(`this garment has no printable placement for ${g.placement}`);
 
       // One variant per wanted colour (any size — the mockup is the same).
       const byColor = new Map<string, Variant>();
@@ -281,16 +302,16 @@ async function run(limit?: number) {
                 source: "catalog",
                 catalog_product_id: g.productId,
                 catalog_variant_ids: lane.items.map((c) => c.variant.id),
-                mockup_style_ids: [styleId],
+                mockup_style_ids: [target.styleId],
                 placements: [
                   {
-                    placement: g.placement,
-                    technique: "dtg",
+                    placement: target.placement,
+                    technique: target.technique,
                     layers: [
                       {
                         type: "file",
                         url: lane.dark ? PRINT.light : PRINT.dark,
-                        position,
+                        position: target.position,
                       },
                     ],
                   },
