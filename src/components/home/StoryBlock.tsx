@@ -6,7 +6,9 @@ export function StoryBlock() {
   return (
     <section className="bg-[color:var(--color-bg-secondary)]">
       <div className="hw-container grid gap-10 py-20 md:grid-cols-[1fr_1.1fr] md:items-center lg:py-28">
-        <div className="flex flex-col items-start">
+        {/* Centred from md up: on a wide screen the word sat at the far left of its
+            column, leaving a hole between it and the text. Mobile stays left-aligned. */}
+        <div className="flex flex-col items-start md:items-center">
           <HafwearMark size={56} className="text-[color:var(--color-text)]" />
           {/* Brygada's italic "f" has a long descender — the extra line height keeps it off the caption. */}
           <p className="mt-6 font-serif text-[96px] italic leading-[1.2] sm:text-[128px]">{brand.story.word}</p>
