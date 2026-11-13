@@ -7,6 +7,7 @@ import { slugify } from "@/lib/utils/slugify";
 import { getDescendantCategoryIds } from "@/lib/category-tree";
 import { Prisma } from "@prisma/client";
 import { hasVisiblePhoto } from "@/lib/visible-products";
+import { visibleImages } from "@/lib/media";
 
 export async function GET(request: NextRequest) {
   try {
@@ -133,10 +134,12 @@ export async function GET(request: NextRequest) {
           isFeatured: true,
           brand: true,
           createdAt: true,
+          // Two photos are shown, but fetch more: the first ones may be hidden
+          // (see visibleImages) and the card should fall through to a clean one.
           images: {
             select: { url: true, alt: true },
             orderBy: { sortOrder: "asc" },
-            take: 2,
+            take: isPublicQuery ? 8 : 2,
           },
           categories: {
             select: { category: { select: { id: true, name: true, slug: true } } },
@@ -147,8 +150,14 @@ export async function GET(request: NextRequest) {
       prisma.product.count({ where }),
     ]);
 
+    // Shoppers must never be handed a photo of the old print, not even one the
+    // browser would then refuse to render: that leaves an empty card.
+    const data = isPublicQuery
+      ? products.map((p) => ({ ...p, images: visibleImages(p.images).slice(0, 2) }))
+      : products;
+
     return NextResponse.json({
-      data: products,
+      data,
       total,
       page,
       pageSize,

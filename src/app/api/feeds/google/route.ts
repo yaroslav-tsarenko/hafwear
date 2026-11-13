@@ -1,21 +1,22 @@
 import { NextResponse } from "next/server";
 import { rebrand } from "@/lib/brand";
 import { prisma } from "@/lib/prisma";
-import { absoluteImageUrl } from "@/lib/media";
+import { absoluteImageUrl, visibleImages } from "@/lib/media";
 import { hasVisiblePhoto } from "@/lib/visible-products";
 
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
       where: { status: "ACTIVE", ...hasVisiblePhoto },
-      include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } },
+      // Several photos, because the leading ones may be hidden (see visibleImages).
+      include: { images: { orderBy: { sortOrder: "asc" }, take: 8 } },
     });
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.com";
 
     const items = products
       .map((product) => {
-        const imageUrl = absoluteImageUrl(product.images[0]?.url, siteUrl);
+        const imageUrl = absoluteImageUrl(visibleImages(product.images)[0]?.url, siteUrl);
         const price = `${Number(product.price).toFixed(2)} EUR`;
         const availability = product.quantity > 0 ? "in_stock" : "out_of_stock";
 

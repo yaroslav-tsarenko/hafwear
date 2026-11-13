@@ -1,3 +1,4 @@
+import { rebrand } from "@/lib/brand";
 import rebrandedImages from "@/data/rebranded-images.json";
 import hiddenImages from "@/data/hidden-images.json";
 
@@ -38,9 +39,15 @@ export function isHiddenImage(url: string | null | undefined): boolean {
   return !!photo && HIDDEN.has(photo[1]);
 }
 
-/** Drop the photos above from a gallery, so the next clean one leads instead. */
-export function visibleImages<T extends { url: string }>(images: T[]): T[] {
-  const kept = images.filter((i) => !isHiddenImage(i.url));
+/**
+ * Drop the photos above from a gallery, so the next clean one leads instead,
+ * and take the old brand out of the alt text while we are here — it is written
+ * into the page source even when nothing visibly says it.
+ */
+export function visibleImages<T extends { url: string; alt?: string | null }>(images: T[]): T[] {
+  const kept = images
+    .filter((i) => !isHiddenImage(i.url))
+    .map((i) => ("alt" in i ? { ...i, alt: rebrand(i.alt) } : i));
   return kept.length ? kept : [];
 }
 

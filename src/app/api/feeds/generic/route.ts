@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { rebrand } from "@/lib/brand";
 import { prisma } from "@/lib/prisma";
-import { absoluteImageUrl } from "@/lib/media";
+import { absoluteImageUrl, visibleImages } from "@/lib/media";
 import { hasVisiblePhoto } from "@/lib/visible-products";
 
 export async function GET() {
@@ -31,7 +31,7 @@ export async function GET() {
       brand: product.brand,
       gtin: product.gtin,
       categories: product.categories.map((c) => c.category.name),
-      images: product.images.map((img) => absoluteImageUrl(img.url, siteUrl)),
+      images: visibleImages(product.images).map((img) => absoluteImageUrl(img.url, siteUrl)),
       url: `${siteUrl}/en/product/${product.slug}`,
       updatedAt: product.updatedAt,
     }));

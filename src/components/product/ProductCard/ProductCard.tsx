@@ -3,7 +3,6 @@
 import { SafeImage } from "@/components/shared/SafeImage/SafeImage";
 import { rebrand } from "@/lib/brand";
 import { Link } from "@/i18n/routing";
-import { ImageOff } from "lucide-react";
 import { useCurrency } from "@/providers/CurrencyProvider";
 import { formatPrice } from "@/lib/utils/format-price";
 
@@ -71,10 +70,8 @@ export function ProductCard({
             )}
           </>
         ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-[color:var(--color-text-tertiary)]">
-            <ImageOff size={24} strokeWidth={1.25} />
-            <span className="text-[12px]">No image</span>
-          </div>
+          // Nothing to apologise for: a plain tile, no "no image" notice.
+          <div className="h-full w-full" />
         )}
 
         <div className="absolute left-3 top-3 flex flex-col items-start gap-1.5">
