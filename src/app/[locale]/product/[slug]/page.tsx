@@ -8,7 +8,7 @@ import variantImages from "@/data/variant-images.json";
 import { ProductTabs } from "@/components/product/ProductTabs/ProductTabs";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { JsonLd } from "@/components/shared/SEO/JsonLd";
-import { absoluteImageUrl } from "@/lib/media";
+import { absoluteImageUrl, visibleImages } from "@/lib/media";
 
 export const revalidate = 86400;
 
@@ -112,6 +112,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   if (!product || product.status === "ARCHIVED") notFound();
   product.name = rebrand(product.name);
+  product.images = visibleImages(product.images);
   for (const img of product.images) img.alt = rebrand(img.alt);
 
   const primaryCategory = product.categories[0]?.category;

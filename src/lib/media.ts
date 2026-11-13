@@ -1,4 +1,5 @@
 import rebrandedImages from "@/data/rebranded-images.json";
+import hiddenImages from "@/data/hidden-images.json";
 
 /**
  * Product photos were stored on the old WordPress host (images.ravora.co.uk),
@@ -24,10 +25,30 @@ export const MEDIA_PREFIX = "/media/";
 const REBRANDED = new Set<string>(rebrandedImages as string[]);
 const CATALOGUE_PHOTO = /^https:\/\/img\.ravora\.co\.uk\/ravora\/img\/([0-9a-f]{20})-(\d+)\.webp$/;
 
+/**
+ * Photos still showing the old print that we cannot regenerate: their art covers
+ * the whole garment and the original file is gone. Hidden rather than shown —
+ * a missing photo costs less than the previous brand's name on our storefront.
+ * Regenerate one and it moves to rebranded-images.json, out of this list.
+ */
+const HIDDEN = new Set<string>(hiddenImages as string[]);
+
+export function isHiddenImage(url: string | null | undefined): boolean {
+  const photo = url?.match(CATALOGUE_PHOTO);
+  return !!photo && HIDDEN.has(photo[1]);
+}
+
+/** Drop the photos above from a gallery, so the next clean one leads instead. */
+export function visibleImages<T extends { url: string }>(images: T[]): T[] {
+  const kept = images.filter((i) => !isHiddenImage(i.url));
+  return kept.length ? kept : [];
+}
+
 export function resolveImageUrl(url: string | null | undefined): string | null {
   if (!url) return null;
   const photo = url.match(CATALOGUE_PHOTO);
   if (photo && REBRANDED.has(photo[1])) return `${MEDIA_PREFIX}products/rebrand/${photo[1]}-${photo[2]}.webp`;
+  if (photo && HIDDEN.has(photo[1])) return null;
   for (const host of LEGACY_HOSTS) {
     if (url.startsWith(host)) return MEDIA_PREFIX + url.slice(host.length);
   }

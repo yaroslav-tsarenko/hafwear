@@ -3,6 +3,7 @@ import { rebrand } from "@/lib/brand";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/routing";
+import { visibleImages } from "@/lib/media";
 import { ProductGrid } from "@/components/product/ProductGrid/ProductGrid";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { getDescendantCategoryIds } from "@/lib/category-tree";
@@ -110,7 +111,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
     price: Number(p.price),
     comparePrice: p.comparePrice == null ? null : Number(p.comparePrice),
     quantity: p.quantity,
-    images: p.images.map((i) => ({ url: i.url, alt: i.alt })),
+    images: visibleImages(p.images).map((i) => ({ url: i.url, alt: i.alt })),
     categories: p.categories.map((pc) => ({ category: { name: pc.category.name } })),
   }));
 
