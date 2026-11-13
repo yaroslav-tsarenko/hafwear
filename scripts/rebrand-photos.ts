@@ -182,7 +182,10 @@ async function upload(key: string, body: Buffer) {
   );
 }
 
+/** The Printful script writes this file too, so merge instead of overwriting. */
 async function saveMap(hashes: Set<string>) {
+  const onDisk: string[] = existsSync(MAP_FILE) ? JSON.parse(await readFile(MAP_FILE, "utf8")) : [];
+  for (const h of onDisk) hashes.add(h);
   await writeFile(MAP_FILE, JSON.stringify([...hashes].sort()) + "\n");
 }
 
