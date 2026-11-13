@@ -121,12 +121,19 @@ const visible: Prisma.ProductWhereInput = { status: "ACTIVE", ...hasVisiblePhoto
 
 async function coverImage(node: CategoryNode): Promise<string | null> {
   if (node.imageUrl) return node.imageUrl;
-  const product = await prisma.product.findFirst({
+  // Several products, several photos each: the best-ranked ones may all be
+  // hidden photos, and a category tile with no picture is worse than a later one.
+  const products = await prisma.product.findMany({
     where: { ...visible, categories: { some: { categoryId: { in: descendantIds(node) } } } },
     orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
-    select: { images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 1 } },
+    take: 5,
+    select: { images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 8 } },
   });
-  return product?.images[0]?.url ?? null;
+  for (const product of products) {
+    const first = visibleImages(product.images)[0];
+    if (first) return first.url;
+  }
+  return null;
 }
 
 function serialize<T>(rows: T): CardProduct[] {
