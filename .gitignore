@@ -49,3 +49,4 @@ claude-code-ecommerce-free.md
 
 # Local credentials — never commit or deploy
 addons/
+/tmp

@@ -115,7 +115,8 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   }));
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const basePath = `/${locale}/catalog/${category.slug}`;
+  // No locale prefix: the next-intl <Link> below adds it (with it we got /en/en/...).
+  const basePath = `/catalog/${category.slug}`;
 
   const pageHref = (n: number) => (n > 1 ? `${basePath}?page=${n}` : basePath);
 
