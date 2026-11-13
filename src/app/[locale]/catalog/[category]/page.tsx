@@ -7,6 +7,7 @@ import { visibleImages } from "@/lib/media";
 import { ProductGrid } from "@/components/product/ProductGrid/ProductGrid";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs/Breadcrumbs";
 import { getDescendantCategoryIds } from "@/lib/category-tree";
+import { hasVisiblePhoto } from "@/lib/visible-products";
 
 export const revalidate = 86400;
 
@@ -71,7 +72,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
   const where = {
     status: "ACTIVE" as const,
-    images: { some: {} },
+    ...hasVisiblePhoto,
     categories: { some: { categoryId: { in: categoryIds } } },
   };
 

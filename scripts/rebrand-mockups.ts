@@ -109,15 +109,36 @@ async function variantsOf(productId: number): Promise<Variant[]> {
   return out;
 }
 
-const styleCache = new Map<number, { placement: string; mockup_styles: Style[] }[]>();
+const styleCache = new Map<number, { placement: string; print_area_width: number; print_area_height: number; mockup_styles: Style[] }[]>();
 async function stylesOf(productId: number) {
   if (!styleCache.has(productId)) {
-    const j = await pf<{ data: { placement: string; mockup_styles: Style[] }[] }>(
+    const j = await pf<{ data: { placement: string; print_area_width: number; print_area_height: number; mockup_styles: Style[] }[] }>(
       `/v2/catalog-products/${productId}/mockup-styles`,
     );
     styleCache.set(productId, j.data);
   }
   return styleCache.get(productId)!;
+}
+
+/**
+ * A chest-width logo, as a share of the garment's own print area — a toddler tee
+ * prints 8x10 inches, an adult tee 12x16, and a fixed size is rejected on the
+ * small ones.
+ */
+async function logoPosition(productId: number, placement: string) {
+  const group = (await stylesOf(productId)).find((g) => g.placement === placement);
+  const areaWidth = group?.print_area_width ?? 12;
+  const areaHeight = group?.print_area_height ?? 16;
+  const width = Math.round(areaWidth * 0.35 * 100) / 100;
+  const height = Math.round((width / 3) * 100) / 100;
+  return {
+    area_width: areaWidth,
+    area_height: areaHeight,
+    width,
+    height,
+    top: Math.round(areaHeight * 0.2 * 100) / 100,
+    left: Math.round(((areaWidth - width) / 2) * 100) / 100,
+  };
 }
 
 /** A plain product shot for catalogue photos, a model shot where the original had one. */
@@ -221,7 +242,11 @@ async function run(limit?: number) {
     const key = `${g.productId}:${g.placement}:${g.person}`;
     const started = Date.now();
     try {
-      const [variants, styleId] = await Promise.all([variantsOf(g.productId), pickStyle(g.productId, g.placement, g.person)]);
+      const [variants, styleId, position] = await Promise.all([
+        variantsOf(g.productId),
+        pickStyle(g.productId, g.placement, g.person),
+        logoPosition(g.productId, g.placement),
+      ]);
       if (!styleId) throw new Error(`no mockup style for ${g.placement}`);
 
       // One variant per wanted colour (any size — the mockup is the same).
@@ -265,7 +290,7 @@ async function run(limit?: number) {
                       {
                         type: "file",
                         url: lane.dark ? PRINT.light : PRINT.dark,
-                        position: { area_width: 12, area_height: 16, width: 4.2, height: 1.4, top: 3.2, left: 3.9 },
+                        position,
                       },
                     ],
                   },

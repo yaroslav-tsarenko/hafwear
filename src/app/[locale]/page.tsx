@@ -11,6 +11,7 @@ import { StoryBlock } from "@/components/home/StoryBlock";
 import { CategoryIndex, type CategoryIndexItem } from "@/components/home/CategoryIndex";
 import { Promises } from "@/components/home/Promises";
 import type { CardProduct } from "@/components/product/ProductCard/ProductCard";
+import { hasVisiblePhoto } from "@/lib/visible-products";
 
 export const revalidate = 86400;
 
@@ -74,7 +75,7 @@ const getCategoryProductCounts = unstable_cache(
   async (): Promise<Array<[string, number]>> => {
     const grouped = await prisma.productCategory.groupBy({
       by: ["categoryId"],
-      where: { product: { status: "ACTIVE", images: { some: {} } } },
+      where: { product: { status: "ACTIVE", ...hasVisiblePhoto } },
       _count: { productId: true },
     });
     return grouped.map((row) => [row.categoryId, row._count.productId] as [string, number]);
@@ -113,7 +114,7 @@ function descendantIds(node: CategoryNode): string[] {
   return [node.id, ...node.children.flatMap(descendantIds)];
 }
 
-const visible: Prisma.ProductWhereInput = { status: "ACTIVE", images: { some: {} } };
+const visible: Prisma.ProductWhereInput = { status: "ACTIVE", ...hasVisiblePhoto };
 
 async function coverImage(node: CategoryNode): Promise<string | null> {
   if (node.imageUrl) return node.imageUrl;

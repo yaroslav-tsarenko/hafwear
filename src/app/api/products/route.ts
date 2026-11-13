@@ -6,6 +6,7 @@ import { PRODUCTS_PER_PAGE } from "@/lib/utils/constants";
 import { slugify } from "@/lib/utils/slugify";
 import { getDescendantCategoryIds } from "@/lib/category-tree";
 import { Prisma } from "@prisma/client";
+import { hasVisiblePhoto } from "@/lib/visible-products";
 
 export async function GET(request: NextRequest) {
   try {
@@ -34,10 +35,11 @@ export async function GET(request: NextRequest) {
       where.status = "ACTIVE";
     }
 
-    // Hide products without images on the public-facing catalog.
+    // Hide products without images on the public-facing catalog — including the
+    // ones whose only photos still show the old print and are hidden for now.
     // Admin/all-status queries still see them so they can be fixed.
     if (isPublicQuery) {
-      where.images = { some: {} };
+      Object.assign(where, hasVisiblePhoto);
     }
 
     if (search) {

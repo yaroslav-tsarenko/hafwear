@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { rebrand } from "@/lib/brand";
+import { hasVisiblePhoto } from "@/lib/visible-products";
 
 export async function GET(request: NextRequest) {
   try {
@@ -17,6 +18,7 @@ export async function GET(request: NextRequest) {
     const products = await prisma.product.findMany({
       where: {
         status: "ACTIVE",
+        ...hasVisiblePhoto,
         OR: [
           { name: { contains: dbQuery, mode: "insensitive" } },
           { sku: { contains: query, mode: "insensitive" } },

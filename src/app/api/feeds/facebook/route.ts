@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 import { rebrand } from "@/lib/brand";
 import { prisma } from "@/lib/prisma";
 import { absoluteImageUrl } from "@/lib/media";
+import { hasVisiblePhoto } from "@/lib/visible-products";
 
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
-      where: { status: "ACTIVE" },
+      where: { status: "ACTIVE", ...hasVisiblePhoto },
       include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } },
     });
 

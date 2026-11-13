@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
+import { hasVisiblePhoto } from "@/lib/visible-products";
 
 export const dynamic = "force-dynamic";
 
@@ -7,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hafwear.com";
 
   const products = await prisma.product.findMany({
-    where: { status: "ACTIVE" },
+    where: { status: "ACTIVE", ...hasVisiblePhoto },
     select: { slug: true, updatedAt: true },
   });
 
