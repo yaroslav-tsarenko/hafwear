@@ -3,44 +3,51 @@
 import { useState } from "react";
 import Image, { type ImageProps } from "next/image";
 import { resolveImageUrl } from "@/lib/media";
-import { HafwearMark } from "@/components/layout/HafwearLogo";
 
 type SafeImageProps = Omit<ImageProps, "src"> & {
   src: string | null | undefined;
-  /** Hide the "Photo coming soon" caption on very small thumbnails. */
+  /** Kept for callers; the fallback tile is the same at every size now. */
   compactFallback?: boolean;
 };
 
 /**
- * next/image that maps legacy photo URLs to /media and, if a photo can't be
- * loaded, shows a calm on-brand placeholder instead of a broken-image icon.
+ * next/image that maps legacy photo URLs to /media.
+ *
+ * A photo that fails to load is never announced to the shopper: the image
+ * optimiser can hiccup on a perfectly good photo, and a tile reading "photo
+ * coming soon" over a product that has photos looks broken. So we retry the
+ * same file unoptimised first, and only then fall back to a plain empty tile.
+ * Products that genuinely have no photo left are kept out of the storefront
+ * altogether (see src/lib/visible-products.ts), so they never reach here.
+ *
  * Must be rendered inside a positioned box when using `fill`.
  */
-export function SafeImage({ src, alt, compactFallback = false, className, ...rest }: SafeImageProps) {
+export function SafeImage({ src, alt, compactFallback: _compactFallback = false, className, ...rest }: SafeImageProps) {
   const resolved = resolveImageUrl(src);
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [rawSrc, setRawSrc] = useState<string | null>(null);
 
   if (!resolved || failedSrc === resolved) {
     return (
       <span
-        role="img"
-        aria-label={alt || "Photo unavailable"}
+        role="presentation"
+        aria-hidden="true"
         // Keep the caller's classes so hover/opacity behaviour (e.g. the card's second photo) still applies.
-        className={`absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[color:var(--color-image-bg)] text-[color:var(--color-text-tertiary)] ${className ?? ""}`}
-      >
-        <HafwearMark size={compactFallback ? 16 : 28} className="opacity-60" />
-        {!compactFallback && <span className="text-[11px] tracking-[0.04em]">Photo coming soon</span>}
-      </span>
+        className={`absolute inset-0 bg-[color:var(--color-image-bg)] ${className ?? ""}`}
+      />
     );
   }
 
   return (
     <Image
       {...rest}
+      key={rawSrc ? "raw" : "optimised"}
       src={resolved}
       alt={alt}
       className={className}
-      onError={() => setFailedSrc(resolved)}
+      // One retry straight from storage: most failures are the optimiser, not the file.
+      unoptimized={rawSrc === resolved}
+      onError={() => (rawSrc === resolved ? setFailedSrc(resolved) : setRawSrc(resolved))}
     />
   );
 }
