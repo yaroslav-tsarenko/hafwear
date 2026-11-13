@@ -12,7 +12,7 @@ import { CategoryIndex, type CategoryIndexItem } from "@/components/home/Categor
 import { Promises } from "@/components/home/Promises";
 import type { CardProduct } from "@/components/product/ProductCard/ProductCard";
 import { hasVisiblePhoto } from "@/lib/visible-products";
-import { visibleImages } from "@/lib/media";
+import { isHiddenImage, visibleImages } from "@/lib/media";
 
 export const revalidate = 86400;
 
@@ -120,7 +120,8 @@ function descendantIds(node: CategoryNode): string[] {
 const visible: Prisma.ProductWhereInput = { status: "ACTIVE", ...hasVisiblePhoto };
 
 async function coverImage(node: CategoryNode): Promise<string | null> {
-  if (node.imageUrl) return node.imageUrl;
+  // The category's own picture can be one of the hidden photos too.
+  if (node.imageUrl && !isHiddenImage(node.imageUrl)) return node.imageUrl;
   // Several products, several photos each: the best-ranked ones may all be
   // hidden photos, and a category tile with no picture is worse than a later one.
   const products = await prisma.product.findMany({
