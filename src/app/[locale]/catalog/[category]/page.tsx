@@ -93,7 +93,8 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
         images: {
           select: { url: true, alt: true },
           orderBy: { sortOrder: "asc" },
-          take: 2,
+          // More than the two the card shows: the first photos may be hidden ones.
+          take: 8,
         },
         categories: {
           select: { category: { select: { name: true } } },
@@ -112,7 +113,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
     price: Number(p.price),
     comparePrice: p.comparePrice == null ? null : Number(p.comparePrice),
     quantity: p.quantity,
-    images: visibleImages(p.images).map((i) => ({ url: i.url, alt: i.alt })),
+    images: visibleImages(p.images).slice(0, 2).map((i) => ({ url: i.url, alt: i.alt })),
     categories: p.categories.map((pc) => ({ category: { name: pc.category.name } })),
   }));
 

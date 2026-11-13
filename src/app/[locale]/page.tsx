@@ -12,6 +12,7 @@ import { CategoryIndex, type CategoryIndexItem } from "@/components/home/Categor
 import { Promises } from "@/components/home/Promises";
 import type { CardProduct } from "@/components/product/ProductCard/ProductCard";
 import { hasVisiblePhoto } from "@/lib/visible-products";
+import { visibleImages } from "@/lib/media";
 
 export const revalidate = 86400;
 
@@ -28,7 +29,9 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
   };
 }
 
-// Minimal product columns for card rendering — two images for the hover swap.
+// Minimal product columns for card rendering — the card shows two images for the
+// hover swap, but we fetch more: the first photos may be hidden ones (see
+// visibleImages), and the card should fall through to the next clean photo.
 const cardSelect = {
   id: true,
   name: true,
@@ -39,7 +42,7 @@ const cardSelect = {
   images: {
     select: { url: true, alt: true },
     orderBy: { sortOrder: "asc" as const },
-    take: 2,
+    take: 8,
   },
   categories: {
     select: { category: { select: { name: true } } },
@@ -127,7 +130,9 @@ async function coverImage(node: CategoryNode): Promise<string | null> {
 }
 
 function serialize<T>(rows: T): CardProduct[] {
-  return JSON.parse(JSON.stringify(rows)) as CardProduct[];
+  const cards = JSON.parse(JSON.stringify(rows)) as CardProduct[];
+  for (const card of cards) card.images = visibleImages(card.images).slice(0, 2);
+  return cards;
 }
 
 const DEPARTMENTS = [

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { rebrand } from "@/lib/brand";
 import { hasVisiblePhoto } from "@/lib/visible-products";
+import { visibleImages } from "@/lib/media";
 
 export async function GET(request: NextRequest) {
   try {
@@ -32,12 +33,15 @@ export async function GET(request: NextRequest) {
         name: true,
         slug: true,
         price: true,
-        images: { take: 1, orderBy: { sortOrder: "asc" } },
+        // More than the one shown: the first photos may be hidden ones.
+        images: { take: 8, orderBy: { sortOrder: "asc" } },
       },
       orderBy: { name: "asc" },
     });
 
-    return NextResponse.json(products.map((p) => ({ ...p, name: rebrand(p.name) })), {
+    return NextResponse.json(
+      products.map((p) => ({ ...p, name: rebrand(p.name), images: visibleImages(p.images).slice(0, 1) })),
+      {
       headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=86400" },
     });
   } catch (error) {
